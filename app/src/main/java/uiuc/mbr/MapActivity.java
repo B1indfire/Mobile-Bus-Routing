@@ -1,19 +1,25 @@
 package uiuc.mbr;
 
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.*;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
 	private GoogleMap map;
+	/**Public for testing only*/
+	public final LocationHandler locationHandler = new LocationHandler();
+
+	public Marker userLocationMarker;
+
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -25,6 +31,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 				.findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
 	}
+
+
+
+
 
 
 	/**
@@ -41,10 +51,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	{
 		map = googleMap;
 
-		// Add a marker in Sydney and move the camera
-		LatLng pos = new LatLng(40.115009, -88.289264);
-		map.addMarker(new MarkerOptions().position(pos).title("my marker"));
+		LatLng debugPos = new LatLng(0, 0);
+		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
 		map.moveCamera(CameraUpdateFactory.zoomTo(14));
-		map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos));
+	}
+
+
+	/**Handles location updates.*/
+	public class LocationHandler implements LocationListener
+	{
+		@Override
+		public void onLocationChanged(Location location)
+		{
+			//TODO
+		}
 	}
 }
