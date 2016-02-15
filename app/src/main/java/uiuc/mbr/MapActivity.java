@@ -13,6 +13,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
 	private GoogleMap map;
+	private final LocationRequest locationRequest = new LocationRequest();
+	private final GoogleCallbacks googleCallbacks = new GoogleCallbacks();
+	private GoogleApiClient googleClient;
 	/**Public for testing only*/
 	public final LocationHandler locationHandler = new LocationHandler();
 
@@ -55,6 +58,30 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
 		map.moveCamera(CameraUpdateFactory.zoomTo(14));
 		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos));
+
+		googleClient = new GoogleApiClient.Builder(getApplicationContext())
+				.addApi(LocationServices.API)
+				.addConnectionCallbacks(googleCallbacks)
+				.build();
+		googleClient.connect();
+	}
+
+
+
+	/**Handles connecting to the Google APIs when the activity starts.*/
+	private class GoogleCallbacks implements GoogleApiClient.ConnectionCallbacks
+	{
+		@Override
+		public void onConnected(Bundle bundle) throws SecurityException
+		{
+			//get a first location update ASAP
+			locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+			locationRequest.setInterval(30 * 1000);
+			LocationServices.FusedLocationApi.requestLocationUpdates(googleClient, locationRequest, locationHandler);
+		}
+
+		@Override
+		public void onConnectionSuspended(int i){}
 	}
 
 
@@ -64,7 +91,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		@Override
 		public void onLocationChanged(Location location)
 		{
-			//TODO
+			LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+			userLocationMarker.setPosition(ll);
+			map.moveCamera(CameraUpdateFactory.newLatLng(ll));
 		}
 	}
 }
