@@ -42,9 +42,7 @@ public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivit
 				loc.setLatitude(testLocation.latitude);
 				loc.setLongitude(testLocation.longitude);
 				activity.locationHandler.onLocationChanged(loc);
-
-				assertEquals(testLocation.latitude, activity.userLocationMarker.getPosition().latitude);
-				assertEquals(testLocation.longitude, activity.userLocationMarker.getPosition().longitude);
+				assertEquals(testLocation, activity.userLocationMarker.getPosition());
 			}
 		});
 	}
