@@ -14,6 +14,7 @@ import java.util.Date;
 
 /**
  * Created by Richard Shen on 2/18/2016.
+ * API for accessing the Android calendar and events.
  */
 public class CalendarService {
     public static final String[] CALENDAR_PROJECTION = new String[]{
@@ -52,7 +53,10 @@ public class CalendarService {
         this.context = context;
     }
 
-    public Account getGoogleAccount() {
+    /**
+     * Returns the first listed Google account on the device.
+     */
+    private Account getGoogleAccount() {
         AccountManager manager = AccountManager.get(context);
         Account[] list = manager.getAccountsByType("com.google");
 
@@ -63,6 +67,10 @@ public class CalendarService {
         return null;
     }
 
+    /**
+     * Gets all calendars associated the current Google account on the device.
+     * @return An ArrayList of Calendars, null if no account was found.
+     */
     public ArrayList<Calendar> getCalendars() {
         // Run query
         Cursor cur = null;
@@ -102,12 +110,21 @@ public class CalendarService {
         return cals;
     }
 
+    /**
+     * @return All events in the next 24 hours.
+     */
     public ArrayList<Event> getEventsNext24Hours() {
         java.util.Calendar c = java.util.Calendar.getInstance();
         long now = c.getTimeInMillis();
         return getEvents(now, now+MILLISECONDS_IN_DAY);
     }
 
+    /**
+     * Finds all events that start between startTime and endTime.
+     * @param startTime Start time in UTC millis.
+     * @param endTime End time in UTC millis.
+     * @return An ArrayList of all Events starting between startTime and endTime.
+     */
     public ArrayList<Event> getEvents(long startTime, long endTime) {
         ContentResolver cr = context.getContentResolver();
 
