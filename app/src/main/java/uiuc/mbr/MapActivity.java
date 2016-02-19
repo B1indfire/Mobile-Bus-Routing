@@ -74,8 +74,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		@Override
 		public void onConnected(Bundle bundle) throws SecurityException
 		{
-			//get a first location update ASAP
-			locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+			//request a location update every 30 seconds
+			locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);//GPS, not network-based location
 			locationRequest.setInterval(30 * 1000);
 			LocationServices.FusedLocationApi.requestLocationUpdates(googleClient, locationRequest, locationHandler);
 		}
