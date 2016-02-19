@@ -14,6 +14,7 @@ import java.util.Date;
 
 /**
  * Created by Richard Shen on 2/18/2016.
+ * API for accessing the Android calendar and events.
  */
 public class CalendarService {
     public static final String[] CALENDAR_PROJECTION = new String[]{
@@ -52,34 +53,19 @@ public class CalendarService {
         this.context = context;
     }
 
-    public Account getGoogleAccount() {
-        AccountManager manager = AccountManager.get(context);
-        Account[] list = manager.getAccountsByType("com.google");
-
-        if (list.length > 0) {
-            Log.d("AccountName", list[0].name);
-            return list[0];
-        }
-        return null;
-    }
-
+    /**
+     * Gets all calendars associated the current Google account on the device.
+     * @return An ArrayList of Calendars, null if no account was found.
+     */
     public ArrayList<Calendar> getCalendars() {
         // Run query
         Cursor cur = null;
         ContentResolver cr = context.getContentResolver();
         Uri uri = CalendarContract.Calendars.CONTENT_URI;
-        String selection = "((" + CalendarContract.Calendars.ACCOUNT_NAME + " = ?) AND ("
-                + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?) AND (" + CalendarContract.Calendars.VISIBLE + " = ?) AND (" +
+        String selection = "((" + CalendarContract.Calendars.VISIBLE + " = ?) AND (" +
                 CalendarContract.Calendars.SYNC_EVENTS + " = ?))";
-        Account account = getGoogleAccount();
-        if(account == null) {
-            return null;
-        } else {
-            if(account.name == null) {
-                return null;
-            }
-        }
-        String[] selectionArgs = new String[]{getGoogleAccount().name, "com.google", "1", "1"};
+
+        String[] selectionArgs = new String[]{"1", "1"};
         ArrayList<Calendar> cals = new ArrayList<>();
         // Submit the query and get a Cursor object back.
         try {
@@ -102,19 +88,29 @@ public class CalendarService {
         return cals;
     }
 
+    /**
+     * @return All events in the next 24 hours.
+     */
     public ArrayList<Event> getEventsNext24Hours() {
         java.util.Calendar c = java.util.Calendar.getInstance();
         long now = c.getTimeInMillis();
         return getEvents(now, now+MILLISECONDS_IN_DAY);
     }
 
+    /**
+     * Finds all events that start between startTime and endTime.
+     * @param startTime Start time in UTC millis.
+     * @param endTime End time in UTC millis.
+     * @return An ArrayList of all Events starting between startTime and endTime.
+     */
     public ArrayList<Event> getEvents(long startTime, long endTime) {
         ContentResolver cr = context.getContentResolver();
 
         String selection = "(( " + CalendarContract.Instances.ALL_DAY + " = ?))";
         String[] selectionArgs = new String[]{"0"};
         Uri uri = CalendarContract.Instances.CONTENT_URI;
-        Cursor cur = cr.query(Uri.parse(uri.toString()+"/"+startTime+"/"+endTime),
+        Uri fullUri = Uri.parse(uri.toString()+"/"+startTime+"/"+endTime);
+        Cursor cur = cr.query(fullUri,
                 EVENT_PROJECTION,
                 selection,
                 selectionArgs,
