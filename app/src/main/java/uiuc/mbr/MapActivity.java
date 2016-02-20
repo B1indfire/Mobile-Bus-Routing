@@ -1,6 +1,7 @@
 package uiuc.mbr;
 
 import android.location.Location;
+import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -8,6 +9,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.*;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 {
@@ -52,10 +56,25 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	@Override
 	public void onMapReady(GoogleMap googleMap)
 	{
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 		map = googleMap;
 
 		LatLng debugPos = new LatLng(0, 0);
 		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
+
+		CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
+				PolylineOptions line = new PolylineOptions();
+		List<String> list = new ArrayList<String>();
+		try {
+				list = api.getShapeCoords("22N ILLINI 10");
+		} catch (Exception e) {}
+		line.width(5);
+		for (int i = 0; i < list.size(); i = i + 2) {
+				line.add(new LatLng(Double.parseDouble(list.get(i)), Double.parseDouble(list.get(i + 1))));
+		}
+		map.addPolyline(line);
+
 		map.moveCamera(CameraUpdateFactory.zoomTo(14));
 		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos));
 
