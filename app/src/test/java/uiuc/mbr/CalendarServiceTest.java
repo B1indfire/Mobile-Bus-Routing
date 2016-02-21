@@ -90,7 +90,11 @@ public class CalendarServiceTest extends AndroidTestCase {
     }
 
     @Test
-    public void testGetEventsNext24Hours() {
+    public void testGetEvents_NoEvents() {
+        when(cur.moveToNext()).thenReturn(false);
 
+        ArrayList<Event> events = cs.getEvents(0, 0);
+        assertNotNull(events);
+        assertEquals(0, events.size());
     }
 }

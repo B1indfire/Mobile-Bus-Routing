@@ -45,7 +45,10 @@ public class CalendarService {
     private static final int EVENT_BEGIN_INDEX = 5;
     private static final int EVENT_END_INDEX = 6;
 
-    public static final long MILLISECONDS_IN_DAY = 86400000;
+    private static final long MILLISECONDS_IN_DAY = 86400000;
+
+    private static final Uri CALENDAR_URI = Uri.parse("content://com.android.calendar/calendars");
+    private static final Uri INSTANCE_URI = Uri.parse("content://com.android.calendar/instances/when");
 
     Context context;
 
@@ -61,7 +64,6 @@ public class CalendarService {
         // Run query
         Cursor cur = null;
         ContentResolver cr = context.getContentResolver();
-        Uri uri = CalendarContract.Calendars.CONTENT_URI;
         String selection = "((" + CalendarContract.Calendars.VISIBLE + " = ?) AND (" +
                 CalendarContract.Calendars.SYNC_EVENTS + " = ?))";
 
@@ -69,7 +71,7 @@ public class CalendarService {
         ArrayList<Calendar> cals = new ArrayList<>();
         // Submit the query and get a Cursor object back.
         try {
-            cur = cr.query(uri, CALENDAR_PROJECTION, selection, selectionArgs, null);
+            cur = cr.query(CALENDAR_URI, CALENDAR_PROJECTION, selection, selectionArgs, null);
 
             while (cur.moveToNext()) {
                 long calID = 0;
@@ -108,8 +110,7 @@ public class CalendarService {
 
         String selection = "(( " + CalendarContract.Instances.ALL_DAY + " = ?))";
         String[] selectionArgs = new String[]{"0"};
-        Uri uri = CalendarContract.Instances.CONTENT_URI;
-        Uri fullUri = Uri.parse(uri.toString()+"/"+startTime+"/"+endTime);
+        Uri fullUri = Uri.parse(INSTANCE_URI+"/"+startTime+"/"+endTime);
         Cursor cur = cr.query(fullUri,
                 EVENT_PROJECTION,
                 selection,
