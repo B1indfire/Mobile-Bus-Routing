@@ -64,4 +64,6 @@ public class StartActivity extends AppCompatActivity
 	{
 		startActivity(new Intent(getApplicationContext(), MapActivity.class));
 	}
+
+
 }
