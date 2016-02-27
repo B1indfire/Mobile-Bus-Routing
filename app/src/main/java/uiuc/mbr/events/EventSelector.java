@@ -130,20 +130,23 @@ public class EventSelector extends AppCompatActivity {
 
                     //User cancels
                     if (a == null) {
-                        //TODO: Uncheck box
+                        buttonView.performClick(); //Invert checking
                         return;
                     }
 
                 }
                 //TODO: Store to alarm
             } else {
-                //TODO: Remove from alarm
+                //TODO: Remove from alarm (if listed)
             }
         }
 
         private Address getValidAddress() {
             Address a = null;
+            boolean okayed = false;
+
             while (a == null) {
+                okayed = false;
                 final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
                 builder.setTitle("Enter an Address");
 
@@ -181,7 +184,10 @@ public class EventSelector extends AppCompatActivity {
 
                 //Cancel out
                 if (addressInput.equals(""))
-                    break;
+                {
+                    Log.d("VALIDITY", "No imput detected");
+                    //break;
+                }
 
                 a = getEventLocation(addressInput);
             }
