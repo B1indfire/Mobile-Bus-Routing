@@ -44,6 +44,12 @@
 			android:label="@string/title_activity_map"
 			android:parentActivityName=".StartActivity">
 		</activity>
+
+		<activity
+			android:name=".events.EventSelector"
+
+			android:parentActivityName=".StartActivity">
+		</activity>
 	</application>
 
 </manifest>

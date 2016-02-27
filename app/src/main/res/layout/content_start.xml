@@ -25,4 +25,13 @@
 		android:text="Map it up"
 		android:onClick="clickMapBtn"
 		android:layout_marginLeft="95dp" android:layout_marginStart="95dp"/>
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Events"
+		android:onClick="clickEventBtn"
+		android:layout_marginLeft="95dp" android:layout_marginStart="95dp"/>
+
+
 </LinearLayout>

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import uiuc.mbr.events.EventSelector;
+
 public class StartActivity extends AppCompatActivity
 {
 
@@ -65,5 +67,9 @@ public class StartActivity extends AppCompatActivity
 		startActivity(new Intent(getApplicationContext(), MapActivity.class));
 	}
 
+	public void clickEventBtn (View v)
+	{
+		startActivity(new Intent(getApplicationContext(), EventSelector.class));
+	}
 
 }
