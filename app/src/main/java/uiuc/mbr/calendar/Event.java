@@ -98,5 +98,12 @@ public class Event {
     public void setLatLong(LatLong latLong) {
         this.latLong = latLong;
     }
+
+    public boolean equals(Object other) {
+        if (!(other instanceof Event))
+            return false;
+        Event e2 = (Event) other;
+        return this.name.equals(e2.getName()) && this.getStart().equals(e2.getStart());
+    }
 }
 

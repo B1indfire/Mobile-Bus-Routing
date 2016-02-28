@@ -49,11 +49,6 @@ public class EventSelector extends AppCompatActivity {
     private Geocoder geocoder;
     private CalendarService calService;
     private ArrayList<Event> eventlist;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    //private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +57,6 @@ public class EventSelector extends AppCompatActivity {
 
         calService = new CalendarService(this.getApplicationContext());
         geocoder = new Geocoder(this, Locale.getDefault());
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -75,7 +67,8 @@ public class EventSelector extends AppCompatActivity {
 
         eventlist = calService.getEventsNext24Hours();
 
-        //TODO: Set check boxes as checked if already stored
+        //TODO: Automatically call performClick() on events with shared parentId's (from previous instances)
+        //TODO: Blacklist events by CalendarID
 
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
         for (int i = 0; i < eventlist.size(); i++) {
@@ -86,6 +79,10 @@ public class EventSelector extends AppCompatActivity {
             checkBox.setOnCheckedChangeListener(new EventCheckboxListener(this, eventlist.get(i), checkBox));
             checkBox.setId(i);
             checkBox.setText(eventlist.get(i).getName());
+
+            if (Schedule.contains(eventlist.get(i)))
+                checkBox.setChecked(true);
+
             row.addView(checkBox);
             my_layout.addView(row);
         }
@@ -94,7 +91,6 @@ public class EventSelector extends AppCompatActivity {
 
 
     public LatLong getEventLocation(Event event) {
-        //TODO: Check invalid address to see if user has already supplied real address
         String location = event.getLocation();
         List<Address> address = new ArrayList<Address>() {
         };
@@ -113,7 +109,6 @@ public class EventSelector extends AppCompatActivity {
     }
 
     public LatLong getEventLocation(String location) {
-        //TODO: Check invalid address to see if user has already supplied real address
         List<Address> address = new ArrayList<Address>() {
         };
         try {
@@ -139,13 +134,11 @@ public class EventSelector extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         /*client.connect();
         Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "EventSelector Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
+                Action.TYPE_VIEW,
+                "EventSelector Page",
                 // make sure this auto-generated web page URL is correct.
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
                 Uri.parse("android-app://uiuc.mbr.events/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);*/
@@ -158,13 +151,11 @@ public class EventSelector extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         /*Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "EventSelector Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
+                Action.TYPE_VIEW,
+                "EventSelector Page",
                 // make sure this auto-generated web page URL is correct.
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
                 Uri.parse("android-app://uiuc.mbr.events/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
@@ -196,7 +187,7 @@ public class EventSelector extends AppCompatActivity {
                     addEventToSchedule(event);
                 }
             } else {
-                //TODO: Remove from alarm list (if listed)
+                Schedule.removeEvent(event);
             }
         }
 

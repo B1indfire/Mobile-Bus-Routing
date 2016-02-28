@@ -1,5 +1,7 @@
 package uiuc.mbr.events;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -24,16 +26,28 @@ public class Schedule {
 
     public static void addEvent(Event e) {
         clearExpiredEvents();
-        if (upcomingEvents.contains(e))
+        if (contains(e))
             return;
 
         upcomingEvents.add(e);
+        Log.d("Schedule", "Event Added: " + e);
+        for (Event ev : upcomingEvents)
+            Log.d("Schedule", ev.toString());
         //TODO: Launch background stuff (alarms)
     }
 
     public static void removeEvent(Event e) {
         clearExpiredEvents();
         upcomingEvents.remove(e);
+
+        //TODO: Remove from alarm list
+    }
+
+    public static boolean contains(Event e) {
+        for (Event ev : upcomingEvents)
+            if (e.equals(ev))
+                return true;
+        return false;
     }
 
     public static Event getNextEvent() {

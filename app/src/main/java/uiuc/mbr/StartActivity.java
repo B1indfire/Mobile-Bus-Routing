@@ -72,4 +72,7 @@ public class StartActivity extends AppCompatActivity
 		startActivity(new Intent(getApplicationContext(), EventSelector.class));
 	}
 
+
+	//tasks
+	//TODO: Edit/remove stored addresses
 }
