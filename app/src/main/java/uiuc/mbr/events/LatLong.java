@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by Scott on 2/28/2016.
+ * A serializable version of LatLng
  */
 public class LatLong implements Serializable {
     public double latitude;

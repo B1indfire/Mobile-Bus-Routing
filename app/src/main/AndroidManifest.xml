@@ -46,7 +46,7 @@
 		</activity>
 
 		<activity
-			android:name=".events.EventSelector"
+			android:name=".events.EventSelectionActivity"
 
 			android:parentActivityName=".StartActivity">
 		</activity>

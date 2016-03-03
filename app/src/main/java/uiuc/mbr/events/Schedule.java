@@ -7,8 +7,12 @@ import java.util.Date;
 
 import uiuc.mbr.calendar.Event;
 
+//TODO: Store upcoming events in memory or something
+
 /**
  * Created by Scott on 2/28/2016.
+ * Keeps track of Events chosen by the user for future routing
+ * Consists of static data and methods for global use
  */
 public class Schedule {
 
@@ -23,6 +27,7 @@ public class Schedule {
     public static void setUpcomingEvents(ArrayList<Event> events) {
         upcomingEvents = events;
     }
+
 
     public static void addEvent(Event e) {
         clearExpiredEvents();
@@ -43,12 +48,16 @@ public class Schedule {
         //TODO: Remove from alarm list
     }
 
+    /**
+     * Checks if the given Event is in the list of upcoming events using the Event.equals() method
+     */
     public static boolean contains(Event e) {
         for (Event ev : upcomingEvents)
             if (e.equals(ev))
                 return true;
         return false;
     }
+
 
     public static Event getNextEvent() {
         clearExpiredEvents();
@@ -62,6 +71,10 @@ public class Schedule {
         return first;
     }
 
+    /**
+     * Removes all Events from the list of upcoming events that begin before the current Date
+     * This should be called at the beginning of any Schedule method
+     */
     private static void clearExpiredEvents() {
         for (int i = upcomingEvents.size()-1; i >= 0; i--)
         {
