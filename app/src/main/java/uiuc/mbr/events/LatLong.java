@@ -17,8 +17,8 @@ import uiuc.mbr.calendar.Event;
  * A serializable version of LatLng
  */
 public class LatLong implements Serializable {
-    public double latitude;
-    public double longitude;
+    private double latitude;
+    private double longitude;
 
     public LatLong(double lat, double longi) {
         latitude = lat;
@@ -48,12 +48,31 @@ public class LatLong implements Serializable {
             e.printStackTrace();
         }
 
-        if (address.size() == 0) {
+        if (address == null || address.size() == 0) {
             return AddressBook.loadLatLongFromMemory(location, c);
         }
 
 
         Address a = address.get(0);
         return new LatLong(a.getLatitude(), a.getLongitude());
+    }
+
+
+
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
