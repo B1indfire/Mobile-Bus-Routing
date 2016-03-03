@@ -31,19 +31,28 @@ public class Schedule {
 
     public static void addEvent(Event e) {
         clearExpiredEvents();
+
         if (contains(e))
             return;
 
+        //Don't allow if already expired
+        Date now = new Date();
+        if (e.getStart().before(now))
+            return;
+
         upcomingEvents.add(e);
-        Log.d("Schedule", "Event Added: " + e);
-        for (Event ev : upcomingEvents)
-            Log.d("Schedule", ev.toString());
         //TODO: Launch background stuff (alarms)
     }
 
     public static void removeEvent(Event e) {
         clearExpiredEvents();
-        upcomingEvents.remove(e);
+
+        for (int i = 0; i < upcomingEvents.size(); i++) {
+            if (upcomingEvents.get(i).equals(e)) {
+                upcomingEvents.remove(i);
+                break;
+            }
+        }
 
         //TODO: Remove from alarm list
     }
@@ -85,4 +94,8 @@ public class Schedule {
         }
     }
 
+
+    public static void clearAllEvents() {
+        upcomingEvents = new ArrayList<Event>();
+    }
 }

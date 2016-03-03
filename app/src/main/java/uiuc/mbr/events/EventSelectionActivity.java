@@ -38,9 +38,6 @@ import uiuc.mbr.calendar.Event;
 //TODO: Refactor out address saving/loading
 public class EventSelectionActivity extends AppCompatActivity {
 
-    //Google Geocoder API object
-    private Geocoder geocoder;
-
     //Provides access to the device calendar
     private CalendarService calService;
 
@@ -50,7 +47,6 @@ public class EventSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_events);
 
         calService = new CalendarService(this.getApplicationContext());
-        geocoder = new Geocoder(this, Locale.getDefault());
     }
 
     @Override
@@ -130,35 +126,6 @@ public class EventSelectionActivity extends AppCompatActivity {
     }
 
     /**
-     * Finds the LatLong of an Event using Google's Geocoding API
-     * @return A LatLong if the Event's location is valid - null if invalid
-     */
-    public LatLong getEventLocation(Event event) {
-        return getEventLocation(event.getLocation());
-    }
-
-    /**
-     * Finds the LatLong of a string address using Google's Geocoding API
-     * @return A LatLong if the address' location is valid - null if invalid
-     */
-    public LatLong getEventLocation(String location) {
-        List<Address> address = new ArrayList<Address>() {};
-        try {
-            address = geocoder.getFromLocationName(location, 1, 39.47, -88.95, 40.49, -87.43); //Champaign area coords
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (address.size() == 0) {
-            return AddressBook.loadLatLongFromMemory(location, this);
-        }
-
-
-        Address a = address.get(0);
-        return new LatLong(a.getLatitude(), a.getLongitude());
-    }
-
-    /**
      * OnCheckChangeListener implementation for the Event list checkboxes
      */
     private class EventCheckboxListener implements CompoundButton.OnCheckedChangeListener {
@@ -191,7 +158,7 @@ public class EventSelectionActivity extends AppCompatActivity {
          */
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            LatLong a = getEventLocation(event);
+            LatLong a = LatLong.getEventLocation(event, parent);
 
             if (isChecked) { //Event Selected
                 if (a == null) { //Invalid Address
@@ -227,7 +194,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     addressInput = input.getText().toString();
-                    LatLong a = getEventLocation(addressInput);
+                    LatLong a = LatLong.getEventLocation(addressInput, parent);
                     if (a != null) {
                         event.setLatLong(a);
                         addEventToSchedule(event);
@@ -260,7 +227,7 @@ public class EventSelectionActivity extends AppCompatActivity {
         private void addEventToSchedule(Event e) {
 
             //if location string is invalid and not in memory
-            if (getEventLocation(e) == null) //Invalid
+            if (LatLong.getEventLocation(e, parent) == null) //Invalid
                 if (!AddressBook.locationInMemory(e.getLocation(), parent)) //Not in memory
                     promptForSavingAddress(e);
 
