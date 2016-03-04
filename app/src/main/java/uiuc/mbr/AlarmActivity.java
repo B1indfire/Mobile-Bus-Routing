@@ -1,4 +1,4 @@
-package uiuc.mbr.calendar;
+package uiuc.mbr;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -47,9 +47,7 @@ public class AlarmActivity extends AppCompatActivity
 		}
 
 		Alarm alarm = new Alarm(name.getText().toString(), when);
-		Intent intent = new Intent(getApplicationContext(), OnAlarmActivity.class);
-		PendingIntent action = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-		Alarm.add(alarm, action, getApplicationContext());
+		Alarm.add(alarm, getApplicationContext());
 
 		name.setText("");
 		Toast.makeText(getApplicationContext(), "Alarm created.", Toast.LENGTH_SHORT).show();

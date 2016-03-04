@@ -47,9 +47,11 @@
 			android:label="@string/title_activity_map"
 			android:parentActivityName=".StartActivity">
 		</activity>
-		<activity android:name=".calendar.AlarmActivity">
+		<activity android:name=".AlarmActivity">
 		</activity>
 		<activity android:name=".OnAlarmActivity">
+		</activity>
+		<activity android:name=".EventAlarmActivity">
 		</activity>
 	</application>
 

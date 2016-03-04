@@ -3,6 +3,7 @@ package uiuc.mbr;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 
 import java.util.*;
 import java.util.Calendar;
@@ -14,8 +15,11 @@ public class Alarm implements Comparable<Alarm>
 	private static final PriorityQueue<Alarm> alarms = new PriorityQueue<>();
 	private static final Map<Alarm, PendingIntent> pendingIntents = new HashMap<>();
 
-	public static void add(Alarm alarm, PendingIntent action, Context context)
+	public static void add(Alarm alarm, Context context)
 	{
+		Intent intent = new Intent(context, OnAlarmActivity.class);
+		PendingIntent action = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
 		alarms.add(alarm);
 		pendingIntents.put(alarm, action);
 		AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -36,6 +40,15 @@ public class Alarm implements Comparable<Alarm>
 		AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		mgr.cancel(pendingIntents.get(alarm));
 		pendingIntents.remove(alarm);
+	}
+
+	public static void removeAll(Context context)
+	{
+		AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		for(PendingIntent pending : pendingIntents.values())
+			mgr.cancel(pending);
+		alarms.clear();
+		pendingIntents.clear();
 	}
 
 
