@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import uiuc.mbr.calendar.AlarmActivity;
+
 public class StartActivity extends AppCompatActivity
 {
 
@@ -63,5 +65,13 @@ public class StartActivity extends AppCompatActivity
 	public void clickMapBtn(View v)
 	{
 		startActivity(new Intent(getApplicationContext(), MapActivity.class));
+	}
+	public void clickAlarmBtn(View v)
+	{
+		startActivity(new Intent(getApplicationContext(), AlarmActivity.class));
+	}
+	public void clickViewAlarmsBtn(View v)
+	{
+		startActivity(new Intent(getApplicationContext(), OnAlarmActivity.class));
 	}
 }
