@@ -7,8 +7,6 @@ import org.json.*;
 
 public class CumtdApi {
 
-    // This class is used for connecting and retrieving data from CumtdApi. Further JSON parsing methods should be implemented here.
-
     String url;
     String key;
 
@@ -152,6 +150,45 @@ public class CumtdApi {
         for(int i = 0 ; i < array.length() ; i = i + 2){
             list.add(array.getJSONObject(i).get("shape_pt_lat").toString());
             list.add(array.getJSONObject(i).get("shape_pt_lon").toString());
+        }
+        return list;
+    }
+
+    /**
+     * Get nearest stops from the current latitude and longitude.
+     * @param x
+     * @param y
+     * @return
+     * @throws JSONException
+     * @throws MalformedURLException
+     * @throws IOException
+     */
+    public List<String> getNearestStops(String x, String y) throws JSONException, MalformedURLException, IOException {
+        List<String> list = new ArrayList<String>();
+        JSONArray array = getStopsByLatLon(x, y).getJSONArray("stops");
+        for (int i = 0; i < 5; i++) {
+            String stop_id = (String) array.getJSONObject(i).get("stop_id");
+            String stop_name = (String) array.getJSONObject(i).get("stop_name");
+            list.add(stop_id + ":" + stop_name);
+        }
+        return list;
+    }
+
+    /**
+     * Get future departures from current stop id.
+     * @param stop_id
+     * @return
+     * @throws JSONException
+     * @throws MalformedURLException
+     * @throws IOException
+     */
+    public List<String> getDepartures(String stop_id) throws JSONException, MalformedURLException, IOException {
+        List<String> list = new ArrayList<String>();
+        JSONArray array = getDeparturesByStop(stop_id).getJSONArray("departures");
+        for (int i = 0; i < array.length(); i++) {
+            String headsign = (String) array.getJSONObject(i).get("headsign");
+            String expected = (String) array.getJSONObject(i).get("expected");
+            list.add(expected + ":" + headsign);
         }
         return list;
     }

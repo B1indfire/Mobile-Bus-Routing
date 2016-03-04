@@ -44,6 +44,11 @@
 			android:label="@string/title_activity_map"
 			android:parentActivityName=".StartActivity">
 		</activity>
+
+		<activity
+			android:name=".GetStops"
+			android:label="GetStops"
+			android:theme="@style/AppTheme.NoActionBar"></activity>
 	</application>
 
 </manifest>
