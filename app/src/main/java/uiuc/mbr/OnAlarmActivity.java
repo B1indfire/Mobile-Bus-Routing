@@ -1,13 +1,17 @@
 package uiuc.mbr;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +33,7 @@ public class OnAlarmActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_on_alarm);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
 		currentAlarmName = (TextView)findViewById(R.id.a_onalarm_current_name);
 		alarmsEmpty = findViewById(R.id.a_onalarm_empty);
@@ -36,8 +41,6 @@ public class OnAlarmActivity extends AppCompatActivity
 		yesCurrent = findViewById(R.id.a_onalarm_yescurrent);
 		ListView listView = (ListView)findViewById(R.id.a_onalarm_list);
 		listView.setAdapter(adapter);
-
-		refresh();
 	}
 
 
@@ -77,6 +80,14 @@ public class OnAlarmActivity extends AppCompatActivity
 			soundPlayer.setLooping(true);
 			soundPlayer.start();
 		}
+	}
+
+
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		refresh();
 	}
 
 
