@@ -2,6 +2,7 @@ package uiuc.mbr;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,9 +13,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import org.json.JSONException;
 
@@ -22,8 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import uiuc.mbr.CumtdApi;
-import uiuc.mbr.R;
 
 public class GetStops extends AppCompatActivity {
 
@@ -53,7 +53,7 @@ public class GetStops extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Get location.
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
         double longitude = location.getLongitude();
         double latitude = location.getLatitude();
 
@@ -68,101 +68,30 @@ public class GetStops extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Sets up buttons for nearest stops and set trigger to display departures on button click.
-        final Button button1 = (Button) findViewById(R.id.button1);
-        button1.setText(list.get(0));
-        button1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                List<String> list = new ArrayList<String>();
-                CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-                try {
-                    final Button button = (Button) findViewById(R.id.button1);
-                    list = api.getDepartures(button.getText().toString().split(":")[0]);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layout);
+        for (String stop : list) {
+            Button btn = new Button(this);
+            btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            btn.setText(stop);
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    ArrayList<String> list = new ArrayList<String>();
+                    CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
+                    try {
+                        final Button button = (Button) v;
+                        list = (ArrayList<String>) api.getDepartures(button.getText().toString().split(":")[0]);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Intent intent = new Intent(getBaseContext(), StopList.class);
+                    intent.putExtra("departures", list);
+                    startActivity(intent);
                 }
-                final TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText(list.toString());
-            }
-        });
-        final Button button2 = (Button) findViewById(R.id.button2);
-        button2.setText(list.get(1));
-        button2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                List<String> list = new ArrayList<String>();
-                CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-                try {
-                    final Button button = (Button) findViewById(R.id.button2);
-                    list = api.getDepartures(button.getText().toString().split(":")[0]);
-                    list = api.getDepartures(list.get(0).split(":")[0]);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                final TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText(list.toString());
-            }
-        });
-        final Button button3 = (Button) findViewById(R.id.button3);
-        button3.setText(list.get(2));
-        button3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                List<String> list = new ArrayList<String>();
-                CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-                try {
-                    final Button button = (Button) findViewById(R.id.button3);
-                    list = api.getDepartures(button.getText().toString().split(":")[0]);
-                    list = api.getDepartures(list.get(0).split(":")[0]);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                final TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText(list.toString());
-            }
-        });
-        final Button button4 = (Button) findViewById(R.id.button4);
-        button4.setText(list.get(3));
-        button4.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                List<String> list = new ArrayList<String>();
-                CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-                try {
-                    final Button button = (Button) findViewById(R.id.button4);
-                    list = api.getDepartures(button.getText().toString().split(":")[0]);
-                    list = api.getDepartures(list.get(0).split(":")[0]);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                final TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText(list.toString());
-            }
-        });
-        final Button button5 = (Button) findViewById(R.id.button5);
-        button5.setText(list.get(4));
-        button5.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                List<String> list = new ArrayList<String>();
-                CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-                try {
-                    final Button button = (Button) findViewById(R.id.button5);
-                    list = api.getDepartures(button.getText().toString().split(":")[0]);
-                    list = api.getDepartures(list.get(0).split(":")[0]);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                final TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText(list.toString());
-            }
-        });
+            });
+            linearLayout.addView(btn);
+        }
     }
 
 }

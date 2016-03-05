@@ -48,7 +48,12 @@
 		<activity
 			android:name=".GetStops"
 			android:label="GetStops"
-			android:theme="@style/AppTheme.NoActionBar"></activity>
+			android:theme="@style/AppTheme.NoActionBar"/>
+
+		<activity
+			android:name=".StopList"
+			android:label="StopList"
+			android:theme="@style/AppTheme.NoActionBar"/>
 	</application>
 
 </manifest>
