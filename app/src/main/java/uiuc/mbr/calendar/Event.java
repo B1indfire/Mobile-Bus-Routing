@@ -1,6 +1,10 @@
 package uiuc.mbr.calendar;
 
+import android.location.Address;
+
 import java.util.Date;
+
+import uiuc.mbr.events.LatLong;
 
 /**
  * Created by Richard Shen on 2/18/2016.
@@ -13,6 +17,8 @@ public class Event {
     private String location;
     private Date start;
     private Date end;
+
+    private LatLong latLong;
 
     public Event(long calendarId, long parentEventId, String name, String description, String location, Date start, Date end) {
         this.calendarId = calendarId;
@@ -83,6 +89,21 @@ public class Event {
     public String toString(){
         return "EVENT{CAL_ID: "+calendarId+", PARENT_EVENT_ID: "+parentEventId+", NAME: "+name+", DESCRIPTION: "+description
                 +", LOCATION: "+location+", START: "+start.toString()+", END: "+end.toString()+"}";
+    }
+
+    public LatLong getLatLong() {
+        return latLong;
+    }
+
+    public void setLatLong(LatLong latLong) {
+        this.latLong = latLong;
+    }
+
+    public boolean equals(Object other) {
+        if (!(other instanceof Event))
+            return false;
+        Event e2 = (Event) other;
+        return this.name.equals(e2.getName()) && this.getStart().equals(e2.getStart());
     }
 }
 

@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import uiuc.mbr.events.EventSelectionActivity;
+
 public class StartActivity extends AppCompatActivity
 {
 
@@ -82,4 +84,13 @@ public class StartActivity extends AppCompatActivity
 	{
 		startActivity(new Intent(getApplicationContext(), EventAlarmActivity.class));
 	}
+
+	public void clickEventBtn (View v)
+	{
+		startActivity(new Intent(getApplicationContext(), EventSelectionActivity.class));
+	}
+
+
+	//tasks
+	//TODO: Edit/remove stored addresses
 }
