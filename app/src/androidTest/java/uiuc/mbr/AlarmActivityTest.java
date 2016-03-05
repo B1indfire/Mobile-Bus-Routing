@@ -14,9 +14,6 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-/**
- * Created by Richard Shen on 3/5/2016.
- */
 public class AlarmActivityTest extends ActivityInstrumentationTestCase2<AlarmActivity> {
 
     AlarmActivity thisActivity;
