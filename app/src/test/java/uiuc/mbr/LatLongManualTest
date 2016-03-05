@@ -1,0 +1,34 @@
+1. Create events (Validity refers to valid address/location)
+    -Invalid past event
+    -Valid Past event
+    -Invalid Future event
+    -Valid Futire event
+
+2. Open MBR app
+3. Navigate to events page
+4. Verify that both future events are listed and no past events are listed.
+
+5. Check the valid future event.
+    -Verify that the checkbox is checked.
+    -Verify that no prompts occur
+    -minimize and reopen the app, verify that the checkbox is still checked
+
+6. Check the invalid future event.
+    -Verify that a prompt for a valid address appeears.
+        -Press Cancel
+            -Verify that the checkbox is unchecked.
+        -Input an invalid address such as "asdlgjkahfglkjahui"
+            -Verify that the checkbox is unchecked.
+            -Verify that an "Invalid address" toast appears.
+        -Input a valid address.
+            -Verify that a prompt to save the address appears.
+            -Say no.
+                -Verify that the checkbox has been checked.
+                -Uncheck the box.
+                -Recheck the box.
+                -Verfiy that you are prompted again for a valid address.
+            -Say yes.
+                -Verify that the checkbox has been checked
+                -Uncheck the checkbox
+                -Recheck the checkbox
+                -Verify that you are not prompted for a valid address.
