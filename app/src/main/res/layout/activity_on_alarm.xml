@@ -42,7 +42,8 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
 			android:text="Shut up!"
-			android:onClick="clickAlarmOffBtn"/>
+			android:onClick="clickAlarmOffBtn"
+			android:id="@+id/turn_off_alarm_btn"/>
 	</LinearLayout>
 
 
