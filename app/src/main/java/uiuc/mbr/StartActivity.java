@@ -58,8 +58,6 @@ public class StartActivity extends AppCompatActivity
 		return super.onOptionsItemSelected(item);
 	}
 
-
-
 	public void clickMapBtn(View v)
 	{
 		startActivity(new Intent(getApplicationContext(), MapActivity.class));
@@ -68,5 +66,20 @@ public class StartActivity extends AppCompatActivity
 	public void clickStpBtn(View v)
 	{
 		startActivity(new Intent(getApplicationContext(), GetStops.class));
+	}
+
+	public void clickAlarmBtn(View v)
+	{
+		startActivity(new Intent(getApplicationContext(), AlarmActivity.class));
+	}
+
+	public void clickViewAlarmsBtn(View v)
+	{
+		startActivity(new Intent(getApplicationContext(), OnAlarmActivity.class));
+	}
+
+	public void clickEventAlarmsBtn(View v)
+	{
+		startActivity(new Intent(getApplicationContext(), EventAlarmActivity.class));
 	}
 }
