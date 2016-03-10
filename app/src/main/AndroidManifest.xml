@@ -64,9 +64,19 @@
 
 		<activity
 			android:name=".events.EventSelectionActivity"
-
 			android:parentActivityName=".StartActivity">
 		</activity>
+
+		<activity
+			android:name=".events.CalendarSelectionActivity"
+			android:parentActivityName=".StartActivity">
+		</activity>
+
+		<activity
+			android:name=".events.AddressBookActivity"
+			android:parentActivityName=".StartActivity">
+		</activity>
+
 		<!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
 		<meta-data

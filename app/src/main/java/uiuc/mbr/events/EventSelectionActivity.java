@@ -102,10 +102,16 @@ public class EventSelectionActivity extends AppCompatActivity {
         ArrayList<Event> eventlist = calService.getEventsNext24Hours();
 
         //TODO: Automatically call performClick() on events with shared parentId's (from previous instances)
-        //TODO: Blacklist events by CalendarID
 
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
         for (int i = 0; i < eventlist.size(); i++) {
+
+            //Blacklist
+            if (CalendarBlacklist.contains(eventlist.get(i).getCalendarId(), this)
+               && !Schedule.contains(eventlist.get(i))) {
+                continue;
+            }
+
             TableRow row = new TableRow(this);
             row.setId(i);
             row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));

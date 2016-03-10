@@ -57,6 +57,18 @@ public class Schedule {
         //TODO: Remove from alarm list
     }
 
+    public static void removeEventsWithAddress(String loc) {
+        clearExpiredEvents();
+
+        for (int i = 0; i < upcomingEvents.size(); i++) {
+            if (upcomingEvents.get(i).getLocation().equals(loc)) {
+                upcomingEvents.remove(i);
+            }
+        }
+
+        //TODO: Remove from alarm list
+    }
+
     /**
      * Checks if the given Event is in the list of upcoming events using the Event.equals() method
      */

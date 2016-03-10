@@ -22,6 +22,7 @@ public class AddressBook {
     /**
      * Saves the given (String, LatLong) pair to memory
      * If the memory hasn't been initialized, this method will create a new file
+     * If an existing Sting loc already is in the addressBook, it will be overwritten
      */
     public static void saveAddress(String loc, LatLong a, Context c) {
         //Create file if it doesn't exist
@@ -128,5 +129,76 @@ public class AddressBook {
             return null;
 
         return addresses.get(loc);
+    }
+
+
+    /**
+     * Removes the key-value pair to which loc belongs to
+     */
+    public static void remove(String loc, Context c) {
+        //Read in current mapping
+        HashMap<String, LatLong> addresses = null;
+        try {
+            FileInputStream fis = c.openFileInput(ADDRESS_FILE);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            addresses = (HashMap<String, LatLong>) ois.readObject();
+            ois.close();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (StreamCorruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses == null)
+            addresses = new HashMap<>();
+
+        addresses.remove(loc);
+
+        //Write to address_file
+        FileOutputStream fos = null;
+        try {
+            fos = c.openFileOutput(ADDRESS_FILE, Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(addresses);
+            oos.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Returns the full set of addresses in memory
+     * Will return an empty map, not null, on any failure
+     */
+    public static HashMap<String, LatLong> getFullAddressBook(Context c) {
+        HashMap<String, LatLong> addresses = null;
+        try {
+            FileInputStream fis = c.openFileInput(ADDRESS_FILE);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            addresses = (HashMap<String, LatLong>) ois.readObject();
+            ois.close();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (StreamCorruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses == null)
+            addresses = new HashMap<>();
+
+        return addresses;
     }
 }
