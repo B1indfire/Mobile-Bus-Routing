@@ -192,4 +192,41 @@ public class CumtdApi {
         }
         return list;
     }
+
+        
+    public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat, String destination_lon, String date, String time, String max_walk, String arrive_depart) throws JSONException, MalformedURLException, IOException {
+        String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat + "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+ "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time + "&max_walk=" + max_walk + "&arrive_depart=" + arrive_depart;
+        JSONObject object = jsonFromString(readFromUrl(url));
+        JSONArray itineraries = object.getJSONArray("itineraries");
+        JSONObject itinerary = itineraries.getJSONObject(0);
+        int duration = itinerary.getInt("travel_time");
+        Directions d = new Directions(duration);
+        JSONArray legs = itinerary.getJSONArray("legs");
+        for (int i = 0; i < legs.length(); i++) {
+            JSONObject current = legs.getJSONObject(i);
+            String type = current.getString("type");
+            if (type.equals("Walk")) {;
+                JSONObject walk = current.getJSONObject("walk");
+                String direction = walk.getString("direction");
+                String distance = walk.get("distance").toString();
+                JSONObject end = walk.getJSONObject("end");
+                String target = end.getString("name");
+                d.addDirections("Head " + direction + " for " + distance + " miles to " + target + ".");
+            } 
+            if (type.equals("Service")) {
+                JSONArray services = current.getJSONArray("services");
+                for (int j = 0; j < services.length(); j++) {
+                    JSONObject service = services.getJSONObject(j);
+                    JSONObject begin = service.getJSONObject("begin");
+                    JSONObject end = service.getJSONObject("end");
+                    JSONObject route = service.getJSONObject("route");
+                    String start = begin.getString("name");
+                    String finish = end.getString("name");
+                    String bus = route.getString("route_id");
+                    d.addDirections("Take the " + bus + " bus from " + start + " to " + finish + ".");
+                }
+            }
+        }
+        return d;
+    }
 }
