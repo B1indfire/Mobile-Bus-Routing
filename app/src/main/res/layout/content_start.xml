@@ -17,48 +17,57 @@
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Mobile bus routing."/>
+		android:text="Mobile bus routing"/>
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Map it up"
 		android:onClick="clickMapBtn"
-		android:layout_marginLeft="95dp" android:layout_marginStart="95dp"/>
+		android:layout_gravity="center_horizontal" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Get Stop"
-		android:layout_marginLeft="95dp"
-		android:layout_marginStart="95dp"
 		android:id="@+id/button"
-		android:onClick="clickStpBtn" />
+		android:onClick="clickStpBtn"
+		android:layout_gravity="center_horizontal" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Create Alarm"
-		android:onClick="clickAlarmBtn"/>
+		android:onClick="clickAlarmBtn"
+		android:layout_gravity="center_horizontal" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="View Alarms"
-		android:onClick="clickViewAlarmsBtn"/>
+		android:onClick="clickViewAlarmsBtn"
+		android:layout_gravity="center_horizontal" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Set Event Alarms"
-		android:onClick="clickEventAlarmsBtn"/>
+		android:onClick="clickEventAlarmsBtn"
+		android:layout_gravity="center_horizontal" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Events"
 		android:onClick="clickEventBtn"
-		android:layout_marginLeft="95dp" android:layout_marginStart="95dp"/>
+		android:layout_gravity="center_horizontal" />
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Settings"
+		android:onClick="clickSettingsBtn"
+		android:layout_gravity="center_horizontal" />
 
 
 </LinearLayout>
