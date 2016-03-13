@@ -109,4 +109,12 @@
         android:layout_weight="0.06"
         android:onClick="saveSettings" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="1073079428729 "
+        android:id="@+id/google_app_id"
+        android:layout_gravity="right" />
+
 </LinearLayout>
