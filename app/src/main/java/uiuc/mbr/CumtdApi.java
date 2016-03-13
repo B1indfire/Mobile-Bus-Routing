@@ -193,10 +193,7 @@ public class CumtdApi {
         return list;
     }
 
-        
-    public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat, String destination_lon, String date, String time, String max_walk, String arrive_depart) throws JSONException, MalformedURLException, IOException {
-        String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat + "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+ "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time + "&max_walk=" + max_walk + "&arrive_depart=" + arrive_depart;
-        JSONObject object = jsonFromString(readFromUrl(url));
+    public Directions parseTripData(JSONObject object) {
         JSONArray itineraries = object.getJSONArray("itineraries");
         JSONObject itinerary = itineraries.getJSONObject(0);
         int duration = itinerary.getInt("travel_time");
@@ -228,5 +225,11 @@ public class CumtdApi {
             }
         }
         return d;
+    }
+    
+    public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat, String destination_lon, String date, String time, String max_walk, String arrive_depart) throws MalformedURLException, IOException {
+        String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat + "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+ "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time + "&max_walk=" + max_walk + "&arrive_depart=" + arrive_depart;
+        return parseTripData(jsonFromString(readFromUrl(url)));
+        
     }
 }
