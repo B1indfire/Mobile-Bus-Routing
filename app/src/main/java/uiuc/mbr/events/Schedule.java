@@ -1,7 +1,5 @@
 package uiuc.mbr.events;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -10,7 +8,6 @@ import uiuc.mbr.calendar.Event;
 //TODO: Store upcoming events in memory or something
 
 /**
- * Created by Scott on 2/28/2016.
  * Keeps track of Events chosen by the user for future routing
  * Consists of static data and methods for global use
  */

@@ -15,6 +15,7 @@ import uiuc.mbr.calendar.Event;
 /**
  * Created by Scott on 2/28/2016.
  * A serializable version of LatLng
+ * TODO get rid of the parts that duplicate Android's LatLng
  */
 public class LatLong implements Serializable {
     private double latitude;

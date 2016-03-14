@@ -14,13 +14,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+
+import uiuc.mbr.serv.AlarmService;
 
 public class OnAlarmActivity extends AppCompatActivity
 {
 	private TextView currentAlarmName;
 	private View alarmsEmpty, noCurrent, yesCurrent;
 
-	private Alarm[] alarms;
+	private List<Alarm> alarms;
 	private final Adapter adapter = new Adapter();
 	private MediaPlayer soundPlayer = null;
 
@@ -43,18 +47,19 @@ public class OnAlarmActivity extends AppCompatActivity
 
 	private void refresh()
 	{
-		alarms = Alarm.allAlarms();
+		alarms = AlarmService.getUntriggeredAlarms();
+		Collections.sort(alarms);
 		adapter.notifyDataSetChanged();
 
 		String text;
-		if(alarms.length == 0)
+		Alarm triggered = AlarmService.getTriggeredAlarm();
+		if(triggered == null)
 			text = null;
 		else
 		{
-			Alarm current = alarms[0];
 			Calendar now = Calendar.getInstance();
-			if(current.when.compareTo(now) <= 0)
-				text = current.name;
+			if(triggered.when.compareTo(now) <= 0)
+				text = triggered.name;
 			else
 				text = null;
 		}
@@ -110,9 +115,7 @@ public class OnAlarmActivity extends AppCompatActivity
 	public void clickAlarmOffBtn(View v)
 	{
 		stopSoundIfPlaying();
-		Alarm alarm = alarms[0];
-		Alarm.remove(alarm, getApplicationContext());
-		adapter.notifyDataSetChanged();
+		AlarmService.clearTriggeredAlarm(getApplicationContext());
 		refresh();
 	}
 
@@ -121,13 +124,13 @@ public class OnAlarmActivity extends AppCompatActivity
 	private class Adapter extends BaseAdapter
 	{
 		@Override
-		public int getCount(){return alarms == null ? 0 : alarms.length;}
+		public int getCount(){return alarms == null ? 0 : alarms.size();}
 
 		@Override
-		public Alarm getItem(int i){return alarms[i];}
+		public Alarm getItem(int i){return alarms.get(i);}
 
 		@Override
-		public long getItemId(int i){return alarms[i].when.hashCode();}
+		public long getItemId(int i){return getItem(i).when.hashCode();}
 
 		@Override
 		public View getView(int i, View view, ViewGroup parent)
@@ -152,6 +155,6 @@ public class OnAlarmActivity extends AppCompatActivity
 
 
 		/**Updates the display of whether the list of alarms is empty.*/
-		private void updateEmpty(){alarmsEmpty.setVisibility(alarms.length == 0 ? View.VISIBLE : View.INVISIBLE);}
+		private void updateEmpty(){alarmsEmpty.setVisibility(alarms.isEmpty() ? View.VISIBLE : View.INVISIBLE);}
 	}
 }

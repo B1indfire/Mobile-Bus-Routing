@@ -1,7 +1,5 @@
 package uiuc.mbr;
 
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,9 +9,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import uiuc.mbr.Alarm;
-import uiuc.mbr.OnAlarmActivity;
-import uiuc.mbr.R;
+import uiuc.mbr.serv.AlarmService;
 
 public class AlarmActivity extends AppCompatActivity
 {
@@ -47,7 +43,7 @@ public class AlarmActivity extends AppCompatActivity
 		}
 
 		Alarm alarm = new Alarm(name.getText().toString(), when);
-		Alarm.add(alarm, getApplicationContext());
+		AlarmService.addAlarm(alarm, getApplicationContext());
 
 		name.setText("");
 		Toast.makeText(getApplicationContext(), "Alarm created.", Toast.LENGTH_SHORT).show();

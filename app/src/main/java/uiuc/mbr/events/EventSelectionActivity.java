@@ -29,7 +29,6 @@ import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
 
 /**
- * Created by varungove on 2/27/16.
  * Activity where the User can select from a list of upcoming Events and choose which to add to the Schedule
  * If an Event has an invalid address, they will be prompted for a valid address
  * If they supply a valid address, the address will be saved to the device memory
@@ -49,41 +48,6 @@ public class EventSelectionActivity extends AppCompatActivity {
         calService = new CalendarService(this.getApplicationContext());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        /*client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW,
-                "EventSelectionActivity Page",
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                Uri.parse("android-app://uiuc.mbr.events/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);*/
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        /*Action viewAction = Action.newAction(
-                Action.TYPE_VIEW,
-                "EventSelectionActivity Page",
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                Uri.parse("android-app://uiuc.mbr.events/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();*/
-    }
 
     @Override
     protected void onResume() {
@@ -96,8 +60,8 @@ public class EventSelectionActivity extends AppCompatActivity {
      * Events are listed with CheckBoxes indicating if they are in the User's schedule
      */
     private void displayEventList() {
-        LinearLayout my_layout = (LinearLayout) findViewById(R.id.events);
-        my_layout.removeAllViews();
+        LinearLayout myLayout = (LinearLayout) findViewById(R.id.events);
+        myLayout.removeAllViews();
 
         ArrayList<Event> eventlist = calService.getEventsNext24Hours();
 
@@ -121,7 +85,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                 checkBox.setChecked(true);
 
             row.addView(checkBox);
-            my_layout.addView(row);
+            myLayout.addView(row);
         }
     }
 
