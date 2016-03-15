@@ -11,6 +11,7 @@ import java.util.Calendar;
 
 import uiuc.mbr.serv.AlarmService;
 
+//TODO REMOVE
 public class AlarmActivity extends AppCompatActivity
 {
 	private TimePicker time;
@@ -22,30 +23,30 @@ public class AlarmActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_alarm);
-		time = (TimePicker)findViewById(R.id.a_alarm_time);
-		name = (TextView)findViewById(R.id.a_alarm_name);
+//		time = (TimePicker)findViewById(R.id.a_alarm_time);
+//		name = (TextView)findViewById(R.id.a_alarm_name);
 	}
 
 
 
 	public void clickAlarmBtn(View v)
 	{
-		Calendar when = Calendar.getInstance();
-		when.set(Calendar.HOUR_OF_DAY, time.getCurrentHour());//the non-deprecated methods require API 23 (Android 6)
-		when.set(Calendar.MINUTE, time.getCurrentMinute());
-		when.set(Calendar.SECOND, 0);
-
-		Calendar now = Calendar.getInstance();
-		if(when.compareTo(now) <= 0)
-		{
-			Toast.makeText(getApplicationContext(), "Cannot create an alarm in the past.", Toast.LENGTH_LONG).show();
-			return;
-		}
-
-		Alarm alarm = new Alarm(name.getText().toString(), when);
-		AlarmService.addAlarm(alarm, getApplicationContext());
-
-		name.setText("");
-		Toast.makeText(getApplicationContext(), "Alarm created.", Toast.LENGTH_SHORT).show();
+//		Calendar when = Calendar.getInstance();
+//		when.set(Calendar.HOUR_OF_DAY, time.getCurrentHour());//the non-deprecated methods require API 23 (Android 6)
+//		when.set(Calendar.MINUTE, time.getCurrentMinute());
+//		when.set(Calendar.SECOND, 0);
+//
+//		Calendar now = Calendar.getInstance();
+//		if(when.compareTo(now) <= 0)
+//		{
+//			Toast.makeText(getApplicationContext(), "Cannot create an alarm in the past.", Toast.LENGTH_LONG).show();
+//			return;
+//		}
+//
+//		Alarm alarm = new Alarm(name.getText().toString(), when);
+//		AlarmService.addAlarm(alarm, getApplicationContext());
+//
+//		name.setText("");
+//		Toast.makeText(getApplicationContext(), "Alarm created.", Toast.LENGTH_SHORT).show();
 	}
 }

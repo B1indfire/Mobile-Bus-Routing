@@ -1,14 +1,11 @@
 package uiuc.mbr.calendar;
 
-import android.location.Address;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
-import uiuc.mbr.events.LatLong;
+import uiuc.mbr.events.LocationLookup;
 
-/**
- * Created by Richard Shen on 2/18/2016.
- */
 public class Event {
     private long calendarId;
     private long parentEventId;
@@ -18,7 +15,7 @@ public class Event {
     private Date start;
     private Date end;
 
-    private LatLong latLong;
+    private LatLng latLong;
 
     public Event(long calendarId, long parentEventId, String name, String description, String location, Date start, Date end) {
         this.calendarId = calendarId;
@@ -91,11 +88,11 @@ public class Event {
                 +", LOCATION: "+location+", START: "+start.toString()+", END: "+end.toString()+"}";
     }
 
-    public LatLong getLatLong() {
+    public LatLng getLatLong() {
         return latLong;
     }
 
-    public void setLatLong(LatLong latLong) {
+    public void setLatLong(LatLng latLong) {
         this.latLong = latLong;
     }
 

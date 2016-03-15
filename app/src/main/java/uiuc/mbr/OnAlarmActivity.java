@@ -58,8 +58,8 @@ public class OnAlarmActivity extends AppCompatActivity
 		else
 		{
 			Calendar now = Calendar.getInstance();
-			if(triggered.when.compareTo(now) <= 0)
-				text = triggered.name;
+			if(triggered.start().compareTo(now) <= 0)
+				text = triggered.event.getName();
 			else
 				text = null;
 		}
@@ -130,7 +130,7 @@ public class OnAlarmActivity extends AppCompatActivity
 		public Alarm getItem(int i){return alarms.get(i);}
 
 		@Override
-		public long getItemId(int i){return getItem(i).when.hashCode();}
+		public long getItemId(int i){return getItem(i).event.getCalendarId();}
 
 		@Override
 		public View getView(int i, View view, ViewGroup parent)
@@ -140,8 +140,8 @@ public class OnAlarmActivity extends AppCompatActivity
 			TextView time = (TextView)v.findViewById(R.id.sub_onalarm_when);
 			Alarm alarm = getItem(i);
 
-			name.setText(alarm.name);
-			time.setText(alarm.when.getTime().toString());
+			name.setText(alarm.event.getName());
+			time.setText(alarm.event.getStart().toString());
 			return v;
 		}
 

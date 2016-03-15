@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.*;
 
@@ -15,16 +14,19 @@ import uiuc.mbr.Alarm;
 import uiuc.mbr.OnAlarmActivity;
 
 /**Keeps track of alarms and when they should trigger.
- * Launches OnAlarmActivity when an alarm is triggered.*/
+ * Launches OnAlarmActivity when an alarm is triggered.
+ * Don't launch this service directly--stick to using the static methods.*/
 public class AlarmService extends Service
 {
 	private static final Queue<Alarm> untriggeredAlarms = new PriorityQueue<>();
 	@Nullable private static Alarm triggeredAlarm = null;
+	private static final Map<Long, Alarm> idsMap = new HashMap<>();
 
 
 	public static void addAlarm(Alarm alarm, Context context)
 	{
 		untriggeredAlarms.add(alarm);
+		idsMap.put(alarm.event.getCalendarId(), alarm);
 		run(context);
 	}
 
@@ -38,6 +40,19 @@ public class AlarmService extends Service
 			throw new IllegalStateException();
 		triggeredAlarm = null;
 		run(context);
+	}
+
+	public static void removeAll()
+	{
+		untriggeredAlarms.clear();
+		triggeredAlarm = null;
+		idsMap.clear();
+	}
+
+	/**Returns an alarm if we have one TODO*/
+	@Nullable public static Alarm getForEvent(long eventId)
+	{
+		return idsMap.get(eventId);
 	}
 
 
@@ -58,14 +73,14 @@ public class AlarmService extends Service
 		Alarm next = untriggeredAlarms.peek();
 		if(next != null)
 		{
-			long nextTime = next.when.getTimeInMillis();
+			long nextTime = next.event.getStart().getTime();
 			long now = System.currentTimeMillis();
 			if(nextTime <= now)
 			{
 				Intent start = new Intent(getApplicationContext(), OnAlarmActivity.class);
 				start.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(start);
-				untriggeredAlarms.poll();
+				untriggeredAlarms.poll();//remove
 				if(triggeredAlarm != null)
 					throw new IllegalStateException();
 				triggeredAlarm = next;

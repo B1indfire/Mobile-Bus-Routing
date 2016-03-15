@@ -1,132 +1,103 @@
 package uiuc.mbr.events;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-import java.util.HashMap;
+import java.io.InputStream;
+import java.util.Scanner;
 
-/**
- * Created by Scott on 3/2/2016.
- * Maintains in memory a HashMap of string locations to LatLong objects
- */
-public class AddressBook {
+/**Manages a database of UserLocation objects.*/
+public class AddressBook
+{
+	private static final String TABLE = "Locations";
 
-    private static final String ADDRESS_FILE = "saved_addresses";
 
-    /**
-     * Saves the given (String, LatLong) pair to memory
-     * If the memory hasn't been initialized, this method will create a new file
-     */
-    public static void saveAddress(String loc, LatLong a, Context c) {
-        //Create file if it doesn't exist
-        FileOutputStream fos = null;
-        try {
-            fos = c.openFileOutput(ADDRESS_FILE, Context.MODE_APPEND);
-            fos.write(("").getBytes());
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	private static File dbFile(Context context)
+	{
+		File dir = context.getExternalFilesDir(null);
+		return new File(dir, "address_book.sqlite");
+	}
 
-        //Read in current mapping
-        HashMap<String, LatLong> addresses = null;
-        try {
-            FileInputStream fis = c.openFileInput(ADDRESS_FILE);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            addresses = (HashMap<String, LatLong>) ois.readObject();
-            ois.close();
-            fis.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (StreamCorruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+	private static SQLiteDatabase db(Context context)
+	{
+		return SQLiteDatabase.openDatabase(dbFile(context).getPath(), null, SQLiteDatabase.OPEN_READWRITE);
+	}
 
-        if (addresses == null)
-            addresses = new HashMap<>();
+	/**Puts all variables in a UserLocation object into a ContentValues object, optionally including the id.*/
+	private static ContentValues values(UserLocation loc)
+	{
+		ContentValues out = new ContentValues();
+		out.put("name", loc.name);
+		out.put("address", loc.address);
+		out.put("latitude", loc.latitude);
+		out.put("longitude", loc.longitude);
+		return out;
+	}
 
-        addresses.put(loc, a);
 
-        //Write to address_file
-        fos = null;
-        try {
-            fos = c.openFileOutput(ADDRESS_FILE, Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(addresses);
-            oos.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	/**TODO*/
+	public static void initIfNecessary(Context context)
+	{
+		try(AssetManager assets = context.getAssets())
+		{
+			try(InputStream in = assets.open("locations-init.sql"))
+			{
+				String script = new Scanner(in).useDelimiter("\\Z").next();
+				String[] parts = script.split(";");
+				try(SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile(context).getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY))
+				{
+					for(int i = 0; i < parts.length - 1; i++)
+						db.execSQL(parts[i]);
+				}
+			}
+			catch(IOException e){throw new RuntimeException(e);}
+		}
+	}
 
-    /**
-     * Determines if the given location string has an associated LatLong in memory
-     */
-    public static boolean locationInMemory(String loc, Context c) {
 
-        HashMap<String, LatLong> addresses = null;
-        try {
-            FileInputStream fis = c.openFileInput(ADDRESS_FILE);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            addresses = (HashMap<String, LatLong>) ois.readObject();
-            ois.close();
-            fis.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (StreamCorruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        if (addresses == null)
-            return false;
+	/**Inserts a new entry into the database and gives an ID to the provided object.*/
+	public static void create(UserLocation location, Context context)
+	{
+		try(SQLiteDatabase db = db(context))
+		{
+			location.id = db.insert(TABLE, null, values(location));
+		}
+	}
 
-        return addresses.containsKey(loc);
-    }
 
-    /**
-     * Returns the LatLong associated with a given string location from memory
-     * If not in memory, returns null
-     */
-    public static LatLong loadLatLongFromMemory(String loc, Context c) {
-        HashMap<String, LatLong> addresses = null;
-        try {
-            FileInputStream fis = c.openFileInput(ADDRESS_FILE);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            addresses = (HashMap<String, LatLong>) ois.readObject();
-            ois.close();
-            fis.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (StreamCorruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+	/**TODO*/
+	public static UserLocation getByName(String name, Context context)
+	{
+		try(SQLiteDatabase db = db(context))
+		{
+			String query = "SELECT address, latitude, longitude FROM " + TABLE + " WHERE name = ?";
+			try(Cursor cursor = db.rawQuery(query, new String[]{name}))
+			{
+				if(!cursor.moveToNext())
+					throw new IllegalArgumentException("No location with name " + name);
 
-        if (addresses == null)
-            return null;
+				String address = cursor.getString(0);
+				double lat = cursor.getDouble(1), lon = cursor.getDouble(2);
+				return new UserLocation(name, address, lat, lon);
+			}
+		}
+	}
 
-        return addresses.get(loc);
-    }
+
+	/**Removes a location from the database.*/
+	public static void delete(String name, Context context)
+	{
+		try(SQLiteDatabase db = db(context))
+		{
+			int deleted = db.delete(TABLE, "name = ?", new String[]{name});
+			if(deleted != 1)
+				throw new RuntimeException("Deleted an unexpected number of rows: " + deleted);
+		}
+	}
 }

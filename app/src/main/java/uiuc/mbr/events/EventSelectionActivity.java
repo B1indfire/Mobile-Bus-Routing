@@ -1,16 +1,10 @@
 package uiuc.mbr.events;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -19,19 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import uiuc.mbr.Alarm;
 import uiuc.mbr.R;
 import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
+import uiuc.mbr.serv.AlarmService;
 
 /**
  * Activity where the User can select from a list of upcoming Events and choose which to add to the Schedule
  * If an Event has an invalid address, they will be prompted for a valid address
  * If they supply a valid address, the address will be saved to the device memory
+ * XXX db stuff in UI thread
  */
 
 //TODO: Refactor out address saving/loading
@@ -76,12 +73,12 @@ public class EventSelectionActivity extends AppCompatActivity {
             CheckBox checkBox = new CheckBox(this);
 
             //Assign a Listener to the CheckBox
-            checkBox.setOnCheckedChangeListener(new EventCheckboxListener(this, eventlist.get(i), checkBox));
+            checkBox.setOnCheckedChangeListener(new EventCheckboxListener(eventlist.get(i), checkBox));
             checkBox.setId(i);
             checkBox.setText(eventlist.get(i).getName());
 
             //Have the box be checked if it's already part of the user's schedule
-            if (Schedule.contains(eventlist.get(i)))
+			if(AlarmService.getForEvent(eventlist.get(i).getParentEventId()) != null)
                 checkBox.setChecked(true);
 
             row.addView(checkBox);
@@ -100,12 +97,10 @@ public class EventSelectionActivity extends AppCompatActivity {
         //The String inputted into the AlertDialog when submitting a new address
         private String addressInput;
 
-        private Activity parent;
         private CheckBox self;
 
 
-        public EventCheckboxListener(Activity parentActivity, Event e, CheckBox c) {
-            parent = parentActivity;
+        public EventCheckboxListener(Event e, CheckBox c) {
             event = e;
             self = c;
         }
@@ -122,7 +117,7 @@ public class EventSelectionActivity extends AppCompatActivity {
          */
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            LatLong a = LatLong.getEventLocation(event, parent);
+            LatLng a = LocationLookup.lookupLocation(event.getLocation(), getApplicationContext());
 
             if (isChecked) { //Event Selected
                 if (a == null) { //Invalid Address
@@ -132,7 +127,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                     addEventToSchedule(event);
                 }
             } else { //Event Deselected
-                Schedule.removeEvent(event);
+                //TODO
             }
         }
 
@@ -142,11 +137,11 @@ public class EventSelectionActivity extends AppCompatActivity {
          * Deselects the event if the user cancels the dialog
          */
         private void promptForValidAddress() {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
             builder.setTitle("Enter an Address");
 
             // Set up the input
-            final EditText input = new EditText(parent);
+            final EditText input = new EditText(getApplicationContext());
             // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
             input.setInputType(InputType.TYPE_CLASS_TEXT);
             builder.setView(input);
@@ -158,12 +153,12 @@ public class EventSelectionActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     addressInput = input.getText().toString();
-                    LatLong a = LatLong.getEventLocation(addressInput, parent);
+                    LatLng a = LocationLookup.lookupLocation(addressInput, getApplicationContext());
                     if (a != null) {
                         event.setLatLong(a);
                         addEventToSchedule(event);
                     } else {
-                        Toast toast = Toast.makeText(parent, "Invalid Address", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Invalid Address", Toast.LENGTH_SHORT);
                         toast.show();
                         self.performClick();
                     }
@@ -177,8 +172,10 @@ public class EventSelectionActivity extends AppCompatActivity {
                 }
             });
 
-            parent.runOnUiThread(new Runnable() {
-                public void run() {
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
                     builder.show();
                 }
             });
@@ -191,11 +188,13 @@ public class EventSelectionActivity extends AppCompatActivity {
         private void addEventToSchedule(Event e) {
 
             //if location string is invalid and not in memory
-            if (LatLong.getEventLocation(e, parent) == null) //Invalid
-                if (!AddressBook.locationInMemory(e.getLocation(), parent)) //Not in memory
+            if (LocationLookup.lookupLocation(e.getLocation(), getApplicationContext()) == null) //Invalid
+                if (AddressBook.getByName(e.getLocation(), getApplicationContext()) == null)
                     promptForSavingAddress(e);
 
-            Schedule.addEvent(e);
+			Calendar start = Calendar.getInstance();
+			start.setTime(event.getStart());
+			AlarmService.addAlarm(new Alarm(event), getApplicationContext());
         }
 
         /**
@@ -203,16 +202,16 @@ public class EventSelectionActivity extends AppCompatActivity {
          */
         private void promptForSavingAddress(Event e) {
             final String loc = e.getLocation();
-            final LatLong address = e.getLatLong();
+            final LatLng pos = e.getLatLong();
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
             builder.setTitle("Save this address?");
 
             // Set up the buttons
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    AddressBook.saveAddress(loc, address, parent);
+                    AddressBook.create(new UserLocation(loc, null/*TODO*/, pos.longitude, pos.longitude), getApplicationContext());
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -222,8 +221,10 @@ public class EventSelectionActivity extends AppCompatActivity {
                 }
             });
 
-            parent.runOnUiThread(new Runnable() {
-                public void run() {
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
                     builder.show();
                 }
             });
