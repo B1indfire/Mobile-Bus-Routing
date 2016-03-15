@@ -1,10 +1,12 @@
 package uiuc.mbr.calendar;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +26,7 @@ public class CalendarService {
     private static final int CALENDAR_DISPLAY_NAME_INDEX = 1;
 
     //Instances are occurrences of recurring events
-    public static final String[] EVENT_PROJECTION = new String[]{
+    public static final String[] INSTANCE_PROJECTION = new String[]{
             CalendarContract.Instances.CALENDAR_ID,
             CalendarContract.Instances.EVENT_ID,
             CalendarContract.Instances.TITLE,
@@ -41,6 +43,10 @@ public class CalendarService {
     private static final int EVENT_LOCATION_INDEX = 4;
     private static final int EVENT_BEGIN_INDEX = 5;
     private static final int EVENT_END_INDEX = 6;
+
+    public static final String[] EVENT_PROJECTION = new String[] {
+        CalendarContract.Events.RRULE
+    };
 
     private static final long MILLISECONDS_IN_DAY = 86400000;
 
@@ -109,7 +115,7 @@ public class CalendarService {
         String[] selectionArgs = new String[]{"0"};
         Uri fullUri = Uri.parse(INSTANCE_URI+"/"+startTime+"/"+endTime);
         Cursor cur = cr.query(fullUri,
-                EVENT_PROJECTION,
+                INSTANCE_PROJECTION,
                 selection,
                 selectionArgs,
                 null);
@@ -139,5 +145,41 @@ public class CalendarService {
         cur.close();
 
         return eventList;
+    }
+
+    /**
+     * Checks if the given event Id (Parent event id, not an instance id) is recurring
+     */
+    public boolean isEventRecurring(long eventId) {
+        // Run query
+        Cursor cur = null;
+        ContentResolver cr = context.getContentResolver();
+
+        Uri u = ContentUris.withAppendedId(Uri.parse("content://com.android.calendar/events"), eventId);
+
+        boolean isRecurring = false;
+
+        // Submit the query and get a Cursor object back.
+        try {
+            cur = cr.query(u, EVENT_PROJECTION, null, null, null);
+
+            while (cur.moveToNext()) {
+                String rrule = "";
+
+                // Get the field values
+                rrule = cur.getString(0);
+
+                Log.d("IsEventRecurring", "RRule = " + rrule);
+
+                if (rrule != null)
+                    isRecurring = true;
+            }
+
+            cur.close();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+        return isRecurring;
     }
 }

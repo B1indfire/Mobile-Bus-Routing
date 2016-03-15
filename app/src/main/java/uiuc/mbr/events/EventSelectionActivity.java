@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -105,10 +106,11 @@ public class EventSelectionActivity extends AppCompatActivity {
 
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
         for (int i = 0; i < eventlist.size(); i++) {
+            Event event = eventlist.get(i);
 
             //Blacklist
-            if (CalendarBlacklist.contains(eventlist.get(i).getCalendarId(), this)
-               && !Schedule.contains(eventlist.get(i))) {
+            if (CalendarBlacklist.contains(event.getCalendarId(), this)
+               && !Schedule.contains(event)) {
                 continue;
             }
 
@@ -118,14 +120,21 @@ public class EventSelectionActivity extends AppCompatActivity {
             CheckBox checkBox = new CheckBox(this);
 
             checkBox.setId(i);
-            checkBox.setText(eventlist.get(i).getName());
+            checkBox.setText(event.getName());
 
             //Have the box be checked if it's already part of the user's schedule
-            if (Schedule.contains(eventlist.get(i)))
+            if (Schedule.contains(event))
                 checkBox.setChecked(true);
 
+            if (RecurringEventList.contains(event.getParentEventId(), this)
+                    && (LatLong.getEventLocation(event, this) != null
+                    || AddressBook.locationInMemory(event.getLocation(), this))) {
+                checkBox.setChecked(true);
+                Schedule.addEvent(event);
+            }
+
             //Assign a Listener to the CheckBox
-            checkBox.setOnCheckedChangeListener(new EventCheckboxListener(this, eventlist.get(i), checkBox));
+            checkBox.setOnClickListener(new EventCheckboxListener(this, event, checkBox));
 
             row.addView(checkBox);
             my_layout.addView(row);
@@ -135,7 +144,7 @@ public class EventSelectionActivity extends AppCompatActivity {
     /**
      * OnCheckChangeListener implementation for the Event list checkboxes
      */
-    private class EventCheckboxListener implements CompoundButton.OnCheckedChangeListener {
+    private class EventCheckboxListener implements View.OnClickListener {
 
         //The Event associated with the checkbox
         private Event event;
@@ -164,15 +173,15 @@ public class EventSelectionActivity extends AppCompatActivity {
          * If an Event is deselected, it is removed from the schedule
          */
         @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        public void onClick(View v) {
             LatLong a = LatLong.getEventLocation(event, parent);
 
-            if (isChecked) { //Event Selected
+            if (self.isChecked()) { //Event Selected
                 if (a == null) { //Invalid Address
                     promptForValidAddress();
                 } else { //Valid Address
                     event.setLatLong(a);
-                    addEventToSchedule(event);
+                    addEventToSchedule();
                 }
             } else { //Event Deselected
                 Schedule.removeEvent(event);
@@ -204,7 +213,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                     LatLong a = LatLong.getEventLocation(addressInput, parent);
                     if (a != null) {
                         event.setLatLong(a);
-                        addEventToSchedule(event);
+                        addEventToSchedule();
                     } else {
                         Toast toast = Toast.makeText(parent, "Invalid Address", Toast.LENGTH_SHORT);
                         toast.show();
@@ -231,22 +240,26 @@ public class EventSelectionActivity extends AppCompatActivity {
          * Adds the given Event to the Schedule
          * Checks if Event needs to save location to memory and prompts if so
          */
-        private void addEventToSchedule(Event e) {
+        private void addEventToSchedule() {
 
             //if location string is invalid and not in memory
-            if (LatLong.getEventLocation(e, parent) == null) //Invalid
-                if (!AddressBook.locationInMemory(e.getLocation(), parent)) //Not in memory
-                    promptForSavingAddress(e);
+            if (LatLong.getEventLocation(event, parent) == null) //Invalid
+                if (!AddressBook.locationInMemory(event.getLocation(), parent)) //Not in memory
+                    promptForSavingAddress();
 
-            Schedule.addEvent(e);
+            if (LatLong.getEventLocation(event, parent) != null
+                    || AddressBook.locationInMemory(event.getLocation(), parent))
+                promptForRecurringEvent();
+
+            Schedule.addEvent(event);
         }
 
         /**
          * Prompts to save the given Event's address to memory
          */
-        private void promptForSavingAddress(Event e) {
-            final String loc = e.getLocation();
-            final LatLong address = e.getLatLong();
+        private void promptForSavingAddress() {
+            final String loc = event.getLocation();
+            final LatLong address = event.getLatLong();
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
             builder.setTitle("Save this address?");
@@ -256,6 +269,39 @@ public class EventSelectionActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     AddressBook.saveAddress(loc, address, parent);
+                    promptForRecurringEvent();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            parent.runOnUiThread(new Runnable() {
+                public void run() {
+                    builder.show();
+                }
+            });
+        }
+
+        /**
+         * If the given event is recurring, prompts the user to save it to memory
+         */
+        private void promptForRecurringEvent() {
+            if (!calService.isEventRecurring(event.getParentEventId())
+                    || RecurringEventList.contains(event.getParentEventId(), parent))
+                return;
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+            builder.setTitle("This event is recurring.  Would you like all future instances of this event to automatically be added to the schedule?");
+
+            // Set up the buttons
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    RecurringEventList.add(event.getParentEventId(), parent);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
