@@ -117,14 +117,15 @@ public class EventSelectionActivity extends AppCompatActivity {
             row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
             CheckBox checkBox = new CheckBox(this);
 
-            //Assign a Listener to the CheckBox
-            checkBox.setOnCheckedChangeListener(new EventCheckboxListener(this, eventlist.get(i), checkBox));
             checkBox.setId(i);
             checkBox.setText(eventlist.get(i).getName());
 
             //Have the box be checked if it's already part of the user's schedule
             if (Schedule.contains(eventlist.get(i)))
                 checkBox.setChecked(true);
+
+            //Assign a Listener to the CheckBox
+            checkBox.setOnCheckedChangeListener(new EventCheckboxListener(this, eventlist.get(i), checkBox));
 
             row.addView(checkBox);
             my_layout.addView(row);

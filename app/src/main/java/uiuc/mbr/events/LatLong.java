@@ -19,10 +19,12 @@ import uiuc.mbr.calendar.Event;
 public class LatLong implements Serializable {
     private double latitude;
     private double longitude;
+    private String streetAddress;
 
-    public LatLong(double lat, double longi) {
+    public LatLong(double lat, double longi, String addr) {
         latitude = lat;
         longitude = longi;
+        streetAddress = addr;
     }
 
     /**
@@ -54,7 +56,7 @@ public class LatLong implements Serializable {
 
 
         Address a = address.get(0);
-        return new LatLong(a.getLatitude(), a.getLongitude());
+        return new LatLong(a.getLatitude(), a.getLongitude(), location);
     }
 
 
@@ -74,5 +76,13 @@ public class LatLong implements Serializable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 }

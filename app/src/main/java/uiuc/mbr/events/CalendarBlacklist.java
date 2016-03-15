@@ -1,6 +1,7 @@
 package uiuc.mbr.events;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,8 +31,10 @@ public class CalendarBlacklist {
             fos.write(("").getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -44,12 +47,14 @@ public class CalendarBlacklist {
         try {
             FileOutputStream fos = c.openFileOutput(BLACKLIST_FILE, Context.MODE_APPEND);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-            writer.append("" + calId + "\n");
+            writer.write("" + calId + "\n");
             writer.close();
             fos.close();
         } catch (FileNotFoundException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -70,10 +75,13 @@ public class CalendarBlacklist {
             reader.close();
             fis.close();
         } catch (FileNotFoundException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         } catch (StreamCorruptedException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         }
 
@@ -88,8 +96,10 @@ public class CalendarBlacklist {
             writer.close();
             fos.close();
         } catch (FileNotFoundException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -103,17 +113,22 @@ public class CalendarBlacklist {
             String line = reader.readLine();
             while (line != null) {
                 if (Long.parseLong(line) == calId) {
+                    Log.d("Blacklist", line + " == " + calId);
                     return true;
                 }
+                Log.d("Blacklist", line + " != " + calId);
                 line = reader.readLine();
             }
             reader.close();
             fis.close();
         } catch (FileNotFoundException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         } catch (StreamCorruptedException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
             e.printStackTrace();
         }
 

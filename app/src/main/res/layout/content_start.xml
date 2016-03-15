@@ -62,4 +62,10 @@
 		android:text="Calendar Blacklist"
 		android:onClick="clickCalendarsBtn" />
 
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Edit Saved Addresses"
+		android:onClick="clickAddressListBtn" />
+
 </LinearLayout>

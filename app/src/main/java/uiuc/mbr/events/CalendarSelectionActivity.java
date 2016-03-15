@@ -27,7 +27,7 @@ public class CalendarSelectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events);
+        setContentView(R.layout.activity_calendars);
 
         calService = new CalendarService(this.getApplicationContext());
     }
@@ -91,14 +91,15 @@ public class CalendarSelectionActivity extends AppCompatActivity {
             row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
             CheckBox checkBox = new CheckBox(this);
 
-            //Assign a Listener to the CheckBox
-            checkBox.setOnCheckedChangeListener(new CalendarCheckboxListener(this, calendarList.get(i), checkBox));
             checkBox.setId(i);
             checkBox.setText(calendarList.get(i).getName());
             checkBox.setChecked(true);
 
             if (CalendarBlacklist.contains(calendarList.get(i).getId(), this))
                 checkBox.setChecked(false);
+
+            //Assign a Listener to the CheckBox
+            checkBox.setOnCheckedChangeListener(new CalendarCheckboxListener(this, calendarList.get(i), checkBox));
 
             row.addView(checkBox);
             my_layout.addView(row);

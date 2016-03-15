@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -87,29 +88,39 @@ public class AddressBookActivity extends AppCompatActivity {
         my_layout.removeAllViews();
 
         HashMap<String, LatLong> addresses = AddressBook.getFullAddressBook(this);
-        String[] keys = (String[]) addresses.keySet().toArray();
+        Object[] keys = addresses.keySet().toArray();
 
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
         for (int i = 0; i < keys.length; i++) {
+            String key = (String) keys[i];
+
             TableRow row = new TableRow(this);
             row.setId(i);
             row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
 
             TextView tv = new TextView(this);
-            tv.setText(keys[i]);
-            row.addView(tv);
+            tv.setText(key + " -> " + addresses.get(key).getStreetAddress());
+            row.addView(tv, new TableRow.LayoutParams(0));
 
             Button editButton = new Button(this);
             editButton.setText("Edit");
-            editButton.setOnClickListener(new EditButtonListener(keys[i], this));
-            row.addView(editButton);
+            editButton.setMinHeight(50);
+            editButton.setMinWidth(50);
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener(new EditButtonListener(key, this));
+            //row.addView(editButton, new TableRow.LayoutParams(1));
 
             Button delButton = new Button(this);
             delButton.setText("Delete");
-            delButton.setOnClickListener(new DeleteButtonListener(keys[i], this));
-            row.addView(delButton);
+            delButton.setMinHeight(50);
+            delButton.setMinWidth(50);
+            delButton.setVisibility(View.VISIBLE);
+            delButton.setOnClickListener(new DeleteButtonListener(key, this));
+            //row.addView(delButton, new TableRow.LayoutParams(2));
 
             my_layout.addView(row);
+            my_layout.addView(editButton);
+            my_layout.addView(delButton);
         }
     }
 
@@ -153,6 +164,7 @@ public class AddressBookActivity extends AppCompatActivity {
                         Toast toast = Toast.makeText(parent, "Invalid Address", Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                    displayAddressBookList();
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

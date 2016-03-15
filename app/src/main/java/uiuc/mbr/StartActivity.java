@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import uiuc.mbr.events.AddressBookActivity;
 import uiuc.mbr.events.CalendarSelectionActivity;
 import uiuc.mbr.events.EventSelectionActivity;
 
@@ -96,6 +97,10 @@ public class StartActivity extends AppCompatActivity
 		startActivity(new Intent(getApplicationContext(), CalendarSelectionActivity.class));
 	}
 
+	public void clickAddressListBtn (View v)
+	{
+		startActivity(new Intent(getApplicationContext(), AddressBookActivity.class));
+	}
 
 	//tasks
 	//TODO: Edit/remove stored addresses
