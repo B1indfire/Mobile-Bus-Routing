@@ -26,8 +26,17 @@ public class AlarmService extends Service
 	public static void addAlarm(Alarm alarm, Context context)
 	{
 		untriggeredAlarms.add(alarm);
-		idsMap.put(alarm.event.getCalendarId(), alarm);
+		idsMap.put(alarm.event.getParentEventId(), alarm);
 		run(context);
+	}
+
+	public static void remove(long eventId, Context context)
+	{
+		Alarm alarm = idsMap.get(eventId);
+		untriggeredAlarms.remove(alarm);
+		if(triggeredAlarm == alarm)
+			triggeredAlarm = null;
+		idsMap.remove(eventId);
 	}
 
 
@@ -49,7 +58,7 @@ public class AlarmService extends Service
 		idsMap.clear();
 	}
 
-	/**Returns an alarm if we have one TODO*/
+	/**Returns an alarm if we have one for that event.*/
 	@Nullable public static Alarm getForEvent(long eventId)
 	{
 		return idsMap.get(eventId);

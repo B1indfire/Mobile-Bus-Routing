@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Richard Shen on 2/18/2016.
  * API for accessing the Android calendar and events.
  */
 public class CalendarService {

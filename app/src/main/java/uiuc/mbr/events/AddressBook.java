@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-/**Manages a database of UserLocation objects.*/
+/**Manages a database of UserLocation objects.
+ * Make sure to call initIfNecessary() early in the app's lifecyle.*/
 public class AddressBook
 {
 	private static final String TABLE = "Locations";
@@ -40,22 +41,30 @@ public class AddressBook
 	}
 
 
-	/**TODO*/
+	/**Sets up the database if necessary.*/
 	public static void initIfNecessary(Context context)
 	{
+		File file = dbFile(context);
+		if(file.exists())
+			return;
+
 		try(AssetManager assets = context.getAssets())
 		{
 			try(InputStream in = assets.open("locations-init.sql"))
 			{
 				String script = new Scanner(in).useDelimiter("\\Z").next();
 				String[] parts = script.split(";");
-				try(SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile(context).getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY))
+				try(SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY))
 				{
 					for(int i = 0; i < parts.length - 1; i++)
 						db.execSQL(parts[i]);
 				}
 			}
-			catch(IOException e){throw new RuntimeException(e);}
+			catch(IOException e)
+			{
+				file.delete();
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
@@ -66,12 +75,12 @@ public class AddressBook
 	{
 		try(SQLiteDatabase db = db(context))
 		{
-			location.id = db.insert(TABLE, null, values(location));
+			db.insert(TABLE, null, values(location));
 		}
 	}
 
 
-	/**TODO*/
+	/**Finds the location object with the provided name.*/
 	public static UserLocation getByName(String name, Context context)
 	{
 		try(SQLiteDatabase db = db(context))

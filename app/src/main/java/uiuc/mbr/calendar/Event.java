@@ -4,8 +4,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
-import uiuc.mbr.events.LocationLookup;
-
 public class Event {
     private long calendarId;
     private long parentEventId;

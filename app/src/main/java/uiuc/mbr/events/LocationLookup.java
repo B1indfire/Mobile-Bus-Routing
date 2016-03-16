@@ -14,20 +14,13 @@ import java.util.List;
 import java.util.Locale;
 
 
-/**
- * TODO
- */
 public class LocationLookup
 {
 	private LocationLookup(){throw new UnsupportedOperationException();}
 
 
-    /**
-     * TODO UPDATE COMMENT
-     * Finds the LatLong of a string address using Google's Geocoding API
-     * If the address is invalid, checks for address in AddressBook
-     * @return A LatLong if the address' location is valid or in AddressBook - null otherwise
-     */
+    /**Uses Google's Geocoding API to look up a user-entered location string.
+	 * Returns the best result Google could find, or null if the location wasn't understood (or null).*/
     @Nullable public static LatLng lookupLocation(String location, Context c) {
 		if(location == null)
 			return null;

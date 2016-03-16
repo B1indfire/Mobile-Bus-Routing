@@ -3,11 +3,9 @@ package uiuc.mbr.events;
 import android.support.annotation.Nullable;
 
 
-/**TODO*/
+/**Describes a user-supplied location (like "Joe's house"), along with data about the actual position of that location.*/
 public class UserLocation
 {
-	/**Database id.*/
-	public long id;
 	/**What the user entered in the "location" field for one or more events.*/
 	public String name;
 	/**If the name couldn't be looked up (e.x. "PAR"), then this is non-null

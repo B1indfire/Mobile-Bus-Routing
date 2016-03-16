@@ -55,7 +55,6 @@
 			android:name=".StopList"
 			android:label="StopList"
 			android:theme="@style/AppTheme.NoActionBar"/>
-		<activity android:name=".AlarmActivity"/>
 		<activity android:name=".OnAlarmActivity"/>
 		<activity android:name=".EventAlarmActivity"/>
 		<activity

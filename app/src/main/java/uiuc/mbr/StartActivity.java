@@ -70,11 +70,6 @@ public class StartActivity extends AppCompatActivity
 		startActivity(new Intent(getApplicationContext(), GetStops.class));
 	}
 
-	public void clickAlarmBtn(View v)
-	{
-		startActivity(new Intent(getApplicationContext(), AlarmActivity.class));
-	}
-
 	public void clickViewAlarmsBtn(View v)
 	{
 		startActivity(new Intent(getApplicationContext(), OnAlarmActivity.class));
@@ -89,8 +84,4 @@ public class StartActivity extends AppCompatActivity
 	{
 		startActivity(new Intent(getApplicationContext(), EventSelectionActivity.class));
 	}
-
-
-	//tasks
-	//TODO: Edit/remove stored addresses
 }

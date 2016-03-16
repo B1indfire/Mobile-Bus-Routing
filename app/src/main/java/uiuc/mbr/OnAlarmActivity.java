@@ -130,7 +130,7 @@ public class OnAlarmActivity extends AppCompatActivity
 		public Alarm getItem(int i){return alarms.get(i);}
 
 		@Override
-		public long getItemId(int i){return getItem(i).event.getCalendarId();}
+		public long getItemId(int i){return getItem(i).event.getParentEventId();}
 
 		@Override
 		public View getView(int i, View view, ViewGroup parent)

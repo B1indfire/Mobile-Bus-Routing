@@ -2,21 +2,19 @@ package uiuc.mbr.events;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.widget.AbsListView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TableRow;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.*;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.*;
 
 import uiuc.mbr.Alarm;
 import uiuc.mbr.R;
@@ -32,10 +30,16 @@ import uiuc.mbr.serv.AlarmService;
  */
 
 //TODO: Refactor out address saving/loading
-public class EventSelectionActivity extends AppCompatActivity {
+public class EventSelectionActivity extends AppCompatActivity
+{
+	@Nullable private List<Event> events;
+
+	private final Adapter adapter = new Adapter();
+
 
     //Provides access to the device calendar
     private CalendarService calService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,52 +47,14 @@ public class EventSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_events);
 
         calService = new CalendarService(this.getApplicationContext());
+		ListView list = (ListView)findViewById(R.id.a_events_list);
+		list.setAdapter(adapter);
+		new Loader().execute();
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        displayEventList();
-    }
 
-    /**
-     * Loads and displays a scrollable list of upcoming Events
-     * Events are listed with CheckBoxes indicating if they are in the User's schedule
-     */
-    private void displayEventList() {
-        LinearLayout myLayout = (LinearLayout) findViewById(R.id.events);
-        myLayout.removeAllViews();
-
-        ArrayList<Event> eventlist = calService.getEventsNext24Hours();
-
-        //TODO: Automatically call performClick() on events with shared parentId's (from previous instances)
-        //TODO: Blacklist events by CalendarID
-
-        //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
-        for (int i = 0; i < eventlist.size(); i++) {
-            TableRow row = new TableRow(this);
-            row.setId(i);
-            row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
-            CheckBox checkBox = new CheckBox(this);
-
-            //Assign a Listener to the CheckBox
-            checkBox.setOnCheckedChangeListener(new EventCheckboxListener(eventlist.get(i), checkBox));
-            checkBox.setId(i);
-            checkBox.setText(eventlist.get(i).getName());
-
-            //Have the box be checked if it's already part of the user's schedule
-			if(AlarmService.getForEvent(eventlist.get(i).getParentEventId()) != null)
-                checkBox.setChecked(true);
-
-            row.addView(checkBox);
-            myLayout.addView(row);
-        }
-    }
-
-    /**
-     * OnCheckChangeListener implementation for the Event list checkboxes
-     */
+    /**OnCheckChangeListener implementation for the Event list checkboxes*/
     private class EventCheckboxListener implements CompoundButton.OnCheckedChangeListener {
 
         //The Event associated with the checkbox
@@ -117,17 +83,17 @@ public class EventSelectionActivity extends AppCompatActivity {
          */
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            LatLng a = LocationLookup.lookupLocation(event.getLocation(), getApplicationContext());
+            LatLng pos = LocationLookup.lookupLocation(event.getLocation(), getApplicationContext());
 
             if (isChecked) { //Event Selected
-                if (a == null) { //Invalid Address
+                if (pos == null) { //Invalid Address
                     promptForValidAddress();
                 } else { //Valid Address
-                    event.setLatLong(a);
+                    event.setLatLong(pos);
                     addEventToSchedule(event);
                 }
             } else { //Event Deselected
-                //TODO
+				AlarmService.remove(event.getParentEventId(), getApplicationContext());
             }
         }
 
@@ -172,13 +138,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                 }
             });
 
-            runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    builder.show();
-                }
-            });
+			builder.show();
         }
 
         /**
@@ -230,4 +190,57 @@ public class EventSelectionActivity extends AppCompatActivity {
             });
         }
     }
+
+
+
+	private class Loader extends AsyncTask<Void, Void, Void>
+	{
+		private List<Event> e;
+
+		@Override
+		protected Void doInBackground(Void[] args)
+		{
+			e = calService.getEventsNext24Hours();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			events = e;
+			adapter.notifyDataSetChanged();
+		}
+	}
+
+
+	/**Displays the list of Events.*/
+	private class Adapter extends BaseAdapter
+	{
+
+		@Override
+		public int getCount(){return events == null ? 0 : events.size();}
+
+		@Override
+		public Event getItem(int i){return events.get(i);}
+
+		@Override
+		public long getItemId(int i){return getItem(i).getParentEventId();}
+
+		@Override
+		public View getView(int i, View convert, ViewGroup parent)
+		{
+			View v = convert != null ? convert : LayoutInflater.from(getApplicationContext()).inflate(R.layout.sub_event, parent, false);
+			CheckBox checkBox = (CheckBox)v.findViewById(R.id.sub_event_checkbox);
+			TextView name = (TextView)v.findViewById(R.id.sub_event_name);
+			TextView location = (TextView)v.findViewById(R.id.sub_event_location);
+			Event event = getItem(i);
+
+			checkBox.setChecked(AlarmService.getForEvent(event.getParentEventId()) != null);
+			checkBox.setOnCheckedChangeListener(new EventCheckboxListener(event, checkBox));
+			name.setText(event.getName());
+			location.setText(event.getLocation());
+
+			return v;
+		}
+	}
 }
