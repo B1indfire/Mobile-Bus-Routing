@@ -18,8 +18,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import uiuc.mbr.calendar.Event;
+
 /**
  * Created by Scott on 3/10/2016.
+ * Used by EventSelectionActivity to keep track of recurring events which the user wants automatically added to their schedule.
+ * Also keeps track of instances of the recurring events which the user does not want in their schedule (called exceptions).
  */
 public class RecurringEventList {
 
@@ -54,8 +58,12 @@ public class RecurringEventList {
     }
 
 
-    public static void add(long eventId, Context c) {
-        if (contains(eventId, c))
+    /**
+     * Adds an event's parent ID to the recurring event list if not already included.
+     */
+    public static void add(Event event, Context c) {
+        long eventId = event.getParentEventId();
+        if (contains(event, c))
             return;
 
         try {
@@ -73,8 +81,13 @@ public class RecurringEventList {
         }
     }
 
-    public static void addException(long eventId, long startTime, Context c) {
-        if (containsException(eventId, startTime, c))
+    /**
+     * Adds an exception to a recurring event to the exceptions list if not already included.
+     */
+    public static void addException(Event event, Context c) {
+        long eventId = event.getParentEventId();
+        long startTime = event.getStart().getTime();
+        if (containsException(event, c))
             return;
 
         try {
@@ -92,8 +105,13 @@ public class RecurringEventList {
         }
     }
 
-    public static void remove(long eventId, Context c) {
-        if (!contains(eventId, c))
+
+    /**
+     * Removes an event's parent ID to the recurring event list if included.
+     */
+    public static void remove(Event event, Context c) {
+        long eventId = event.getParentEventId();
+        if (!contains(event, c))
             return;
 
         ArrayList<Long> calIds = new ArrayList<>();
@@ -137,8 +155,13 @@ public class RecurringEventList {
         }
     }
 
-    public static void removeException(long eventId, long startTime, Context c) {
-        if (!containsException(eventId, startTime, c))
+    /**
+     * Removes an exception to a recurring event from the exceptions list if included.
+     */
+    public static void removeException(Event event, Context c) {
+        long eventId = event.getParentEventId();
+        long startTime = event.getStart().getTime();
+        if (!containsException(event, c))
             return;
 
         ArrayList<String> lines = new ArrayList<>();
@@ -169,7 +192,7 @@ public class RecurringEventList {
         }
 
         try {
-            FileOutputStream fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_PRIVATE);
+            FileOutputStream fos = c.openFileOutput(EXCEPTIONS_FILE, Context.MODE_PRIVATE);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
             for (String i : lines) {
                 writer.write(i + "\n");
@@ -185,7 +208,11 @@ public class RecurringEventList {
         }
     }
 
-    public static boolean contains(long eventId, Context c) {
+    /**
+     * Determines if the recurring event list contains the given event's parent id.
+     */
+    public static boolean contains(Event event, Context c) {
+        long eventId = event.getParentEventId();
         createFileIfNotExists(c);
 
         try {
@@ -194,10 +221,8 @@ public class RecurringEventList {
             String line = reader.readLine();
             while (line != null) {
                 if (Long.parseLong(line) == eventId) {
-                    Log.d("Blacklist", line + " == " + eventId);
                     return true;
                 }
-                Log.d("Blacklist", line + " != " + eventId);
                 line = reader.readLine();
             }
             reader.close();
@@ -216,11 +241,16 @@ public class RecurringEventList {
         return false;
     }
 
-    public static boolean containsException(long eventId, long startTime, Context c) {
+    /**
+     * Determines if the exceptions list contains the given event instance.
+     */
+    public static boolean containsException(Event event, Context c) {
+        long eventId = event.getParentEventId();
+        long startTime = event.getStart().getTime();
         createFileIfNotExists(c);
 
         try {
-            FileInputStream fis = c.openFileInput(RECURRING_EVENT_FILE);
+            FileInputStream fis = c.openFileInput(EXCEPTIONS_FILE);
             BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
             String line = reader.readLine();
             while (line != null) {
@@ -246,5 +276,12 @@ public class RecurringEventList {
         }
 
         return false;
+    }
+
+    /**
+     * Determines if the given event is in the recurring events list but is not in the exceptions.
+     */
+    public static boolean containsNonExempt(Event event, Context c) {
+        return contains(event, c) && !containsException(event,c);
     }
 }

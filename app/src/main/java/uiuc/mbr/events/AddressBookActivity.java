@@ -27,6 +27,9 @@ import uiuc.mbr.calendar.Calendar;
 import uiuc.mbr.calendar.CalendarService;
 
 /**
+ * Displays a list of all addresses inputted into the AddressBook
+ * Allows the user to edit or delete any entry
+ *
  * Created by Scott on 3/10/2016.
  */
 public class AddressBookActivity extends AppCompatActivity {
@@ -81,33 +84,34 @@ public class AddressBookActivity extends AppCompatActivity {
 
     /**
      * Loads and displays a scrollable list of Saved Addresses
-     *
+     * Provides buttons for editing and deleting each address
      */
     private void displayAddressBookList() {
         LinearLayout my_layout = (LinearLayout) findViewById(R.id.address_book);
         my_layout.removeAllViews();
 
-        HashMap<String, LatLong> addresses = AddressBook.getFullAddressBook(this);
-        Object[] keys = addresses.keySet().toArray();
+        HashMap<String, LatLong> fullAddressBook = AddressBook.getFullAddressBook(this);
+        Object[] baseAddresses = fullAddressBook.keySet().toArray();
 
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
-        for (int i = 0; i < keys.length; i++) {
-            String key = (String) keys[i];
+        for (int i = 0; i < baseAddresses.length; i++) {
+            String baseAddress = (String) baseAddresses[i];
 
             TableRow row = new TableRow(this);
             row.setId(i);
             row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
 
             TextView tv = new TextView(this);
-            tv.setText(key + " -> " + addresses.get(key).getStreetAddress());
+            tv.setText(baseAddress + " -> " + fullAddressBook.get(baseAddress).getStreetAddress());
             row.addView(tv, new TableRow.LayoutParams(0));
 
+            //TODO: Improve button layout
             Button editButton = new Button(this);
             editButton.setText("Edit");
             editButton.setMinHeight(50);
             editButton.setMinWidth(50);
             editButton.setVisibility(View.VISIBLE);
-            editButton.setOnClickListener(new EditButtonListener(key, this));
+            editButton.setOnClickListener(new EditButtonListener(baseAddress, this));
             //row.addView(editButton, new TableRow.LayoutParams(1));
 
             Button delButton = new Button(this);
@@ -115,7 +119,7 @@ public class AddressBookActivity extends AppCompatActivity {
             delButton.setMinHeight(50);
             delButton.setMinWidth(50);
             delButton.setVisibility(View.VISIBLE);
-            delButton.setOnClickListener(new DeleteButtonListener(key, this));
+            delButton.setOnClickListener(new DeleteButtonListener(baseAddress, this));
             //row.addView(delButton, new TableRow.LayoutParams(2));
 
             my_layout.addView(row);
@@ -124,6 +128,9 @@ public class AddressBookActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * OnClickListener implementation for the Edit button
+     */
     private class EditButtonListener implements View.OnClickListener {
 
         private String key;
@@ -141,9 +148,14 @@ public class AddressBookActivity extends AppCompatActivity {
             promptForNewAddress();
         }
 
+        /**
+         * Prompts the user for a new address target
+         * Changes the AddressBook entry if valid
+         * Rejects the user's input if invalid
+         */
         private void promptForNewAddress() {
             final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-            builder.setTitle("Enter an Address");
+            builder.setTitle("Enter a new Address");
 
             // Set up the input
             final EditText input = new EditText(parent);
@@ -158,9 +170,9 @@ public class AddressBookActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     addressInput = input.getText().toString();
                     LatLong a = LatLong.getEventLocation(addressInput, parent);
-                    if (a != null) {
+                    if (a != null) { //Valid address
                         AddressBook.saveAddress(key, a, parent);
-                    } else {
+                    } else { //Invalid Address
                         Toast toast = Toast.makeText(parent, "Invalid Address", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -184,7 +196,9 @@ public class AddressBookActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * OnClickListener implementation for the Delete button
+     */
     private class DeleteButtonListener implements View.OnClickListener {
 
         private String key;
@@ -195,11 +209,15 @@ public class AddressBookActivity extends AppCompatActivity {
             parent = c;
         }
 
+        /**
+         * Removes the Address entry from AddressBook
+         * Removes all events using the given address from the Schedule (since they're all now invalid)
+         * Refreshes the display
+         */
         @Override
         public void onClick(View v) {
             AddressBook.remove(key, parent);
             Schedule.removeEventsWithAddress(key);
-
             displayAddressBookList();
         }
     }

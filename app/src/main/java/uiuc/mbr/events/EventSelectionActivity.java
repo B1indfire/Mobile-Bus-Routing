@@ -36,7 +36,6 @@ import uiuc.mbr.calendar.Event;
  * If they supply a valid address, the address will be saved to the device memory
  */
 
-//TODO: Refactor out address saving/loading
 public class EventSelectionActivity extends AppCompatActivity {
 
     //Provides access to the device calendar
@@ -102,8 +101,6 @@ public class EventSelectionActivity extends AppCompatActivity {
 
         ArrayList<Event> eventlist = calService.getEventsNext24Hours();
 
-        //TODO: Automatically call performClick() on events with shared parentId's (from previous instances)
-
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
         for (int i = 0; i < eventlist.size(); i++) {
             Event event = eventlist.get(i);
@@ -122,24 +119,26 @@ public class EventSelectionActivity extends AppCompatActivity {
             checkBox.setId(i);
             checkBox.setText(event.getName());
 
-            //Have the box be checked if it's already part of the user's schedule
             if (Schedule.contains(event))
                 checkBox.setChecked(true);
-
-            if (RecurringEventList.contains(event.getParentEventId(), this)
-                    && !RecurringEventList.containsException(event.getParentEventId(), event.getStart().getTime(),this)
-                    && (LatLong.getEventLocation(event, this) != null
-                    || AddressBook.locationInMemory(event.getLocation(), this))) {
+            else if (RecurringEventList.containsNonExempt(event,this) && hasValidLocation(event)) {
                 checkBox.setChecked(true);
                 Schedule.addEvent(event);
             }
 
-            //Assign a Listener to the CheckBox
             checkBox.setOnClickListener(new EventCheckboxListener(this, event, checkBox));
 
             row.addView(checkBox);
             my_layout.addView(row);
         }
+    }
+
+    /**
+     * Checks if the event has a valid location
+     */
+    private boolean hasValidLocation(Event e) {
+        return LatLong.getEventLocation(e, this) != null
+                || AddressBook.locationInMemory(e.getLocation(), this);
     }
 
     /**
@@ -244,15 +243,12 @@ public class EventSelectionActivity extends AppCompatActivity {
         private void addEventToSchedule() {
 
             //if location string is invalid and not in memory
-            if (LatLong.getEventLocation(event, parent) == null) //Invalid
-                if (!AddressBook.locationInMemory(event.getLocation(), parent)) //Not in memory
-                    promptForSavingAddress();
-
-            if (LatLong.getEventLocation(event, parent) != null
-                    || AddressBook.locationInMemory(event.getLocation(), parent))
+            if (!hasValidLocation(event))
+                promptForSavingAddress();
+            else
                 promptForRecurringEvent();
 
-            RecurringEventList.removeException(event.getParentEventId(), event.getStart().getTime(), parent);
+            RecurringEventList.removeException(event, parent);
 
             Schedule.addEvent(event);
         }
@@ -261,9 +257,7 @@ public class EventSelectionActivity extends AppCompatActivity {
          * Removes the given Event from the Schedule
          */
         private void removeEventFromSchedule() {
-            if (RecurringEventList.contains(event.getParentEventId(), parent))
-                promptToRemoveRecurringEvent();
-
+            promptToRemoveRecurringEvent();
             Schedule.removeEvent(event);
         }
 
@@ -303,18 +297,17 @@ public class EventSelectionActivity extends AppCompatActivity {
          * If the given event is recurring, prompts the user to save it to memory
          */
         private void promptForRecurringEvent() {
-            if (!calService.isEventRecurring(event.getParentEventId())
-                    || RecurringEventList.contains(event.getParentEventId(), parent))
+            if (!calService.isEventRecurring(event) || RecurringEventList.contains(event, parent))
                 return;
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-            builder.setTitle("This event is recurring.  Would you like all future instances of this event to automatically be added to the schedule?");
+            builder.setMessage("This event is recurring.  Would you like all future instances of this event to automatically be added to the schedule?");
 
             // Set up the buttons
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    RecurringEventList.add(event.getParentEventId(), parent);
+                    RecurringEventList.add(event, parent);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -335,24 +328,23 @@ public class EventSelectionActivity extends AppCompatActivity {
          * If the given event is recurring, prompts the user to remove it from memory
          */
         private void promptToRemoveRecurringEvent() {
-            if (!calService.isEventRecurring(event.getParentEventId())
-                    || !RecurringEventList.contains(event.getParentEventId(), parent))
+            if (!calService.isEventRecurring(event) || !RecurringEventList.contains(event, parent))
                 return;
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-            builder.setTitle("This event is recurring.  Would you like all future instances of this event to automatically be removed from the schedule?");
+            builder.setMessage("This event is set to automatically be added to the schedule.  Would you like to disable this for future events?");
 
             // Set up the buttons
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    RecurringEventList.remove(event.getParentEventId(), parent);
+                    RecurringEventList.remove(event, parent);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    RecurringEventList.addException(event.getParentEventId(), event.getStart().getTime(), parent);
+                    RecurringEventList.addException(event, parent);
                     dialog.cancel();
                 }
             });

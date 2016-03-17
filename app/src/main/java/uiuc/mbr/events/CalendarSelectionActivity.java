@@ -17,6 +17,8 @@ import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
 
 /**
+ * An activity which displays a list of calendars on the device and allows to user to toggle
+ * whether their events should be displayed for scheduling
  * Created by Scott on 3/10/2016.
  */
 public class CalendarSelectionActivity extends AppCompatActivity {
@@ -86,20 +88,22 @@ public class CalendarSelectionActivity extends AppCompatActivity {
 
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
         for (int i = 0; i < calendarList.size(); i++) {
+            Calendar cal = calendarList.get(i);
             TableRow row = new TableRow(this);
             row.setId(i);
             row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
             CheckBox checkBox = new CheckBox(this);
 
             checkBox.setId(i);
-            checkBox.setText(calendarList.get(i).getName());
-            checkBox.setChecked(true);
+            checkBox.setText(cal.getName());
 
-            if (CalendarBlacklist.contains(calendarList.get(i).getId(), this))
+            //Set checked state based on current blacklist
+            checkBox.setChecked(true);
+            if (CalendarBlacklist.contains(cal.getId(), this))
                 checkBox.setChecked(false);
 
             //Assign a Listener to the CheckBox
-            checkBox.setOnCheckedChangeListener(new CalendarCheckboxListener(this, calendarList.get(i), checkBox));
+            checkBox.setOnCheckedChangeListener(new CalendarCheckboxListener(this, cal));
 
             row.addView(checkBox);
             my_layout.addView(row);
@@ -111,25 +115,19 @@ public class CalendarSelectionActivity extends AppCompatActivity {
      */
     private class CalendarCheckboxListener implements CompoundButton.OnCheckedChangeListener {
 
-        //The Event associated with the checkbox
+        //The Calendar associated with the checkbox
         private Calendar calendar;
 
-        //The String inputted into the AlertDialog when submitting a new address
-        private String addressInput;
-
         private Activity parent;
-        private CheckBox self;
 
-
-        public CalendarCheckboxListener(Activity parentActivity, Calendar c, CheckBox cb) {
+        public CalendarCheckboxListener(Activity parentActivity, Calendar c) {
             parent = parentActivity;
             calendar = c;
-            self = cb;
         }
 
         /**
          * Triggered when the user clicks a checkbox
-         * TODO: Finish documentation here
+         * Toggles the associated calendar's state in the CalendarBlacklist
          */
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

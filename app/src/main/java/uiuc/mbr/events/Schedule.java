@@ -57,6 +57,10 @@ public class Schedule {
         //TODO: Remove from alarm list
     }
 
+
+    /**
+     * Removes all events that have the given location
+     */
     public static void removeEventsWithAddress(String loc) {
         clearExpiredEvents();
 
@@ -80,6 +84,11 @@ public class Schedule {
     }
 
 
+    /**
+     * Returns the first event chronologically in the schedule
+     * Will not return an event with a start time before System.now
+     * Returns null if no events in schedule
+     */
     public static Event getNextEvent() {
         clearExpiredEvents();
         if (upcomingEvents.size() == 0)
@@ -106,7 +115,9 @@ public class Schedule {
         }
     }
 
-
+    /**
+     * Removes all events from the schedule
+     */
     public static void clearAllEvents() {
         upcomingEvents = new ArrayList<Event>();
     }

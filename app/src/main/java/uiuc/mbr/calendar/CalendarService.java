@@ -148,9 +148,11 @@ public class CalendarService {
     }
 
     /**
-     * Checks if the given event Id (Parent event id, not an instance id) is recurring
+     * Checks if the given event's parent is recurring
      */
-    public boolean isEventRecurring(long eventId) {
+    public boolean isEventRecurring(Event event) {
+        long eventId = event.getParentEventId();
+
         // Run query
         Cursor cur = null;
         ContentResolver cr = context.getContentResolver();

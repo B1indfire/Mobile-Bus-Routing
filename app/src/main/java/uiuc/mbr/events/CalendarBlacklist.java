@@ -17,13 +17,19 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import uiuc.mbr.calendar.Calendar;
+
 /**
  * Created by Scott on 3/10/2016.
+ * Stores a list of calendars whose events should not be displayed in the schedule.
  */
 public class CalendarBlacklist {
 
     public static final String BLACKLIST_FILE = "blacklist";
 
+    /**
+     * Checks if the calendar blacklist file exists on the device and creates a blank file if not
+     */
     private static void createFileIfNotExists(Context c) {
         FileOutputStream fos = null;
         try {
@@ -40,6 +46,9 @@ public class CalendarBlacklist {
     }
 
 
+    /**
+     * Adds a given calendar's id to the list if not present.
+     */
     public static void add(long calId, Context c) {
         if (contains(calId, c))
             return;
@@ -59,6 +68,9 @@ public class CalendarBlacklist {
         }
     }
 
+    /**
+     * Removes a given calendar's id from the list if present.
+     */
     public static void remove(long calId, Context c) {
         if (!contains(calId, c))
             return;
@@ -104,6 +116,9 @@ public class CalendarBlacklist {
         }
     }
 
+    /**
+     * Determines if a given calendar id is in the list.
+     */
     public static boolean contains(long calId, Context c) {
         createFileIfNotExists(c);
 
