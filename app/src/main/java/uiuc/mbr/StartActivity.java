@@ -12,23 +12,19 @@ import android.view.View;
 
 import uiuc.mbr.events.EventSelectionActivity;
 
-public class StartActivity extends AppCompatActivity
-{
+public class StartActivity extends AppCompatActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-		fab.setOnClickListener(new View.OnClickListener()
-		{
+		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view)
-			{
+			public void onClick(View view) {
 				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 						.setAction("Action", null).show();
 			}
@@ -36,60 +32,56 @@ public class StartActivity extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_start, menu);
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
+	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
-		if(id == R.id.action_settings)
-		{
+		if(id == R.id.action_settings) {
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void clickMapBtn(View v)
-	{
+	public void clickMapBtn(View v) {
 		startActivity(new Intent(getApplicationContext(), MapActivity.class));
 	}
 
-	public void clickStpBtn(View v)
-	{
+	public void clickStpBtn(View v) {
 		startActivity(new Intent(getApplicationContext(), GetStops.class));
 	}
 
-	public void clickAlarmBtn(View v)
-	{
+	public void clickAlarmBtn(View v) {
 		startActivity(new Intent(getApplicationContext(), AlarmActivity.class));
 	}
 
-	public void clickViewAlarmsBtn(View v)
-	{
+	public void clickViewAlarmsBtn(View v) {
 		startActivity(new Intent(getApplicationContext(), OnAlarmActivity.class));
 	}
 
-	public void clickEventAlarmsBtn(View v)
-	{
+	public void clickEventAlarmsBtn(View v){
+
 		startActivity(new Intent(getApplicationContext(), EventAlarmActivity.class));
 	}
 
-	public void clickEventBtn (View v)
-	{
+	public void clickEventBtn (View v){
+
 		startActivity(new Intent(getApplicationContext(), EventSelectionActivity.class));
 	}
 
+	public void clickSettingsBtn (View v) {
+		startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+	}
 
 	//tasks
 	//TODO: Edit/remove stored addresses
