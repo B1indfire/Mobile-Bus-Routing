@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -149,7 +150,8 @@ public class RecurringEventList {
                 int middle = line.indexOf(",");
                 String id = line.substring(0, middle);
                 String start = line.substring(middle+1);
-                if(Long.parseLong(id) != eventId || Long.parseLong(start) != startTime)
+                if((Long.parseLong(id) != eventId || Long.parseLong(start) != startTime) &&
+                        Long.parseLong(start) >= Calendar.getInstance().getTimeInMillis())
                     lines.add(line);
                 line = reader.readLine();
             }

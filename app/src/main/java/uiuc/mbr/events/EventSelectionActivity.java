@@ -252,8 +252,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                     || AddressBook.locationInMemory(event.getLocation(), parent))
                 promptForRecurringEvent();
 
-            if (RecurringEventList.containsException(event.getParentEventId(), event.getStart().getTime(), parent))
-                RecurringEventList.removeException(event.getParentEventId(), event.getStart().getTime(), parent);
+            RecurringEventList.removeException(event.getParentEventId(), event.getStart().getTime(), parent);
 
             Schedule.addEvent(event);
         }
