@@ -14,24 +14,24 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-public class AlarmActivityTest extends ActivityInstrumentationTestCase2<AlarmActivity> {
-
-    AlarmActivity thisActivity;
-    Instrumentation instrumentation;
-    ActivityMonitor monitor;
-
-    public AlarmActivityTest() {
-        super(AlarmActivity.class);
-    }
-
-    @Before
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        thisActivity = getActivity();
-        instrumentation = getInstrumentation();
-        monitor = instrumentation.addMonitor(OnAlarmActivity.class.getName(), null, false);
-    }
+public class AlarmActivityTest {// extends ActivityInstrumentationTestCase2<AlarmActivity> {
+//
+//    AlarmActivity thisActivity;
+//    Instrumentation instrumentation;
+//    ActivityMonitor monitor;
+//
+//    public AlarmActivityTest() {
+//        super(AlarmActivity.class);
+//    }
+//
+//    @Before
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//
+//        thisActivity = getActivity();
+//        instrumentation = getInstrumentation();
+//        monitor = instrumentation.addMonitor(OnAlarmActivity.class.getName(), null, false);
+//    }
 
     @Test
     public void testSetAlarmAndRun() {
@@ -69,10 +69,10 @@ public class AlarmActivityTest extends ActivityInstrumentationTestCase2<AlarmAct
 //        );
     }
 
-    @Override
-    @After
-    protected void tearDown() throws Exception {
-        instrumentation.removeMonitor(monitor);
-        super.tearDown();
-    }
+//    @Override
+//    @After
+//    protected void tearDown() throws Exception {
+//        instrumentation.removeMonitor(monitor);
+//        super.tearDown();
+//    }
 }

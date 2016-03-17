@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,23 +49,21 @@ public class AddressBook
 		if(file.exists())
 			return;
 
-		try(AssetManager assets = context.getAssets())
+		AssetManager assets = context.getAssets();
+		try(InputStream in = assets.open("locations-init.sql"))
 		{
-			try(InputStream in = assets.open("locations-init.sql"))
+			String script = new Scanner(in).useDelimiter("\\Z").next();
+			String[] parts = script.split(";");
+			try(SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY))
 			{
-				String script = new Scanner(in).useDelimiter("\\Z").next();
-				String[] parts = script.split(";");
-				try(SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY))
-				{
-					for(int i = 0; i < parts.length - 1; i++)
-						db.execSQL(parts[i]);
-				}
+				for(int i = 0; i < parts.length - 1; i++)
+					db.execSQL(parts[i]);
 			}
-			catch(IOException e)
-			{
-				file.delete();
-				throw new RuntimeException(e);
-			}
+		}
+		catch(IOException e)
+		{
+			file.delete();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -80,7 +79,9 @@ public class AddressBook
 	}
 
 
-	/**Finds the location object with the provided name.*/
+	/**Finds the location object with the provided name.*
+	 * Returns null if there is no such location.*/
+	@Nullable
 	public static UserLocation getByName(String name, Context context)
 	{
 		try(SQLiteDatabase db = db(context))
@@ -89,12 +90,24 @@ public class AddressBook
 			try(Cursor cursor = db.rawQuery(query, new String[]{name}))
 			{
 				if(!cursor.moveToNext())
-					throw new IllegalArgumentException("No location with name " + name);
+					return null;
 
 				String address = cursor.getString(0);
 				double lat = cursor.getDouble(1), lon = cursor.getDouble(2);
 				return new UserLocation(name, address, lat, lon);
 			}
+		}
+	}
+
+
+	/**Updates all fields of a location except the name.*/
+	public static void update(UserLocation location, Context context)
+	{
+		try(SQLiteDatabase db = db(context))
+		{
+			ContentValues values = values(location);
+			values.remove("name");
+			db.update(TABLE, values, "name = ?", new String[]{location.name});
 		}
 	}
 

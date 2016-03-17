@@ -1,5 +1,7 @@
 package uiuc.mbr.calendar;
 
+import android.os.Bundle;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
@@ -100,5 +102,35 @@ public class Event {
         Event e2 = (Event) other;
         return this.name.equals(e2.getName()) && this.getStart().equals(e2.getStart());
     }
+
+
+
+    /**Puts values from an Event into a Bundle so it can be recreated later with importFrom().
+	 * All keys used will start with the requested prefix; set a prefix that will avoid collisions with other code.*/
+    public void export(String prefix, Bundle bundle)
+    {
+		bundle.putLong(prefix + "calendarId", calendarId);
+		bundle.putLong(prefix + "parentEventId", parentEventId);
+		bundle.putString(prefix + "name", name);
+		bundle.putString(prefix + "description", description);
+		bundle.putString(prefix + "location", location);
+		bundle.putLong(prefix + "start", start.getTime());
+		bundle.putLong(prefix + "end", end.getTime());
+    }
+
+
+	/**Recreates an Event using a prefix-bundle combination previously passed to export().*/
+	public static Event importFrom(String prefix, Bundle bundle)
+	{
+		long calendarId = bundle.getLong(prefix + "calendarId");
+		long parentEventId = bundle.getLong(prefix + "parentEventId");
+		String name = bundle.getString(prefix + "name");
+		String description = bundle.getString(prefix + "description");
+		String location = bundle.getString(prefix + "location");
+		Date start = new Date(bundle.getLong(prefix + "start"));
+		Date end = new Date(bundle.getLong(prefix + "end"));
+
+		return new Event(calendarId, parentEventId, name, description, location, start, end);
+	}
 }
 

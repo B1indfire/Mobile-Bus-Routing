@@ -19,6 +19,8 @@ import java.util.List;
 
 import uiuc.mbr.serv.AlarmService;
 
+
+/**Activity that runs when an alarm is triggered.*/
 public class OnAlarmActivity extends AppCompatActivity
 {
 	private TextView currentAlarmName;
