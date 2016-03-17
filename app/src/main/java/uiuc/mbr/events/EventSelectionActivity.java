@@ -127,6 +127,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                 checkBox.setChecked(true);
 
             if (RecurringEventList.contains(event.getParentEventId(), this)
+                    && !RecurringEventList.containsException(event.getParentEventId(), event.getStart().getTime(),this)
                     && (LatLong.getEventLocation(event, this) != null
                     || AddressBook.locationInMemory(event.getLocation(), this))) {
                 checkBox.setChecked(true);
@@ -184,7 +185,7 @@ public class EventSelectionActivity extends AppCompatActivity {
                     addEventToSchedule();
                 }
             } else { //Event Deselected
-                Schedule.removeEvent(event);
+                removeEventFromSchedule();
             }
         }
 
@@ -251,7 +252,20 @@ public class EventSelectionActivity extends AppCompatActivity {
                     || AddressBook.locationInMemory(event.getLocation(), parent))
                 promptForRecurringEvent();
 
+            if (RecurringEventList.containsException(event.getParentEventId(), event.getStart().getTime(), parent))
+                RecurringEventList.removeException(event.getParentEventId(), event.getStart().getTime(), parent);
+
             Schedule.addEvent(event);
+        }
+
+        /**
+         * Removes the given Event from the Schedule
+         */
+        private void removeEventFromSchedule() {
+            if (RecurringEventList.contains(event.getParentEventId(), parent))
+                promptToRemoveRecurringEvent();
+
+            Schedule.removeEvent(event);
         }
 
         /**
@@ -307,6 +321,39 @@ public class EventSelectionActivity extends AppCompatActivity {
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            parent.runOnUiThread(new Runnable() {
+                public void run() {
+                    builder.show();
+                }
+            });
+        }
+
+        /**
+         * If the given event is recurring, prompts the user to remove it from memory
+         */
+        private void promptToRemoveRecurringEvent() {
+            if (!calService.isEventRecurring(event.getParentEventId())
+                    || !RecurringEventList.contains(event.getParentEventId(), parent))
+                return;
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+            builder.setTitle("This event is recurring.  Would you like all future instances of this event to automatically be removed from the schedule?");
+
+            // Set up the buttons
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    RecurringEventList.remove(event.getParentEventId(), parent);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    RecurringEventList.addException(event.getParentEventId(), event.getStart().getTime(), parent);
                     dialog.cancel();
                 }
             });

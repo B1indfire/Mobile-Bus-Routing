@@ -34,56 +34,28 @@ public class Event {
         return calendarId;
     }
 
-    public void setCalendarId(long calendarId) {
-        this.calendarId = calendarId;
-    }
-
     public long getParentEventId() {
         return parentEventId;
-    }
-
-    public void setParentEventId(long parentEventId) {
-        this.parentEventId = parentEventId;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Date getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
     public Date getEnd() {
         return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
     }
 
     public String toString(){
