@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import uiuc.mbr.events.AddressBookActivity;
+import uiuc.mbr.events.CalendarSelectionActivity;
 import uiuc.mbr.events.EventSelectionActivity;
 
 public class StartActivity extends AppCompatActivity
@@ -83,5 +85,15 @@ public class StartActivity extends AppCompatActivity
 	public void clickEventBtn (View v)
 	{
 		startActivity(new Intent(getApplicationContext(), EventSelectionActivity.class));
+	}
+
+	public void clickCalendarsBtn (View v)
+	{
+		startActivity(new Intent(getApplicationContext(), CalendarSelectionActivity.class));
+	}
+
+	public void clickAddressListBtn (View v)
+	{
+		startActivity(new Intent(getApplicationContext(), AddressBookActivity.class));
 	}
 }

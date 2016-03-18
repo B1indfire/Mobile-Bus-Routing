@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 import java.util.Scanner;
 
 /**Manages a database of UserLocation objects.
@@ -98,6 +99,28 @@ public class AddressBook
 			}
 		}
 	}
+
+
+    /**Returns all addresses in no particular order.*/
+    public static List<UserLocation> getAll(Context context)
+    {
+        try(SQLiteDatabase db = db(context))
+        {
+			try(Cursor cursor = db.rawQuery("SELECT address, latitude, longitude, name FROM " + TABLE, null))
+			{
+				List<UserLocation> out = new ArrayList<>();
+				while(cursor.moveToNext())
+				{
+					String address = cursor.getString(0);
+					double lat = cursor.getDouble(1), lon = cursor.getDouble(2);
+					String name = cursor.getString(3);
+					out.add(new UserLocation(name, address, lat, lon));
+				}
+
+				return out;
+			}
+        }
+    }
 
 
 	/**Updates all fields of a location except the name.*/

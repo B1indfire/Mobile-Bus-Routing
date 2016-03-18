@@ -25,6 +25,8 @@ public class AlarmService extends Service
 
 	public static void addAlarm(Alarm alarm, Context context)
 	{
+		if(idsMap.containsKey(alarm.event.getParentEventId()))
+			return;
 		untriggeredAlarms.add(alarm);
 		idsMap.put(alarm.event.getParentEventId(), alarm);
 		run(context);

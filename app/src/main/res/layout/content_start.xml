@@ -23,15 +23,12 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Map it up"
-		android:onClick="clickMapBtn"
-		android:layout_marginLeft="95dp" android:layout_marginStart="95dp"/>
+		android:onClick="clickMapBtn" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Get Stop"
-		android:layout_marginLeft="95dp"
-		android:layout_marginStart="95dp"
 		android:id="@+id/button"
 		android:onClick="clickStpBtn" />
 
@@ -51,8 +48,18 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Events"
-		android:onClick="clickEventBtn"
-		android:layout_marginLeft="95dp" android:layout_marginStart="95dp"/>
+		android:onClick="clickEventBtn"/>
 
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Calendar Blacklist"
+		android:onClick="clickCalendarsBtn" />
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Edit Saved Addresses"
+		android:onClick="clickAddressListBtn" />
 
 </LinearLayout>

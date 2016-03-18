@@ -9,14 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-
 import java.util.*;
 
-import uiuc.mbr.R;
+import uiuc.mbr.*;
 import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
 import uiuc.mbr.serv.AlarmService;
 import uiuc.mbr.ui.AddEventDialog;
+import uiuc.mbr.ui.RemoveRecurringEventDialog;
 
 /**
  * Activity where the User can select from a list of upcoming Events and choose which to add to the Schedule
@@ -28,7 +28,6 @@ import uiuc.mbr.ui.AddEventDialog;
 public class EventSelectionActivity extends AppCompatActivity implements AddEventDialog.CloseListener
 {
 	@Nullable private List<Event> events;
-
 	private final Adapter adapter = new Adapter();
 
     /**Provides access to the device calendar*/
@@ -57,6 +56,7 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 
     /**OnCheckChangeListener implementation for the Event list checkboxes*/
     private class EventCheckboxListener implements CompoundButton.OnCheckedChangeListener {
+
 
         //The Event associated with the checkbox
         private Event event;
@@ -87,7 +87,17 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 				dialog.show(getFragmentManager(), null);
 			}
 			else//Event Deselected
+			{
 				AlarmService.remove(event.getParentEventId(), getApplicationContext());
+				if(calService.isEventRecurring(event) && RecurringEventList.contains(event, getApplicationContext()))
+				{
+					RemoveRecurringEventDialog dialog = new RemoveRecurringEventDialog();
+					Bundle args = new Bundle();
+					RemoveRecurringEventDialog.setup(event, args);
+					dialog.setArguments(args);
+					dialog.show(getFragmentManager(), null);
+				}
+			}
         }
     }
 
@@ -102,6 +112,14 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 		protected Void doInBackground(Void[] args)
 		{
 			e = calService.getEventsNext24Hours();
+			for(Iterator<Event> it = e.iterator(); it.hasNext(); /*nothing*/)
+			{
+				Event event = it.next();
+				if(CalendarBlacklist.contains(event.getCalendarId(), getApplicationContext()) && null == AlarmService.getForEvent(event.getParentEventId()))
+					it.remove();
+				if(calService.isEventRecurring(event) && !RecurringEventList.containsException(event, getApplicationContext()))
+					AlarmService.addAlarm(new Alarm(event), getApplicationContext());
+			}
 			return null;
 		}
 
