@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import uiuc.mbr.events.AddressBookActivity;
+import uiuc.mbr.events.CalendarSelectionActivity;
 import uiuc.mbr.events.EventSelectionActivity;
 
 public class StartActivity extends AppCompatActivity {
@@ -61,11 +63,9 @@ public class StartActivity extends AppCompatActivity {
 		startActivity(new Intent(getApplicationContext(), GetStops.class));
 	}
 
-	public void clickAlarmBtn(View v) {
-		startActivity(new Intent(getApplicationContext(), AlarmActivity.class));
-	}
 
-	public void clickViewAlarmsBtn(View v) {
+	public void clickViewAlarmsBtn(View v)
+	{
 		startActivity(new Intent(getApplicationContext(), OnAlarmActivity.class));
 	}
 
@@ -79,10 +79,18 @@ public class StartActivity extends AppCompatActivity {
 		startActivity(new Intent(getApplicationContext(), EventSelectionActivity.class));
 	}
 
-	public void clickSettingsBtn (View v) {
+	public void clickSettingsBtn (View v)
+	{
 		startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 	}
 
-	//tasks
-	//TODO: Edit/remove stored addresses
+	public void clickCalendarsBtn (View v)
+	{
+		startActivity(new Intent(getApplicationContext(), CalendarSelectionActivity.class));
+	}
+
+	public void clickAddressListBtn (View v)
+	{
+		startActivity(new Intent(getApplicationContext(), AddressBookActivity.class));
+	}
 }

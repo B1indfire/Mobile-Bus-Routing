@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+
+	<ProgressBar
+		style="?android:attr/progressBarStyleLarge"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:id="@+id/d_addevent_loading"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Location:"/>
+			<Space android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1"/>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="--location--"
+				android:id="@+id/d_addevent_location"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Address:"/>
+			<Space android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1"/>
+			<EditText
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:hint="123 Main St., Urbana, IL"
+				android:id="@+id/d_addevent_address"/>
+		</LinearLayout>
+
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#830"
+			android:text="---a long message about this location/event---"
+			android:id="@+id/d_addevent_msg"/>
+
+	</LinearLayout>
+
+</FrameLayout>

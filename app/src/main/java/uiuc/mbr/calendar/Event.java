@@ -1,14 +1,11 @@
 package uiuc.mbr.calendar;
 
-import android.location.Address;
+import android.os.Bundle;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
-import uiuc.mbr.events.LatLong;
-
-/**
- * Created by Richard Shen on 2/18/2016.
- */
 public class Event {
     private long calendarId;
     private long parentEventId;
@@ -18,7 +15,7 @@ public class Event {
     private Date start;
     private Date end;
 
-    private LatLong latLong;
+    private LatLng latLong;
 
     public Event(long calendarId, long parentEventId, String name, String description, String location, Date start, Date end) {
         this.calendarId = calendarId;
@@ -34,56 +31,28 @@ public class Event {
         return calendarId;
     }
 
-    public void setCalendarId(long calendarId) {
-        this.calendarId = calendarId;
-    }
-
     public long getParentEventId() {
         return parentEventId;
-    }
-
-    public void setParentEventId(long parentEventId) {
-        this.parentEventId = parentEventId;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Date getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
     public Date getEnd() {
         return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
     }
 
     public String toString(){
@@ -91,11 +60,11 @@ public class Event {
                 +", LOCATION: "+location+", START: "+start.toString()+", END: "+end.toString()+"}";
     }
 
-    public LatLong getLatLong() {
+    public LatLng getLatLong() {
         return latLong;
     }
 
-    public void setLatLong(LatLong latLong) {
+    public void setLatLong(LatLng latLong) {
         this.latLong = latLong;
     }
 
@@ -105,5 +74,35 @@ public class Event {
         Event e2 = (Event) other;
         return this.name.equals(e2.getName()) && this.getStart().equals(e2.getStart());
     }
+
+
+
+    /**Puts values from an Event into a Bundle so it can be recreated later with importFrom().
+	 * All keys used will start with the requested prefix; set a prefix that will avoid collisions with other code.*/
+    public void export(String prefix, Bundle bundle)
+    {
+		bundle.putLong(prefix + "calendarId", calendarId);
+		bundle.putLong(prefix + "parentEventId", parentEventId);
+		bundle.putString(prefix + "name", name);
+		bundle.putString(prefix + "description", description);
+		bundle.putString(prefix + "location", location);
+		bundle.putLong(prefix + "start", start.getTime());
+		bundle.putLong(prefix + "end", end.getTime());
+    }
+
+
+	/**Recreates an Event using a prefix-bundle combination previously passed to export().*/
+	public static Event importFrom(String prefix, Bundle bundle)
+	{
+		long calendarId = bundle.getLong(prefix + "calendarId");
+		long parentEventId = bundle.getLong(prefix + "parentEventId");
+		String name = bundle.getString(prefix + "name");
+		String description = bundle.getString(prefix + "description");
+		String location = bundle.getString(prefix + "location");
+		Date start = new Date(bundle.getLong(prefix + "start"));
+		Date end = new Date(bundle.getLong(prefix + "end"));
+
+		return new Event(calendarId, parentEventId, name, description, location, start, end);
+	}
 }
 

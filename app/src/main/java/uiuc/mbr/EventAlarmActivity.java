@@ -4,11 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.Calendar;
 import java.util.List;
 
 import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
+import uiuc.mbr.serv.AlarmService;
 
 public class EventAlarmActivity extends AppCompatActivity
 {
@@ -23,16 +23,14 @@ public class EventAlarmActivity extends AppCompatActivity
 
 	public void handleButton(View v)
 	{
-		Alarm.removeAll(getApplicationContext());
+		AlarmService.removeAll();
 
 		CalendarService service = new CalendarService(getApplicationContext());
 		List<Event> events = service.getEventsNext24Hours();
 		for(Event event : events)
 		{
-			Calendar when = Calendar.getInstance();
-			when.setTime(event.getStart());
-			Alarm alarm = new Alarm(event.getName(), when);
-			Alarm.add(alarm, getApplicationContext());
+			Alarm alarm = new Alarm(event);
+			AlarmService.addAlarm(alarm, getApplicationContext());
 		}
 	}
 }
