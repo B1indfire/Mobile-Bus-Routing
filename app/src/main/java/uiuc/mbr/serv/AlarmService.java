@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.*;
 
@@ -63,6 +64,7 @@ public class AlarmService extends Service
 	/**Returns an alarm if we have one for that event.*/
 	@Nullable public static Alarm getForEvent(long eventId)
 	{
+		Log.d("AlarmService", ""+idsMap.size());
 		return idsMap.get(eventId);
 	}
 

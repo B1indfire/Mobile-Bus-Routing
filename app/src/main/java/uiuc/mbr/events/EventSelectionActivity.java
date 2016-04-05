@@ -16,6 +16,7 @@ import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
 import uiuc.mbr.serv.AlarmService;
 import uiuc.mbr.ui.AddEventDialog;
+import uiuc.mbr.ui.AddRecurringEventDialog;
 import uiuc.mbr.ui.RemoveRecurringEventDialog;
 
 /**
@@ -47,8 +48,20 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 
 
 	@Override
-	public void onAddEventDialogClosed(boolean accepted)
+	public void onAddEventDialogClosed(boolean accepted, Event event)
 	{
+		if (accepted) {
+			RecurringEventList.removeException(event, getApplicationContext());
+			if(new CalendarService(getApplicationContext()).isEventRecurring(event) && !RecurringEventList.contains(event, getApplicationContext()))
+			{
+				AddRecurringEventDialog dialog = new AddRecurringEventDialog();
+				Bundle args = new Bundle();
+				AddRecurringEventDialog.setup(event, args);
+				dialog.setArguments(args);
+				dialog.show(getFragmentManager(), null);
+			}
+		}
+
 		new Loader().execute();
 	}
 
@@ -117,7 +130,9 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 				Event event = it.next();
 				if(CalendarBlacklist.contains(event.getCalendarId(), getApplicationContext()) && null == AlarmService.getForEvent(event.getParentEventId()))
 					it.remove();
-				if(calService.isEventRecurring(event) && !RecurringEventList.containsException(event, getApplicationContext()))
+				if(calService.isEventRecurring(event)
+						&& RecurringEventList.contains(event, getApplicationContext())
+						&& !RecurringEventList.containsException(event, getApplicationContext()))
 					AlarmService.addAlarm(new Alarm(event), getApplicationContext());
 			}
 			return null;

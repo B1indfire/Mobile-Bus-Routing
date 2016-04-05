@@ -29,7 +29,7 @@ public class RemoveRecurringEventDialog extends DialogFragment
 	{
 		readArgs();
 
-		Dialog dialog = new AlertDialog.Builder(getActivity().getApplicationContext())
+		Dialog dialog = new AlertDialog.Builder(getActivity())
 		.setMessage("This event is set to automatically be added to the schedule.  Would you like to disable this for future events?")
 
 		// Set up the buttons
