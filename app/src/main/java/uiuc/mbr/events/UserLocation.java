@@ -29,4 +29,8 @@ public class UserLocation
 	{
 		this(name, null, Double.NaN, Double.NaN);
 	}
+
+
+	@Override
+	public String toString(){return "LOCATION '" + name + "' -> '" + address + "'";}
 }

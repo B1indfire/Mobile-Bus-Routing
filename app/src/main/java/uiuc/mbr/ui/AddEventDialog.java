@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;//have to use this or else setView() requires a higher API level
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class AddEventDialog extends DialogFragment
 	private Context context;
 
 	/**Visible when we're working--don't allow user input when visible.*/
-	private View loading;
+	private View loading, addressRow;
 	private TextView location, address, msg;
 
 
@@ -69,10 +70,11 @@ public class AddEventDialog extends DialogFragment
 		location = (TextView)view.findViewById(R.id.d_addevent_location);
 		address = (TextView)view.findViewById(R.id.d_addevent_address);
 		msg = (TextView)view.findViewById(R.id.d_addevent_msg);
+		addressRow = view.findViewById(R.id.d_addevent_address_row);
 
 		location.setText(event.getLocation());
 		context = getActivity().getApplicationContext();
-		new Worker().execute();
+		new Worker(false).execute();
 		return out;
 	}
 
@@ -107,6 +109,10 @@ public class AddEventDialog extends DialogFragment
 	{
 		private UserLocation data = null;
 		private String newAddress;
+		private final boolean save;
+
+		/**@param save whether or not to save the value in the address text input into the AddressBook.*/
+		public Worker(boolean save){this.save = save;}
 
 		@Override
 		public void onPreExecute()
@@ -122,16 +128,19 @@ public class AddEventDialog extends DialogFragment
 			if(locStr != null && locStr.length() > 0)
 			{
 				AddressBook.initIfNecessary(context);
-				data = AddressBook.getByName(event.getLocation(), context);
+				data = AddressBook.getByName(locStr, context);
 				if(data == null)
-					AddressBook.create(data = new UserLocation(event.getLocation()), context);
-				data.address = newAddress;
+					AddressBook.create(data = new UserLocation(locStr), context);
+
+				if(save)
+					data.address = newAddress;
 
 				String use = data.address != null && data.address.length() > 0 ? data.address : data.name;
 				LatLng pos = LocationLookup.lookupLocation(use, context);
 				data.latitude = pos == null ? Double.NaN : pos.latitude;
 				data.longitude = pos == null ? Double.NaN : pos.longitude;
-				AddressBook.update(data, context);
+				if(save)
+					AddressBook.update(data, context);
 			}
 
 			return null;
@@ -141,6 +150,11 @@ public class AddEventDialog extends DialogFragment
 		@Override
 		protected void onPostExecute(Void result)
 		{
+			if(event.getLocation() == null || event.getLocation().isEmpty())
+				addressRow.setVisibility(View.GONE);
+			else
+				addressRow.setVisibility(View.VISIBLE);
+
 			loading.setVisibility(View.INVISIBLE);
 			address.setText(data == null ? "" : data.address);
 
@@ -183,7 +197,7 @@ public class AddEventDialog extends DialogFragment
 		{
 			if(loading.getVisibility() == View.VISIBLE)
 				return;
-			new Worker().execute();
+			new Worker(true).execute();
 		}
 	}
 
