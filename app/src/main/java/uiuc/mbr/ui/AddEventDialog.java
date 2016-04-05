@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;//have to use this or else setView() requires a higher API level
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,13 +63,14 @@ public class AddEventDialog extends DialogFragment
 				.setTitle(event.getName())
 				.setView(view)
 				.setPositiveButton("Continue", new ContinueHandler())
-				.setNegativeButton("Cancel", new CancelHandler())
+				.setNegativeButton("Cancel", new CancelHandler()).setCancelable(true)
 				.create();
 
 		loading = view.findViewById(R.id.d_addevent_loading);
 		location = (TextView)view.findViewById(R.id.d_addevent_location);
 		address = (TextView)view.findViewById(R.id.d_addevent_address);
 		msg = (TextView)view.findViewById(R.id.d_addevent_msg);
+
 
 		location.setText(event.getLocation());
 		context = getActivity().getApplicationContext();
@@ -119,20 +121,19 @@ public class AddEventDialog extends DialogFragment
 		protected Void doInBackground(Void[] args)
 		{
 			String locStr = event.getLocation();
-			if(locStr != null && locStr.length() > 0)
-			{
-				AddressBook.initIfNecessary(context);
-				data = AddressBook.getByName(event.getLocation(), context);
-				if(data == null)
-					AddressBook.create(data = new UserLocation(event.getLocation()), context);
-				data.address = newAddress;
-
-				String use = data.address != null && data.address.length() > 0 ? data.address : data.name;
-				LatLng pos = LocationLookup.lookupLocation(use, context);
-				data.latitude = pos == null ? Double.NaN : pos.latitude;
-				data.longitude = pos == null ? Double.NaN : pos.longitude;
-				AddressBook.update(data, context);
+			if (locStr.length() == 0) locStr = event.getName();
+			AddressBook.initIfNecessary(context);
+			data = AddressBook.getByName(locStr, context);
+			if(data == null) {
+				AddressBook.create(data = new UserLocation(locStr), context);
 			}
+			data.address = newAddress;
+
+			String use = data.address != null && data.address.length() > 0 ? data.address : data.name;
+			LatLng pos = LocationLookup.lookupLocation(use, context);
+			data.latitude = pos == null ? Double.NaN : pos.latitude;
+			data.longitude = pos == null ? Double.NaN : pos.longitude;
+				AddressBook.update(data, context);
 
 			return null;
 		}
@@ -192,8 +193,7 @@ public class AddEventDialog extends DialogFragment
 	private class CancelHandler implements DialogInterface.OnClickListener
 	{
 		@Override
-		public void onClick(DialogInterface anInterface, int i)
-		{
+		public void onClick(DialogInterface anInterface, int i) {
 			dismiss();
 		}
 	}
