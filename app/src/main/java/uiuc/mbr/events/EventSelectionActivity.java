@@ -46,6 +46,7 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(adapter);
 		list.setItemsCanFocus(false);
+		new RecurringEventMaintainer().execute();
 		new Loader().execute();
     }
 
@@ -119,6 +120,25 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 
 
 
+	/**Checks whether any events need to be added to AlarmService due to recurrence rules.
+	 * Needs to run periodically (at least every 24 hours) to guarantee all recurring events are always in the service.*/
+	private class RecurringEventMaintainer extends AsyncTask<Void, Void, Void>
+	{
+		@Override
+		protected Void doInBackground(Void[] args)
+		{
+			for(Event event : calService.getEventsNext24Hours())
+			{
+				if(calService.isEventRecurring(event)
+						&& RecurringEventList.contains(event, getApplicationContext())
+						&& !RecurringEventList.containsException(event, getApplicationContext()))
+					AlarmService.addAlarm(new Alarm(event), getApplicationContext());
+			}
+			return null;
+		}
+	}
+
+
 	/**Loads the list to display.*/
 	private class Loader extends AsyncTask<Void, Void, Void>
 	{
@@ -133,10 +153,6 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 				Event event = it.next();
 				if(CalendarBlacklist.contains(event.getCalendarId(), getApplicationContext()) && null == AlarmService.getForEvent(event.getParentEventId()))
 					it.remove();
-				if(calService.isEventRecurring(event)
-						&& RecurringEventList.contains(event, getApplicationContext())
-						&& !RecurringEventList.containsException(event, getApplicationContext()))
-					AlarmService.addAlarm(new Alarm(event), getApplicationContext());
 			}
 			return null;
 		}
@@ -172,7 +188,6 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 			Event event = getItem(i);
 
 			checkBox.setChecked(AlarmService.getForEvent(event.getParentEventId()) != null);
-//			checkBox.setOnCheckedChangeListener(new EventCheckboxListener(event));
 			name.setText(event.getName());
 			location.setText(event.getLocation());
 

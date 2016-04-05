@@ -64,7 +64,7 @@ public class AlarmService extends Service
 	/**Returns an alarm if we have one for that event.*/
 	@Nullable public static Alarm getForEvent(long eventId)
 	{
-		Log.d("AlarmService", ""+idsMap.size());
+		Log.d("AlarmService", "get alarm when there are " + idsMap.size());
 		return idsMap.get(eventId);
 	}
 
