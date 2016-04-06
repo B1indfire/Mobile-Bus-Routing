@@ -43,17 +43,14 @@ public class Alarm implements Comparable<Alarm>
 					                             "" + event.getLatLong().latitude, "" + event.getLatLong().longitude,
 					                             "" + arrivalTimeAsDate.getDate(), "" + arrivalTimeAsDate.getTime(),
 					                             "arrive", c);
-			int duration = dir.getDuration();
+
+			int duration = (dir == null) ? 0 : dir.getDuration();
 
 			//Determine appropriate leaving time from directions
 			Calendar departTime = Calendar.getInstance();
 			departTime.setTime(arrivalTimeAsDate);
 			departTime.add(Calendar.MINUTE, -1 * duration);
 			alarmTime = departTime;
-
-			Log.wtf("setAlarmTime", "ArrivalTime: " + arrivalTimeAsDate.toString());
-			Log.wtf("setAlarmTime", "Duration: " + duration);
-			Log.wtf("setAlarmTime", "DepartTime: " + departTime.getTime().toString());
 
 		} catch (IOException e) {
 			e.printStackTrace();

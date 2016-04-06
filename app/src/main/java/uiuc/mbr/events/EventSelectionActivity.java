@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.*;
 
 import uiuc.mbr.*;
@@ -131,8 +133,13 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 			{
 				if(calService.isEventRecurring(event)
 						&& RecurringEventList.contains(event, getApplicationContext())
-						&& !RecurringEventList.containsException(event, getApplicationContext()))
-					AlarmService.addAlarm(event, getApplicationContext());
+						&& !RecurringEventList.containsException(event, getApplicationContext())) {
+					UserLocation loc = AddressBook.getByName(event.getLocation(), getApplicationContext());
+					if (loc != null) {
+						event.setLatLong(new LatLng(loc.latitude, loc.longitude));
+						AlarmService.addAlarm(event, getApplicationContext());
+					}
+				}
 			}
 			return null;
 		}
