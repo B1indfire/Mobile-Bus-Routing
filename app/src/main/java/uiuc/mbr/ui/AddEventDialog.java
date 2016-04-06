@@ -97,7 +97,7 @@ public class AddEventDialog extends DialogFragment
 	public void onDismiss(DialogInterface d)
 	{
 		if(getActivity() instanceof CloseListener)
-			((CloseListener)getActivity()).onAddEventDialogClosed(accepted);
+			((CloseListener)getActivity()).onAddEventDialogClosed(accepted, event);
 		super.onDismiss(d);
 	}
 
@@ -173,16 +173,6 @@ public class AddEventDialog extends DialogFragment
 				Snackbar.make(getActivity().findViewById(android.R.id.content), "Event added.", Snackbar.LENGTH_SHORT).show();
 				accepted = true;
 				dismiss();
-
-				RecurringEventList.removeException(event, context);
-				if(new CalendarService(context).isEventRecurring(event) && !RecurringEventList.contains(event, context))
-				{
-					AddRecurringEventDialog dialog = new AddRecurringEventDialog();
-					Bundle args = new Bundle();
-					AddRecurringEventDialog.setup(event, args);
-					dialog.setArguments(args);
-					dialog.show(getActivity().getFragmentManager(), null);
-				}
 			}
 		}
 	}
@@ -218,6 +208,6 @@ public class AddEventDialog extends DialogFragment
 	public interface CloseListener
 	{
 		/**@param accepted if true, we set an alarm for this event*/
-		void onAddEventDialogClosed(boolean accepted);
+		void onAddEventDialogClosed(boolean accepted, Event e);
 	}
 }

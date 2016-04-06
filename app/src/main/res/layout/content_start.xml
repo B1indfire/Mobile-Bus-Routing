@@ -66,12 +66,14 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Calendar Blacklist"
+		android:layout_gravity="center_horizontal"
 		android:onClick="clickCalendarsBtn" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Edit Saved Addresses"
+		android:layout_gravity="center_horizontal"
 		android:onClick="clickAddressListBtn" />
 
 </LinearLayout>
