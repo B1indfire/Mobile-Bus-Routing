@@ -5,14 +5,20 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.IBinder;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.*;
 
 import uiuc.mbr.Alarm;
 import uiuc.mbr.OnAlarmActivity;
+import uiuc.mbr.calendar.Event;
 
 /**Keeps track of alarms and when they should trigger.
  * Launches OnAlarmActivity when an alarm is triggered.
@@ -24,12 +30,30 @@ public class AlarmService extends Service
 	private static final Map<Long, Alarm> idsMap = new HashMap<>();
 
 
-	public static void addAlarm(Alarm alarm, Context context)
+	public static void addAlarm(Event event, Context context)
 	{
+		Alarm alarm = new Alarm(event);
+
+		//Add alarm to the queues
 		if(idsMap.containsKey(alarm.event.getParentEventId()))
 			return;
 		untriggeredAlarms.add(alarm);
 		idsMap.put(alarm.event.getParentEventId(), alarm);
+
+		//TODO: Use previous event's location instead of current location if within 2 hours
+
+		// Allow network.
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		//Get the current location
+		LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
+		LatLng startingLoc = new LatLng(location.getLatitude(), location.getLongitude());
+
+		//Set when the alarm needs to go off based on the starting location
+		alarm.setAlarmTime(startingLoc, context);
+
 		run(context);
 	}
 
@@ -40,6 +64,8 @@ public class AlarmService extends Service
 		if(triggeredAlarm == alarm)
 			triggeredAlarm = null;
 		idsMap.remove(eventId);
+
+		//TODO: Update alarmTimes for all alarms remaining
 	}
 
 
@@ -64,7 +90,6 @@ public class AlarmService extends Service
 	/**Returns an alarm if we have one for that event.*/
 	@Nullable public static Alarm getForEvent(long eventId)
 	{
-		Log.d("AlarmService", "get alarm when there are " + idsMap.size());
 		return idsMap.get(eventId);
 	}
 
@@ -86,7 +111,7 @@ public class AlarmService extends Service
 		Alarm next = untriggeredAlarms.peek();
 		if(next != null)
 		{
-			long nextTime = next.event.getStart().getTime();
+			long nextTime = next.getAlarmTime().getTime().getTime();
 			long now = System.currentTimeMillis();
 			if(nextTime <= now)
 			{

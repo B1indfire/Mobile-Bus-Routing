@@ -248,15 +248,16 @@ public class CumtdApi {
      * @param time
      * @param arrive_depart
      * @return
-     * @throws MalformedURLException
      * @throws IOException
+     * @throws JSONException
      */
     public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat,
                                       String destination_lon, String date, String time,
                                       String arrive_depart, Context c)
-            throws MalformedURLException, IOException, JSONException {
+            throws IOException, JSONException {
         Integer tempW = SettingsActivity.loadMaxWalkFromMemory(c);
-        double maxWalk = tempW*.1;
+        int tempWInt = (tempW == null) ? 0 : tempW;
+        double maxWalk = tempWInt*.1;
         System.out.println(maxWalk);
         String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat +
                 "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+

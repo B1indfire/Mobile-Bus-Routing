@@ -132,7 +132,7 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 				if(calService.isEventRecurring(event)
 						&& RecurringEventList.contains(event, getApplicationContext())
 						&& !RecurringEventList.containsException(event, getApplicationContext()))
-					AlarmService.addAlarm(new Alarm(event), getApplicationContext());
+					AlarmService.addAlarm(event, getApplicationContext());
 			}
 			return null;
 		}

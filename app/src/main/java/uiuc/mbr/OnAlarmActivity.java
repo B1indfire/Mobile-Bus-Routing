@@ -60,7 +60,7 @@ public class OnAlarmActivity extends AppCompatActivity
 		else
 		{
 			Calendar now = Calendar.getInstance();
-			if(triggered.start().compareTo(now) <= 0)
+			if(triggered.getAlarmTime().compareTo(now) <= 0)
 				text = triggered.event.getName();
 			else
 				text = null;
@@ -143,7 +143,7 @@ public class OnAlarmActivity extends AppCompatActivity
 			Alarm alarm = getItem(i);
 
 			name.setText(alarm.event.getName());
-			time.setText(alarm.event.getStart().toString());
+			time.setText(alarm.getAlarmTime().getTime().toString());
 			return v;
 		}
 

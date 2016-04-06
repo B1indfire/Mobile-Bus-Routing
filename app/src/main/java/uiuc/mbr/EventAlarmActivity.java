@@ -29,8 +29,7 @@ public class EventAlarmActivity extends AppCompatActivity
 		List<Event> events = service.getEventsNext24Hours();
 		for(Event event : events)
 		{
-			Alarm alarm = new Alarm(event);
-			AlarmService.addAlarm(alarm, getApplicationContext());
+			AlarmService.addAlarm(event, getApplicationContext());
 		}
 	}
 }
