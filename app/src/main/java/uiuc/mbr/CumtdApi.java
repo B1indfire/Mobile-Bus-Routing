@@ -256,7 +256,7 @@ public class CumtdApi {
                                       String arrive_depart, Context c)
             throws IOException, JSONException {
         Integer tempW = SettingsActivity.loadMaxWalkFromMemory(c);
-        int tempWInt = (tempW == null) ? 0 : tempW;
+        int tempWInt = (tempW == null) ? 1 : tempW;
         double maxWalk = tempWInt*.1;
         System.out.println(maxWalk);
         String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat +
