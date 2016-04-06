@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,9 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
         calService = new CalendarService(getApplicationContext());
 		ListView list = (ListView)findViewById(R.id.a_events_list);
 		list.setAdapter(adapter);
+		list.setOnItemClickListener(adapter);
+		list.setItemsCanFocus(false);
+		new RecurringEventMaintainer().execute();
 		new Loader().execute();
     }
 
@@ -116,6 +120,25 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 
 
 
+	/**Checks whether any events need to be added to AlarmService due to recurrence rules.
+	 * Needs to run periodically (at least every 24 hours) to guarantee all recurring events are always in the service.*/
+	private class RecurringEventMaintainer extends AsyncTask<Void, Void, Void>
+	{
+		@Override
+		protected Void doInBackground(Void[] args)
+		{
+			for(Event event : calService.getEventsNext24Hours())
+			{
+				if(calService.isEventRecurring(event)
+						&& RecurringEventList.contains(event, getApplicationContext())
+						&& !RecurringEventList.containsException(event, getApplicationContext()))
+					AlarmService.addAlarm(new Alarm(event), getApplicationContext());
+			}
+			return null;
+		}
+	}
+
+
 	/**Loads the list to display.*/
 	private class Loader extends AsyncTask<Void, Void, Void>
 	{
@@ -130,10 +153,6 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 				Event event = it.next();
 				if(CalendarBlacklist.contains(event.getCalendarId(), getApplicationContext()) && null == AlarmService.getForEvent(event.getParentEventId()))
 					it.remove();
-				if(calService.isEventRecurring(event)
-						&& RecurringEventList.contains(event, getApplicationContext())
-						&& !RecurringEventList.containsException(event, getApplicationContext()))
-					AlarmService.addAlarm(new Alarm(event), getApplicationContext());
 			}
 			return null;
 		}
@@ -148,7 +167,7 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 
 
 	/**Displays the list of Events.*/
-	private class Adapter extends BaseAdapter
+	private class Adapter extends BaseAdapter implements AdapterView.OnItemClickListener
 	{
 		@Override
 		public int getCount(){return events == null ? 0 : events.size();}
@@ -169,11 +188,40 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 			Event event = getItem(i);
 
 			checkBox.setChecked(AlarmService.getForEvent(event.getParentEventId()) != null);
-			checkBox.setOnCheckedChangeListener(new EventCheckboxListener(event));
 			name.setText(event.getName());
 			location.setText(event.getLocation());
 
 			return v;
+		}
+
+
+		@Override
+		public void onItemClick(AdapterView<?> view, View view1, int i, long l)
+		{
+			Event event = getItem(i);
+
+			if (AlarmService.getForEvent(event.getParentEventId()) == null)//event is not selected
+			{
+				AddEventDialog dialog = new AddEventDialog();
+				Bundle args = new Bundle();
+				AddEventDialog.setup(event, args);
+				dialog.setArguments(args);
+				dialog.show(getFragmentManager(), null);
+			}
+			else//Event Deselected
+			{
+				AlarmService.remove(event.getParentEventId(), getApplicationContext());
+				if(calService.isEventRecurring(event) && RecurringEventList.contains(event, getApplicationContext()))
+				{
+					RemoveRecurringEventDialog dialog = new RemoveRecurringEventDialog();
+					Bundle args = new Bundle();
+					RemoveRecurringEventDialog.setup(event, args);
+					dialog.setArguments(args);
+					dialog.show(getFragmentManager(), null);
+				}
+
+				new Loader().execute();
+			}
 		}
 	}
 }
