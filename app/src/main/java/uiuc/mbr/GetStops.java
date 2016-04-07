@@ -13,7 +13,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -58,7 +57,7 @@ public class GetStops extends AppCompatActivity {
         double latitude = location.getLatitude();
 
         // Get nearest stops.
-        CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
+        CumtdApi api = CumtdApi.create();
         List<String> list = new ArrayList<String>();
         try {
             list = api.getNearestStops("" + latitude, "" + longitude);
@@ -76,7 +75,7 @@ public class GetStops extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     ArrayList<String> list = new ArrayList<String>();
-                    CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
+                    CumtdApi api = CumtdApi.create();
                     try {
                         final Button button = (Button) v;
                         list = (ArrayList<String>) api.getDepartures(button.getText().toString().split(":")[0]);

@@ -63,8 +63,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		LatLng debugPos = new LatLng(0, 0);
 		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
 
-		CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-				PolylineOptions line = new PolylineOptions();
+		CumtdApi api = CumtdApi.create();
+		PolylineOptions line = new PolylineOptions();
 		List<String> list = new ArrayList<String>();
 		try {
 				list = api.getShapeCoords("22N ILLINI 10");

@@ -1,12 +1,10 @@
 package uiuc.mbr;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -27,7 +25,7 @@ public class Alarm implements Comparable<Alarm>
 
 
 	public void setAlarmTime(LatLng startLocation, Context c) {
-		CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
+		CumtdApi api = CumtdApi.create();
 
 		//Set arrival time based on min arrival setting
 		Calendar arrivalTime = Calendar.getInstance();
@@ -37,6 +35,11 @@ public class Alarm implements Comparable<Alarm>
 		arrivalTime.add(Calendar.MINUTE, -1 * offset);
 		Date arrivalTimeAsDate = arrivalTime.getTime();
 
+		alarmTime = getTimeFromApi(startLocation, c, api, arrivalTime, arrivalTimeAsDate);
+	}
+
+	private Calendar getTimeFromApi(LatLng startLocation, Context c, CumtdApi api, Calendar arrivalTime, Date arrivalTimeAsDate) {
+		Calendar time;
 		try {
 			//Get directions from CUMTD API
 			Directions dir = api.getTripArriveBy("" + startLocation.latitude, "" + startLocation.longitude,
@@ -50,15 +53,16 @@ public class Alarm implements Comparable<Alarm>
 			Calendar departTime = Calendar.getInstance();
 			departTime.setTime(arrivalTimeAsDate);
 			departTime.add(Calendar.MINUTE, -1 * duration);
-			alarmTime = departTime;
+			time = departTime;
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			alarmTime = arrivalTime;
+			time = arrivalTime;
 		} catch (JSONException e) {
 			e.printStackTrace();
-			alarmTime = arrivalTime;
+			time = arrivalTime;
 		}
+		return time;
 	}
 
 	public Calendar getAlarmTime()

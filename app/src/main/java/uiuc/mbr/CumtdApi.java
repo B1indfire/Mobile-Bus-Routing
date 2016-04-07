@@ -12,9 +12,13 @@ public class CumtdApi {
     String url;
     String key;
 
-    public CumtdApi(String url, String key) {
+    private CumtdApi(String url, String key) {
         this.url = url;
         this.key = key;
+    }
+
+    public static CumtdApi create() {
+        return new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
     }
 
     private JSONObject getFromApi(String name) throws MalformedURLException, IOException, org.json.JSONException{
