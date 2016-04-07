@@ -10,6 +10,7 @@ import java.util.List;
 public class Directions {
 	private int duration;
 	private List<String> directions = new ArrayList<String>();
+	private List<String> coordinates = new ArrayList<String>();
 	
 	public Directions(int duration) {
 		this.duration = duration;
@@ -18,6 +19,10 @@ public class Directions {
 	public void addDirections(String s) {
 		directions.add(s);
 	}
+
+	public void addCoordinates(String s) {
+		coordinates.add(s);
+	}
 	
 	public int getDuration() {
 		return duration;
@@ -25,5 +30,9 @@ public class Directions {
 	
 	public List<String> getDirections() {
 		return directions;
+	}
+
+	public List<String> getCoordinates() {
+		return coordinates;
 	}
 }
