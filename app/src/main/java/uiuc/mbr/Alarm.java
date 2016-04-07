@@ -7,13 +7,14 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
 import uiuc.mbr.calendar.Event;
 
 /**A time when the user should be notified, together with a name.*/
-public class Alarm implements Comparable<Alarm>
+public class Alarm implements Comparable<Alarm>, Serializable
 {
 	public final Event event;
 	private Calendar alarmTime;
