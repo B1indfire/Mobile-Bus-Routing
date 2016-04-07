@@ -49,22 +49,51 @@ public class AlarmService extends Service
 		untriggeredAlarms.add(alarm);
 		idsMap.put(alarm.event.getParentEventId(), alarm);
 
-		//TODO: Use previous event's location instead of current location if within 2 hours
+		LatLng startingLoc = null;
 
 		// Allow network.
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 
-		//Get the current location
-		LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
-		LatLng startingLoc = new LatLng(location.getLatitude(), location.getLongitude());
+		//Check if there's an event before this event and within 2 hours.
+		Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
+		//int index = Arrays.binarySearch(temp, alarm);
+		int index=-1;
+		for(int i =0; i<temp.length; i++){
+			if(temp[i].equals(alarm))
+				index=i;
+		}
+		if(index>0){
+			if((event.getStart().getTime()-temp[index-1].event.getEnd().getTime())<7200000){ //2 hrs in millis
+				startingLoc = temp[index-1].event.getLatLong();
+			}
+		}
+
+		if (startingLoc == null) {
+
+
+			//Get the current location
+			LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+			Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
+			startingLoc = new LatLng(location.getLatitude(), location.getLongitude());
+		}
 
 		//Set when the alarm needs to go off based on the starting location
 		alarm.setAlarmTime(startingLoc, context);
 
-		saveAlarms(context);
 
+		//Check if the next event is within two hours of this event's end time.
+		if(index!=temp.length-1){//not end of array
+			long diff = temp[index+1].event.getStart().getTime()-event.getEnd().getTime();
+			Log.wtf("uiuc.mbr", Long.toString(diff));
+			if(diff<7200000){ //2 hrs in millis
+				Log.wtf("uiuc.mbr", "change next event start");
+				temp[index+1].setAlarmTime(event.getLatLong(), context);
+			}
+		}
+
+
+		saveAlarms(context);
 		run(context);
 	}
 
@@ -78,6 +107,10 @@ public class AlarmService extends Service
 
 
 		//TODO: Update alarmTimes for all alarms remaining
+//		Intent innerAction = new Intent(context, AlarmService.class);
+//		PendingIntent action = PendingIntent.getService(context, 0, innerAction, 0);
+
+
 		saveAlarms(context);
 	}
 
@@ -94,11 +127,12 @@ public class AlarmService extends Service
 		run(context);
 	}
 
-	public static void removeAll()
+	public static void removeAll(Context c)
 	{
 		untriggeredAlarms.clear();
 		triggeredAlarm = null;
 		idsMap.clear();
+		saveAlarms(c);
 	}
 
 	/**Returns an alarm if we have one for that event.*/
