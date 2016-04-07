@@ -154,6 +154,17 @@ public class CumtdApi {
         return list;
     }
 
+    public List<String> getShapeCoordsByStop(String beginStop, String endStop, String shapeId) throws JSONException, MalformedURLException, IOException {
+        List<String> list = new ArrayList<String>();
+        JSONArray array = getShapeBetweenStops(beginStop, endStop, shapeId).getJSONArray("shapes");
+        System.out.println(array);
+        for(int i = 0 ; i < array.length() ; i = i + 2){
+            list.add(array.getJSONObject(i).get("shape_pt_lat").toString());
+            list.add(array.getJSONObject(i).get("shape_pt_lon").toString());
+        }
+        return list;
+    }
+
     /**
      * Get nearest stops from the current latitude and longitude.
      * @param x
@@ -223,7 +234,7 @@ public class CumtdApi {
                 double endLon = end.getDouble("lon");
                 String target = end.getString("name");
                 d.addDirections("Head " + direction + " for " + distance + " miles to " + target + ".");
-                d.addCoordinates("W:(" + beginLat + "," + beginLon + ")(" + endLat + "," + endLon + ")");            }
+                d.addCoordinates("W:" + beginLat + "," + beginLon + "," + endLat + "," + endLon);            }
             if (type.equals("Service")) {
                 JSONArray services = current.getJSONArray("services");
                 for (int j = 0; j < services.length(); j++) {
@@ -236,12 +247,14 @@ public class CumtdApi {
                     String start = begin.getString("name");
                     String finish = end.getString("name");
                     String bus = route.getString("route_id");
-                    List<String> coords = getShapeCoords(shape);
+                    String beginStopId = begin.getString("stop_id");
+                    String endStopId = end.getString("stop_id");
+                    List<String> coords = getShapeCoordsByStop(beginStopId, endStopId, shape);
                     String shapeCoords = "";
                     for(int k = 0; k < coords.size(); k=k+2) {
-                        shapeCoords += "(" + coords.get(k) + "," + coords.get(k+1) + ")";
+                        shapeCoords += coords.get(k) + "," + coords.get(k+1) + ",";
                     }
-                    d.addCoordinates("S:" + shapeCoords);
+                    d.addCoordinates("S:" + shapeCoords.substring(0, shapeCoords.length()-1));
                     d.addDirections("Take the " + bus + " bus from " + start + " to " + finish + ".");                }
             }
         }

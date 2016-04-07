@@ -64,14 +64,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
 
 		CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-				PolylineOptions line = new PolylineOptions();
-		List<String> list = new ArrayList<String>();
+		PolylineOptions line = new PolylineOptions();
+		Directions d = new Directions(0);
 		try {
-				list = api.getShapeCoords("22N ILLINI 10");
+			d = api.getTripArriveBy("40.11626", "-88.25783", "40.12233", "-88.29619", "2016-03-12", "21:00", "1", "arrive");
 		} catch (Exception e) {}
 		line.width(5);
-		for (int i = 0; i < list.size(); i = i + 2) {
-				line.add(new LatLng(Double.parseDouble(list.get(i)), Double.parseDouble(list.get(i + 1))));
+		List<String> list = d.getCoordinates();
+		for (int i = 0; i < list.size(); i++) {
+			String[] p1 = list.get(i).split(":");
+			if (p1[0].equals("W")) {
+
+			}
+			String[] p2 = p1[1].split(",");
+			for (int j = 0; j < p2.length; j+=2) {
+				line.add(new LatLng(Double.parseDouble(p2[j]), Double.parseDouble(p2[j+1])));
+			}
 		}
 		map.addPolyline(line);
 
