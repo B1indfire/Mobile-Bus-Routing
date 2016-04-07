@@ -76,7 +76,9 @@ public class AlarmService extends Service
 			triggeredAlarm = null;
 		idsMap.remove(eventId);
 
+
 		//TODO: Update alarmTimes for all alarms remaining
+		saveAlarms(context);
 	}
 
 
@@ -87,6 +89,7 @@ public class AlarmService extends Service
 	{
 		if(triggeredAlarm == null)
 			throw new IllegalStateException();
+		remove(triggeredAlarm.event.getParentEventId(), context);
 		triggeredAlarm = null;
 		run(context);
 	}
@@ -119,6 +122,7 @@ public class AlarmService extends Service
 	@Override
 	public int onStartCommand(Intent i, int flags, int startId)
 	{
+		System.out.println(untriggeredAlarms);
 		Alarm next = untriggeredAlarms.peek();
 		if(next != null)
 		{
@@ -191,29 +195,6 @@ public class AlarmService extends Service
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-//		HashMap<Alarm, Integer> settings = null;
-		//Gets stuff already stored in it.
-		/*try {
-			FileInputStream fis = c.openFileInput(UNTRIGGERED_ALARMS_FILE);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			settings = (HashMap<String, Integer>) ois.readObject();
-			ois.close();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (StreamCorruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		if (settings == null)
-			settings = new HashMap<>();
-		settings.put("maxWalk", maxWalkBar.getValue());
-		settings.put("minArr", minArrBar.getValue());*/
 
 		//Write to files
 		fos = null;

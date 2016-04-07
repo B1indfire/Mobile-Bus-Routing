@@ -5,6 +5,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +117,7 @@ public class OnAlarmActivity extends AppCompatActivity
 
 	public void clickAlarmOffBtn(View v)
 	{
+		Log.wtf("uiuc.mbr", "Clicked shutup button");
 		stopSoundIfPlaying();
 		AlarmService.clearTriggeredAlarm(getApplicationContext());
 		refresh();

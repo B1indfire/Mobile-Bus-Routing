@@ -76,4 +76,13 @@ public class Alarm implements Comparable<Alarm>, Serializable
 	{
 		return event.getStart().compareTo(alarm.event.getStart());
 	}
+
+	@Override
+	public boolean equals(Object other){
+		if(!(other instanceof Alarm))
+			return false;
+
+		Alarm a = (Alarm) other;
+		return this.event.equals(a.event);
+	}
 }
