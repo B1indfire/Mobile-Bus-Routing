@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Color;		
+
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
@@ -69,19 +71,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		try {
 			d = api.getTripArriveBy("40.11626", "-88.25783", "40.12233", "-88.29619", "2016-03-12", "21:00", "1", "arrive");
 		} catch (Exception e) {}
-		line.width(5);
 		List<String> list = d.getCoordinates();
 		for (int i = 0; i < list.size(); i++) {
 			String[] p1 = list.get(i).split(":");
+			PolylineOptions line = new PolylineOptions();
+			line.width(5)
 			if (p1[0].equals("W")) {
-
+				line.color(Color.BLACK);
+			} else {
+				line.color(Color.YELLOW);
 			}
 			String[] p2 = p1[1].split(",");
 			for (int j = 0; j < p2.length; j+=2) {
 				line.add(new LatLng(Double.parseDouble(p2[j]), Double.parseDouble(p2[j+1])));
 			}
+			map.addPolyline(line);
 		}
-		map.addPolyline(line);
 
 		map.moveCamera(CameraUpdateFactory.zoomTo(14));
 		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos));
