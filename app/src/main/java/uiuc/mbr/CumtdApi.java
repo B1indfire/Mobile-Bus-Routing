@@ -9,8 +9,8 @@ import org.json.*;
 
 public class CumtdApi {
 
-    String url;
-    String key;
+    private final String url;
+    private final String key;
 
     private CumtdApi(String url, String key) {
         this.url = url;
@@ -54,8 +54,7 @@ public class CumtdApi {
     }
 
     private JSONObject jsonFromString(String s) throws org.json.JSONException {
-        JSONObject json = new JSONObject(s);
-        return json;
+        return new JSONObject(s);
     }
 
     public JSONObject getCalendarDatesByDate(String date) throws MalformedURLException, IOException, org.json.JSONException{
@@ -217,7 +216,7 @@ public class CumtdApi {
         for (int i = 0; i < legs.length(); i++) {
             JSONObject current = legs.getJSONObject(i);
             String type = current.getString("type");
-            if (type.equals("Walk")) {;
+            if (type.equals("Walk")) {
                 JSONObject walk = current.getJSONObject("walk");
                 String direction = walk.getString("direction");
                 String distance = walk.get("distance").toString();

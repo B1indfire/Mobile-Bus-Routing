@@ -29,7 +29,7 @@ public class AddRecurringEventDialog extends DialogFragment
 	{
 		readArgs();
 
-		final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+		return new AlertDialog.Builder(getActivity())
 		.setMessage("This event is recurring.  Would you like all future instances of this event to automatically be added to the schedule?")
 
 		// Set up the buttons
@@ -46,8 +46,6 @@ public class AddRecurringEventDialog extends DialogFragment
 			}
 		})
 		.create();
-
-		return dialog;
 	}
 
 }

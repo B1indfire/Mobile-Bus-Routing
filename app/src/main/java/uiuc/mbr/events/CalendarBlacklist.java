@@ -25,7 +25,7 @@ import uiuc.mbr.calendar.Calendar;
  */
 public class CalendarBlacklist {
 
-    public static final String BLACKLIST_FILE = "blacklist";
+    private static final String BLACKLIST_FILE = "blacklist";
 
     /**
      * Checks if the calendar blacklist file exists on the device and creates a blank file if not

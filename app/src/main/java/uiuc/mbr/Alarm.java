@@ -16,7 +16,7 @@ import uiuc.mbr.calendar.Event;
 public class Alarm implements Comparable<Alarm>
 {
 	public final Event event;
-	public Calendar alarmTime;
+	private Calendar alarmTime;
 
 	public Alarm(Event event)
 	{

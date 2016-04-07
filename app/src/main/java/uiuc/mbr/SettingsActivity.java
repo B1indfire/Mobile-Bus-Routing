@@ -75,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
         saveSettings(v, this.getApplicationContext());
     }
 
-    public void saveSettings(View v, Context c) {
+    private void saveSettings(View v, Context c) {
         FileOutputStream fos = null;
         try {
             fos = c.openFileOutput(SETTINGS_FILE, Context.MODE_APPEND);
