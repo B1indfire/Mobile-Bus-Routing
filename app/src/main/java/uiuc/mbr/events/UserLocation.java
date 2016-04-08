@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 
 /**Describes a user-supplied location (like "Joe's house"), along with data about the actual position of that location.*/
-public class UserLocation
+public class UserLocation implements Comparable<UserLocation>
 {
 	/**What the user entered in the "location" field for one or more events.*/
 	public String name;
@@ -33,4 +33,8 @@ public class UserLocation
 
 	@Override
 	public String toString(){return "LOCATION '" + name + "' -> '" + address + "'";}
+
+	/**Compares locations by name.*/
+	@Override
+	public int compareTo(UserLocation that){return this.name.compareTo(that.name);}
 }

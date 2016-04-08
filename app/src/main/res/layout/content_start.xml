@@ -25,13 +25,11 @@
 		android:text="Map it up"
 		android:layout_gravity="center_horizontal"
 		android:onClick="clickMapBtn" />
-		android:onClick="clickMapBtn" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Get Stop"
-		android:id="@+id/button"
 		android:onClick="clickStpBtn"
 		android:layout_gravity="center_horizontal" />
 
@@ -40,6 +38,13 @@
 		android:layout_height="wrap_content"
 		android:text="View Alarms"
 		android:onClick="clickViewAlarmsBtn"
+		android:layout_gravity="center_horizontal" />
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Quick Go To"
+		android:onClick="clickQuickGotoVtn"
 		android:layout_gravity="center_horizontal" />
 
 	<Button
