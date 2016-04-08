@@ -53,6 +53,22 @@ public class AlarmService extends Service
 		new AlarmAddTask(alarm, context).execute();
 	}
 
+	public static void updateFirst(Context context) {
+		new UpdateFirstTask(context).execute();
+	}
+
+	public static void remove(long eventId, Context context)
+	{
+		Alarm alarm = idsMap.get(eventId);
+
+		new AlarmRemoveTask(alarm, context).execute();
+	}
+
+	public static void updateAllAlarmTimes(Context context) {
+		new UpdateAllAlarmsTask(context).execute();
+	}
+
+
 	private static class AlarmAddTask extends AsyncTask<Void, Void, Void> {
 
 		private Context context;
@@ -110,6 +126,8 @@ public class AlarmService extends Service
 
 		@Override
 		protected void onPostExecute(Void result) {
+			Log.wtf("AddAlarm", "Completed AddAlarm for " + alarm.event.toString());
+
 			saveAlarms(context);
 			run(context);
 		}
@@ -147,17 +165,6 @@ public class AlarmService extends Service
 			saveAlarms(context);
 			run(context);
 		}
-	}
-
-	public static void updateFirst(Context context) {
-		new UpdateFirstTask(context).execute();
-	}
-
-	public static void remove(long eventId, Context context)
-	{
-		Alarm alarm = idsMap.get(eventId);
-
-		new AlarmRemoveTask(alarm, context).execute();
 	}
 
 	private static class AlarmRemoveTask extends AsyncTask<Void, Void, Void> {
@@ -214,6 +221,50 @@ public class AlarmService extends Service
 			saveAlarms(context);
 		}
 	}
+
+	private static class UpdateAllAlarmsTask extends AsyncTask<Void, Void, Void> {
+
+		private Context context;
+
+		public UpdateAllAlarmsTask(Context c) {
+			this.context = c;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
+
+			for (int index = 0; index < temp.length; index++) {
+
+				LatLng startLoc = null;
+
+				if (index != 0)
+					if (temp[index].event.getStart().getTime()-temp[index-1].event.getEnd().getTime() < 72000)
+						startLoc = temp[index].event.getLatLong();
+
+				if (startLoc == null) {
+					//Get the current location
+					LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+					Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
+					startLoc = new LatLng(location.getLatitude(), location.getLongitude());
+				}
+
+				temp[index].setAlarmTime(startLoc, context);
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			Log.wtf("UpdateAllAlarms", "Complete");
+
+			saveAlarms(context);
+		}
+	}
+
+
 
 	public static List<Alarm> getUntriggeredAlarms(){return new ArrayList<>(untriggeredAlarms);}
 

@@ -27,6 +27,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.HashMap;
 
+import uiuc.mbr.serv.AlarmService;
 
 
 /**
@@ -72,10 +73,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
     public void saveSettings(View v){
-        saveSettings(v, this.getApplicationContext());
+        saveSettingsToFile(v, this.getApplicationContext());
+        AlarmService.updateAllAlarmTimes(this.getApplicationContext());
     }
 
-    private void saveSettings(View v, Context c) {
+    private void saveSettingsToFile(View v, Context c) {
         FileOutputStream fos = null;
         try {
             fos = c.openFileOutput(SETTINGS_FILE, Context.MODE_APPEND);
@@ -125,7 +127,6 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     public static Integer loadMaxWalkFromMemory(Context c) {
         HashMap<String, Integer> settings = null;
         try {
