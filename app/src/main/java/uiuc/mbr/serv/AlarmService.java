@@ -69,11 +69,8 @@ public class AlarmService extends Service
 
 			Log.wtf("AddAlarm", "AddAlarm Started");
 
-			//Check if there's an event before this event and within 2 hours.
 			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
 			Arrays.sort(temp);
-
-			//int index = Arrays.binarySearch(temp, alarm);
 			int index=-1;
 			for(int i =0; i<temp.length; i++){
 				if(temp[i].equals(alarm))
@@ -159,20 +156,64 @@ public class AlarmService extends Service
 	public static void remove(long eventId, Context context)
 	{
 		Alarm alarm = idsMap.get(eventId);
-		untriggeredAlarms.remove(alarm);
-		if(triggeredAlarm == alarm)
-			triggeredAlarm = null;
-		idsMap.remove(eventId);
 
-
-		//TODO: Update alarmTimes for all alarms remaining
-//		Intent innerAction = new Intent(context, AlarmService.class);
-//		PendingIntent action = PendingIntent.getService(context, 0, innerAction, 0);
-
-
-		saveAlarms(context);
+		new AlarmRemoveTask(alarm, context).execute();
 	}
 
+	private static class AlarmRemoveTask extends AsyncTask<Void, Void, Void> {
+
+		private Alarm alarm;
+		private Context context;
+
+		public AlarmRemoveTask(Alarm a, Context c) {
+			this.alarm = a;
+			this.context = c;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			Log.wtf("RemoveAlarm", "RemoveAlarm Started");
+
+			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
+			Arrays.sort(temp);
+			int index=-1;
+			for(int i =0; i<temp.length; i++){
+				if(temp[i].equals(alarm))
+					index=i;
+			}
+			Log.wtf("RemoveAlarm", "Index = " + index);
+
+			if (index != untriggeredAlarms.size()-1) {
+				LatLng startLoc = null;
+
+				if (index != 0)
+					if (temp[index+1].event.getStart().getTime()-temp[index-1].event.getEnd().getTime() < 7200000) //Less than 2 hrs
+						startLoc = temp[index-1].event.getLatLong();
+
+				if (startLoc == null) {
+					//Get the current location
+					LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+					Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
+					startLoc = new LatLng(location.getLatitude(), location.getLongitude());
+				}
+
+				temp[index+1].setAlarmTime(startLoc, context);
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			untriggeredAlarms.remove(alarm);
+			if(triggeredAlarm == alarm)
+				triggeredAlarm = null;
+			idsMap.remove(alarm.event.getParentEventId());
+
+			saveAlarms(context);
+		}
+	}
 
 	public static List<Alarm> getUntriggeredAlarms(){return new ArrayList<>(untriggeredAlarms);}
 
@@ -181,7 +222,6 @@ public class AlarmService extends Service
 	{
 		if(triggeredAlarm == null)
 			throw new IllegalStateException();
-		remove(triggeredAlarm.event.getParentEventId(), context);
 		triggeredAlarm = null;
 		run(context);
 	}
@@ -206,15 +246,14 @@ public class AlarmService extends Service
 		context.startService(new Intent(context, AlarmService.class));
 	}
 
-
-
 	@Nullable @Override
 	public IBinder onBind(Intent intent){return null;}
-
 
 	@Override
 	public int onStartCommand(Intent i, int flags, int startId)
 	{
+		loadAlarms(this);
+
 		System.out.println(untriggeredAlarms);
 		Alarm next = untriggeredAlarms.peek();
 		if(next != null)
@@ -239,6 +278,8 @@ public class AlarmService extends Service
 				mgr.setExact(AlarmManager.RTC_WAKEUP, nextTime, action);
 			}
 		}
+
+		saveAlarms(this);
 
 		return super.onStartCommand(i, flags, startId);
 	}
