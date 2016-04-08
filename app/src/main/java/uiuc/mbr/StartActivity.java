@@ -89,4 +89,8 @@ public class StartActivity extends AppCompatActivity {
 	{
 		startActivity(new Intent(getApplicationContext(), AddressBookActivity.class));
 	}
+
+	public void clickUpdateFirst(View view) {
+		AlarmService.updateFirst(this);
+	}
 }

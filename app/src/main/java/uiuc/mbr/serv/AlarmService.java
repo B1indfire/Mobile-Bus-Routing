@@ -118,6 +118,44 @@ public class AlarmService extends Service
 		}
 	}
 
+	private static class UpdateFirstTask extends AsyncTask<Void, Void, Void> {
+
+		private Context context;
+		private Alarm alarm;
+
+		public UpdateFirstTask(Context c) {
+			this.context = c;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			LatLng currentLoc = null;
+			alarm = untriggeredAlarms.poll();
+
+			if (alarm != null) {
+				LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+				Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
+				currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
+
+				//Set when the alarm needs to go off based on the starting location
+				alarm.setAlarmTime(currentLoc, context);
+				untriggeredAlarms.add(alarm);
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			saveAlarms(context);
+			run(context);
+		}
+	}
+
+	public static void updateFirst(Context context) {
+		new UpdateFirstTask(context).execute();
+	}
+
 	public static void remove(long eventId, Context context)
 	{
 		Alarm alarm = idsMap.get(eventId);

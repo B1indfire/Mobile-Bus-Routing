@@ -76,4 +76,11 @@
 		android:layout_gravity="center_horizontal"
 		android:onClick="clickAddressListBtn" />
 
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Update Location For First Alarm"
+		android:layout_gravity="center_horizontal"
+		android:onClick="clickUpdateFirst" />
+
 </LinearLayout>
