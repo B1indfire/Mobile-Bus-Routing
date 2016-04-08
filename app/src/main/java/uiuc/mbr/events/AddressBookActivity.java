@@ -61,7 +61,12 @@ public class AddressBookActivity extends AppCompatActivity {
         my_layout.removeAllViews();
 
         List<UserLocation> fullAddressBook = AddressBook.getAll(getApplicationContext());
-
+        if(fullAddressBook == null) {
+            TextView tv = new TextView(this);
+            tv.setText("No addresses found.");
+            my_layout.addView(tv);
+            return;
+        }
         //From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
         for (int i = 0; i < fullAddressBook.size(); i++) {
             UserLocation current = fullAddressBook.get(i);

@@ -119,7 +119,9 @@ public class AddressBook
 
 				return out;
 			}
-        }
+        } catch (Exception e) {
+			return null;
+		}
     }
 
 

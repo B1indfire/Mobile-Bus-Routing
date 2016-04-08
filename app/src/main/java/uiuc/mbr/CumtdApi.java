@@ -1,5 +1,7 @@
 package uiuc.mbr;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
@@ -275,9 +277,8 @@ public class CumtdApi {
      * @throws MalformedURLException
      * @throws IOException
      */
-    public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat, String destination_lon, String date, String time, String max_walk, String arrive_depart) throws MalformedURLException, IOException, JSONException {
+    public Directions getTripArriveBy(double origin_lat, double origin_lon, double destination_lat, double destination_lon, String date, String time, String max_walk, String arrive_depart) throws MalformedURLException, IOException, JSONException {
         String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat + "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+ "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time + "&max_walk=" + max_walk + "&arrive_depart=" + arrive_depart;
         return parseTripData(jsonFromString(readFromUrl(url)));
-        
     }
 }
