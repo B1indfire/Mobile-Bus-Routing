@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -49,52 +50,72 @@ public class AlarmService extends Service
 		untriggeredAlarms.add(alarm);
 		idsMap.put(alarm.event.getParentEventId(), alarm);
 
-		LatLng startingLoc = null;
+		new AlarmAddTask(alarm, context).execute();
+	}
 
-		// Allow network.
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+	private static class AlarmAddTask extends AsyncTask<Void, Void, Void> {
 
-		//Check if there's an event before this event and within 2 hours.
-		Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
-		//int index = Arrays.binarySearch(temp, alarm);
-		int index=-1;
-		for(int i =0; i<temp.length; i++){
-			if(temp[i].equals(alarm))
-				index=i;
+		private Context context;
+		private Alarm alarm;
+
+		public AlarmAddTask(Alarm a, Context c) {
+			this.alarm = a;
+			this.context = c;
 		}
-		if(index>0){
-			if((event.getStart().getTime()-temp[index-1].event.getEnd().getTime())<7200000){ //2 hrs in millis
-				startingLoc = temp[index-1].event.getLatLong();
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			LatLng startingLoc = null;
+
+			Log.wtf("AddAlarm", "AddAlarm Started");
+
+			//Check if there's an event before this event and within 2 hours.
+			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
+			Arrays.sort(temp);
+
+			//int index = Arrays.binarySearch(temp, alarm);
+			int index=-1;
+			for(int i =0; i<temp.length; i++){
+				if(temp[i].equals(alarm))
+					index=i;
 			}
-		}
+			Log.wtf("AddAlarm", "Index = " + index);
 
-		if (startingLoc == null) {
-
-
-			//Get the current location
-			LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-			Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
-			startingLoc = new LatLng(location.getLatitude(), location.getLongitude());
-		}
-
-		//Set when the alarm needs to go off based on the starting location
-		alarm.setAlarmTime(startingLoc, context);
-
-
-		//Check if the next event is within two hours of this event's end time.
-		if(index!=temp.length-1){//not end of array
-			long diff = temp[index+1].event.getStart().getTime()-event.getEnd().getTime();
-			Log.wtf("uiuc.mbr", Long.toString(diff));
-			if(diff<7200000){ //2 hrs in millis
-				Log.wtf("uiuc.mbr", "change next event start");
-				temp[index+1].setAlarmTime(event.getLatLong(), context);
+			if(index>0){
+				if((alarm.event.getStart().getTime()-temp[index-1].event.getEnd().getTime())<7200000){ //2 hrs in millis
+					startingLoc = temp[index-1].event.getLatLong();
+				}
 			}
+
+			//Not within 2 hrs of previous event = Use current GPS location
+			if (startingLoc == null) {
+				//Get the current location
+				LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+				Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
+				startingLoc = new LatLng(location.getLatitude(), location.getLongitude());
+			}
+
+			//Set when the alarm needs to go off based on the starting location
+			alarm.setAlarmTime(startingLoc, context);
+
+			//Check if the next event is within two hours of this event's end time.
+			if(index!=temp.length-1){//not end of array
+				long diff = temp[index+1].event.getStart().getTime()-alarm.event.getEnd().getTime();
+				Log.wtf("AddAlarm", Long.toString(diff));
+				if(diff<7200000){ //2 hrs in millis
+					Log.wtf("AddAlarm", "change next event start");
+					temp[index+1].setAlarmTime(alarm.event.getLatLong(), context);
+				}
+			}
+
+			return null;
 		}
 
-
-		saveAlarms(context);
-		run(context);
+		@Override
+		protected void onPostExecute(Void result) {
+			saveAlarms(context);
+			run(context);
+		}
 	}
 
 	public static void remove(long eventId, Context context)
@@ -183,6 +204,9 @@ public class AlarmService extends Service
 
 		return super.onStartCommand(i, flags, startId);
 	}
+
+
+
 
 	public static void loadAlarms(Context c){
 		Queue<Alarm> untriggeredTemp = new PriorityQueue<>();
