@@ -16,3 +16,25 @@ Test disabling a scheduled alarm:
     6. Navigate to the alarms page and verify that the event now has a scheduled alarm
     7. Navigate back to the events page and un-check the checked event, verifying that it does get unselected
     8. Navigate back to the alarms page and verify that the even no longer has a scheduled alarm
+
+Test adding an alarm with 2 hours of another will affect alarm time of the second:
+    1. Add two events to calendar within two hours of each other
+    2. Check the later event event
+    3. Note the alarm time set for the event
+    4. Check the first event
+    5. Make sure the second event's alarm time has been updated
+
+Test removing an alarm will affect the start time of the even after it if it is within two hours:
+    1. Add two events to calendar within two hours of each other
+    2. Check both events
+    3. Note the start time of the second event
+    4. Uncheck the first event
+    5. Make sure the second event's alarm time has been updated
+
+Test updating first alarm time with current location:
+    1. Add an event to calendar
+    2. Check the event
+    3. Note the start time of the event
+    4. Physically move to a distant enough place
+    5. On start screen click button to update location for first event
+    6. Make sure the first event's alarm has been updated

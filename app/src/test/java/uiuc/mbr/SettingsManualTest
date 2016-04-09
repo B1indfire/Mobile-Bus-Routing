@@ -1,14 +1,22 @@
-1. Open up the Settings menu.
-    -Confirm that both slide bars are set to the center.
-2. Move top slide bar to desired position.
-3. Press the Save button.
-    -Close the app
-    -Reopen the app
-    -Return to the settings page
-    -Verify that the top slide bar is in the same position.
-4. Repeat steps 2 and 3 for the bottom slide bar.
-5. Move any slide bar to a different position.
-    -Close the app without hitting the save button.
-    -Reopen the app
-    -Return to the settings page
-    -Verify that the settings have not changed.
+Test basic Settings page usability:
+    1. Open up the Settings menu.
+        -Confirm that both slide bars are set to the center.
+    2. Move top slide bar to desired position.
+    3. Press the Save button.
+        -Close the app
+        -Reopen the app
+        -Return to the settings page
+        -Verify that the top slide bar is in the same position.
+    4. Repeat steps 2 and 3 for the bottom slide bar.
+    5. Move any slide bar to a different position.
+        -Close the app without hitting the save button.
+        -Reopen the app
+        -Return to the settings page
+        -Verify that the settings have not changed.
+
+Test changing settings also will change alarms:
+    1. Add event to calendar
+    2. Go to events page a check the event
+    3. Note the event's alarm time
+    4. Go to settings page and change the settings and hit save
+    5. Make sure the event's alarm change has been updated appropriately
