@@ -17,7 +17,6 @@ public class LocationLookupTest extends ActivityInstrumentationTestCase2<StartAc
 
     StartActivity thisActivity;
     Instrumentation instrumentation;
-    Instrumentation.ActivityMonitor monitor;
 
 	public LocationLookupTest(){super(StartActivity.class);}
 
@@ -28,7 +27,6 @@ public class LocationLookupTest extends ActivityInstrumentationTestCase2<StartAc
 
         thisActivity = getActivity();
         instrumentation = getInstrumentation();
-        monitor = instrumentation.addMonitor(OnAlarmActivity.class.getName(), null, false);
     }
 
 	@Test
