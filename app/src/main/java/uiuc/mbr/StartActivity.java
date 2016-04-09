@@ -65,6 +65,11 @@ public class StartActivity extends AppCompatActivity {
 		startActivity(new Intent(getApplicationContext(), OnAlarmActivity.class));
 	}
 
+	public void clickQuickGotoVtn(View v)
+	{
+		startActivity(new Intent(getApplicationContext(), GotoActivity.class));
+	}
+
 	public void clickEventAlarmsBtn(View v){
 
 		startActivity(new Intent(getApplicationContext(), EventAlarmActivity.class));

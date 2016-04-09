@@ -8,6 +8,13 @@
 		<item name="colorAccent">@color/colorAccent</item>
 		<item name="android:textColor">#000</item>
 	</style>
+
+	<style name="BigTitle" parent="AppTheme">
+		<item name="android:textSize">28sp</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:layout_gravity">center_horizontal</item>
+	</style>
+
 	<style name="AppTheme.NoActionBar">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>

@@ -2,6 +2,8 @@ package uiuc.mbr;
 
 import android.content.Context;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
@@ -159,6 +161,17 @@ public class CumtdApi {
         return list;
     }
 
+    public List<String> getShapeCoordsByStop(String beginStop, String endStop, String shapeId) throws JSONException, MalformedURLException, IOException {
+        List<String> list = new ArrayList<String>();
+        JSONArray array = getShapeBetweenStops(beginStop, endStop, shapeId).getJSONArray("shapes");
+        System.out.println(array);
+        for(int i = 0 ; i < array.length() ; i = i + 2){
+            list.add(array.getJSONObject(i).get("shape_pt_lat").toString());
+            list.add(array.getJSONObject(i).get("shape_pt_lon").toString());
+        }
+        return list;
+    }
+
     /**
      * Get nearest stops from the current latitude and longitude.
      * @param x
@@ -204,7 +217,7 @@ public class CumtdApi {
      * @param object
      * @return
      */
-    public Directions parseTripData(JSONObject object) throws JSONException {
+    public Directions parseTripData(JSONObject object) throws JSONException, IOException {
         JSONArray itineraries = object.getJSONArray("itineraries");
         if (itineraries.length() <= 0) {
             return null;
@@ -220,10 +233,15 @@ public class CumtdApi {
                 JSONObject walk = current.getJSONObject("walk");
                 String direction = walk.getString("direction");
                 String distance = walk.get("distance").toString();
+                JSONObject begin = walk.getJSONObject("begin");
                 JSONObject end = walk.getJSONObject("end");
+                double beginLat = begin.getDouble("lat");
+                double beginLon = begin.getDouble("lon");
+                double endLat = end.getDouble("lat");
+                double endLon = end.getDouble("lon");
                 String target = end.getString("name");
                 d.addDirections("Head " + direction + " for " + distance + " miles to " + target + ".");
-            } 
+                d.addCoordinates("W:" + beginLat + "," + beginLon + "," + endLat + "," + endLon);            }
             if (type.equals("Service")) {
                 JSONArray services = current.getJSONArray("services");
                 for (int j = 0; j < services.length(); j++) {
@@ -231,11 +249,20 @@ public class CumtdApi {
                     JSONObject begin = service.getJSONObject("begin");
                     JSONObject end = service.getJSONObject("end");
                     JSONObject route = service.getJSONObject("route");
+                    JSONObject trip = service.getJSONObject("trip");
+                    String shape = trip.getString("shape_id");
                     String start = begin.getString("name");
                     String finish = end.getString("name");
                     String bus = route.getString("route_id");
-                    d.addDirections("Take the " + bus + " bus from " + start + " to " + finish + ".");
-                }
+                    String beginStopId = begin.getString("stop_id");
+                    String endStopId = end.getString("stop_id");
+                    List<String> coords = getShapeCoordsByStop(beginStopId, endStopId, shape);
+                    String shapeCoords = "";
+                    for(int k = 0; k < coords.size(); k=k+2) {
+                        shapeCoords += coords.get(k) + "," + coords.get(k+1) + ",";
+                    }
+                    d.addCoordinates("S:" + shapeCoords.substring(0, shapeCoords.length()-1));
+                    d.addDirections("Take the " + bus + " bus from " + start + " to " + finish + ".");                }
             }
         }
         return d;
@@ -267,6 +294,5 @@ public class CumtdApi {
                 "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time +
                 "&max_walk=" + Double.toString(maxWalk) + "&arrive_depart=" + arrive_depart;
         return parseTripData(jsonFromString(readFromUrl(url)));
-        
     }
 }

@@ -6,73 +6,152 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
+	android:gravity="center_horizontal"
 	android:paddingBottom="@dimen/activity_vertical_margin"
 	android:paddingLeft="@dimen/activity_horizontal_margin"
 	android:paddingRight="@dimen/activity_horizontal_margin"
 	android:paddingTop="@dimen/activity_vertical_margin"
 	app:layout_behavior="@string/appbar_scrolling_view_behavior"
 	tools:context="uiuc.mbr.StartActivity"
+	android:background="@drawable/back"
 	tools:showIn="@layout/activity_start">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Mobile bus routing"/>
+<LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
 
 	<Button
+		style="?android:attr/buttonStyleSmall"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Map it up"
-		android:layout_gravity="center_horizontal" />
+		android:background="@drawable/buttons"
+		android:layout_marginBottom="5dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginRight="5dp"
+		android:layout_marginLeft="5dp"
+		android:layout_weight="1"
+		android:layout_gravity="center_horizontal"
 		android:onClick="clickMapBtn" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Get Stop"
-		android:id="@+id/button"
+		android:layout_weight="1"
+		android:layout_marginRight="5dp"
+		android:layout_marginLeft="5dp"
+		android:background="@drawable/buttons"
+		android:layout_marginBottom="5dp"
+		android:layout_marginTop="5dp"
 		android:onClick="clickStpBtn"
 		android:layout_gravity="center_horizontal" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="View Alarms"
-		android:onClick="clickViewAlarmsBtn"
+		android:text="Quick Go To"
+		android:layout_weight="1"
+		android:background="@drawable/buttons"
+		android:layout_marginBottom="5dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginRight="5dp"
+		android:layout_marginLeft="5dp"
+		android:onClick="clickQuickGotoVtn"
 		android:layout_gravity="center_horizontal" />
 
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Set Event Alarms"
-		android:onClick="clickEventAlarmsBtn"
-		android:layout_gravity="center_horizontal" />
 
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Events"
-		android:onClick="clickEventBtn"
-		android:layout_gravity="center_horizontal" />
+</LinearLayout>
 
-	<Button
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Settings"
-		android:onClick="clickSettingsBtn"
-		android:layout_gravity="center_horizontal" />
+		android:orientation="horizontal">
 
-	<Button
-		android:layout_width="wrap_content"
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="View Alarms"
+			android:background="@drawable/buttons"
+			android:layout_marginBottom="5dp"
+			android:layout_marginTop="5dp"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:layout_weight="1"
+			android:onClick="clickViewAlarmsBtn"
+			android:layout_gravity="center_horizontal" />
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Events"
+			android:onClick="clickEventBtn"
+			android:background="@drawable/buttons"
+			android:layout_marginBottom="5dp"
+			android:layout_marginTop="5dp"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:layout_weight="1"
+			android:layout_gravity="center_horizontal" />
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Settings"
+			android:background="@drawable/buttons"
+			android:layout_marginBottom="5dp"
+			android:layout_marginTop="5dp"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:layout_weight="1"
+			android:onClick="clickSettingsBtn"
+			android:layout_gravity="center_horizontal" />
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Calendar Blacklist"
-		android:layout_gravity="center_horizontal"
-		android:onClick="clickCalendarsBtn" />
+		android:orientation="horizontal">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Set Event Alarms"
+			android:background="@drawable/buttons"
+			android:layout_marginBottom="5dp"
+			android:layout_marginTop="5dp"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:layout_weight="1"
+			android:onClick="clickEventAlarmsBtn"
+			android:layout_gravity="center_horizontal" />
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Calendar Blacklist"
+			android:background="@drawable/buttons"
+			android:layout_marginBottom="5dp"
+			android:layout_marginTop="5dp"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:layout_weight="1"
+			android:layout_gravity="center_horizontal"
+			android:onClick="clickCalendarsBtn" />
+
+	</LinearLayout>
+
+
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Edit Saved Addresses"
+		android:background="@drawable/buttons"
+		android:layout_marginBottom="5dp"
+		android:layout_marginTop="5dp"
 		android:layout_gravity="center_horizontal"
 		android:onClick="clickAddressListBtn" />
 
