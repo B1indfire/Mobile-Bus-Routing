@@ -140,7 +140,10 @@ public class AddEventDialog extends DialogFragment
 				data.latitude = pos == null ? Double.NaN : pos.latitude;
 				data.longitude = pos == null ? Double.NaN : pos.longitude;
 				if(save)
+				{
 					AddressBook.update(data, context);
+					Log.wtf("saved address", data.toString());
+				}
 			}
 
 			return null;

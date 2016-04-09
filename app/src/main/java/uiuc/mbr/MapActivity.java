@@ -20,7 +20,6 @@ import java.util.List;
 
 import android.graphics.Color;
 import android.text.InputType;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,6 +27,27 @@ import uiuc.mbr.events.LocationLookup;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 {
+	/**Sets up the intent used to start this activity with an origin and/or destination latitude+longitude.
+	 * Calling this function is optional. Not calling it is equivalent to calling it with all NaN arguments.
+	 * Anything you don't provide here (anything that's NaN) will be requested in a dialog.*/
+	public static void setupIntent(double oLat, double oLon, double dLat, double dLon, Intent intent)
+	{
+		intent.putExtra("olat", oLat);
+		intent.putExtra("olon", oLon);
+		intent.putExtra("dlat", dLat);
+		intent.putExtra("dlon", dLon);
+	}
+
+	/**Pulls data out of the intent used to start this activity.*/
+	private void readIntent()
+	{
+		oLatitude = getIntent().getDoubleExtra("olat", Double.NaN);
+		oLongitude = getIntent().getDoubleExtra("olon", Double.NaN);
+		dLatitude = getIntent().getDoubleExtra("dlat", Double.NaN);
+		dLongitude = getIntent().getDoubleExtra("dlon", Double.NaN);
+	}
+
+
 
 	private GoogleMap map;
 	private final LocationRequest locationRequest = new LocationRequest();
@@ -38,10 +58,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 
 	public Marker userLocationMarker;
 
-	double o_latitude;
-	double o_longitude;
-	double d_latitude;
-	double d_longitude;
+	private double oLatitude, oLongitude, dLatitude, dLongitude;
 	Date arrival;
 	SupportMapFragment mapFragment;
 
@@ -54,33 +71,34 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		setContentView(R.layout.activity_map);
 		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
 		mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-		Intent intent = getIntent();
-		o_latitude = intent.getDoubleExtra("ORIGIN_LATITUDE", -1000);
-		o_longitude = intent.getDoubleExtra("ORIGIN_LONGITUDE", -1000);
-		d_latitude = intent.getDoubleExtra("DEST_LATITUDE", -1000);
-		d_longitude = intent.getDoubleExtra("DEST_LONGITUDE", -1000);
-		arrival = new Date(intent.getLongExtra("ARRIVAL_TIME", System.currentTimeMillis() + MILLISECONDS_IN_HOUR));
-		if(o_latitude == -1000 || o_longitude == -1000) {
-			promptForNewAddress(false);
-		} else if(d_latitude == -1000 || d_longitude == -1000) {
-			promptForNewAddress(true);
-		}
-		else {
-			mapFragment.getMapAsync(this);
-		}
+
+		readIntent();
+		arrival = new Date(System.currentTimeMillis() + MILLISECONDS_IN_HOUR);
+		nextStep();
 	}
 
-	/**
-	 * If dest == true, prompts for d_long/d_lat, otherwise prompts for o_long/o_lat
-	 * @param dest
-	 */
+
+	/**Prompts the user for an origin or destination if one is needed;
+	 * displays the route on the map otherwise.*/
+	private void nextStep()
+	{
+		if(Double.isNaN(oLatitude) || Double.isNaN(oLongitude))
+			promptForNewAddress(false);
+		else if(Double.isNaN(dLatitude) || Double.isNaN(dLongitude))
+			promptForNewAddress(true);
+		else
+			mapFragment.getMapAsync(this);
+
+	}
+
+
+	/**Prompts the user for an origin/destination, depending on the argument.*/
 	private void promptForNewAddress(final boolean dest) {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		if(dest)
-			builder.setTitle("Enter destination address");
+			builder.setTitle("Enter destination");
 		else
-			builder.setTitle("Enter starting address");
-		final MapActivity context = this;
+			builder.setTitle("Enter starting location");
 
 		// Set up the input
 		final EditText input = new EditText(this);
@@ -88,49 +106,45 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		builder.setView(input);
 
 		// Set up the buttons
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+		{
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(DialogInterface dialog, int which)
+			{
 				String addressInput = input.getText().toString();
 				LatLng ll = LocationLookup.lookupLocation(addressInput, getApplicationContext());
-				if (ll != null) { //Valid address
-					if(dest) {
-						d_latitude = ll.latitude;
-						d_longitude = ll.longitude;
-						mapFragment.getMapAsync(context);
-					} else {
-						o_latitude = ll.latitude;
-						o_longitude = ll.longitude;
-						if(d_latitude == -1000 || d_longitude == -1000)
-							promptForNewAddress(true);
-						else
-							mapFragment.getMapAsync(context);
+				if(ll != null)
+				{ //Valid address
+					if(dest)
+					{
+						dLatitude = ll.latitude;
+						dLongitude = ll.longitude;
 					}
-				} else { //Invalid Address
-					Toast toast = Toast.makeText(context, "Invalid Address", Toast.LENGTH_SHORT);
-					toast.show();
+					else
+					{
+						oLatitude = ll.latitude;
+						oLongitude = ll.longitude;
+					}
 				}
+				else//Invalid Location
+					Toast.makeText(MapActivity.this, "Invalid Location", Toast.LENGTH_SHORT).show();
+				nextStep();
 			}
-		});
-		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 				finish();
 			}
-		});
-		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+		})
+		.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				finish();
 			}
-		});
-
-		runOnUiThread(new Runnable() {
-			public void run() {
-				builder.show();
-			}
-		});
+		})
+		.show();
 	}
 
 	/**
@@ -150,14 +164,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 
 		int[] colors = {Color.RED, Color.GREEN, Color.BLUE};
 		CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
-		Directions d = new Directions(0);
+		Directions d;
 		try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			String[] dateTime = df.format(arrival).split(" ");
-			d = api.getTripArriveBy(o_latitude, o_longitude, d_latitude, d_longitude, dateTime[0], dateTime[1], "1", "arrive");
-		} catch (Exception e) {}
+			d = api.getTripArriveBy(oLatitude, oLongitude, dLatitude, dLongitude, dateTime[0], dateTime[1], "1", "arrive");
+		} catch (Exception e) {throw new RuntimeException(e);}
 		if(d == null) {
-			Toast toast = Toast.makeText(this, "No bus route found.", Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(this, "No bus route found.", Toast.LENGTH_LONG);
 			toast.show();
 			return;
 		}

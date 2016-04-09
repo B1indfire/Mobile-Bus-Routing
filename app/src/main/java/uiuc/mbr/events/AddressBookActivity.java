@@ -1,18 +1,14 @@
 package uiuc.mbr.events;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
@@ -21,15 +17,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import uiuc.mbr.Alarm;
 import uiuc.mbr.R;
-import uiuc.mbr.calendar.Calendar;
-import uiuc.mbr.calendar.CalendarService;
-import uiuc.mbr.calendar.Event;
 import uiuc.mbr.serv.AlarmService;
 
 /**
@@ -60,6 +51,7 @@ public class AddressBookActivity extends AppCompatActivity {
         LinearLayout my_layout = (LinearLayout) findViewById(R.id.address_book);
         my_layout.removeAllViews();
 
+		AddressBook.initIfNecessary(getApplicationContext());
         List<UserLocation> fullAddressBook = AddressBook.getAll(getApplicationContext());
         if(fullAddressBook == null) {
             TextView tv = new TextView(this);
@@ -78,9 +70,9 @@ public class AddressBookActivity extends AppCompatActivity {
             row.setId(i);
             row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
 
-            TextView tv = new TextView(this);
-            tv.setText(baseAddress + " -> " + current.address);
-            row.addView(tv, new TableRow.LayoutParams(0));
+			TextView tv = new TextView(this);
+			tv.setText(baseAddress + " -> " + current.address + " @ " + current.latitude + ", " + current.longitude);
+			row.addView(tv, new TableRow.LayoutParams(0));
 
             //TODO: Improve button layout
             Button editButton = new Button(this);

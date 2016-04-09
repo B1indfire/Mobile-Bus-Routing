@@ -26,7 +26,7 @@ public class LocationLookup
 			return null;
 
         Geocoder geocoder = new Geocoder(c, Locale.getDefault());
-        List<Address> addresses = new ArrayList<Address>() {};
+        List<Address> addresses;
         try {
             addresses = geocoder.getFromLocationName(location, 1, 39.47, -88.95, 40.49, -87.43); //Champaign area coords
         } catch (IOException e) {throw new RuntimeException(e);}

@@ -6,6 +6,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
+	android:gravity="center_horizontal"
 	android:paddingBottom="@dimen/activity_vertical_margin"
 	android:paddingLeft="@dimen/activity_horizontal_margin"
 	android:paddingRight="@dimen/activity_horizontal_margin"
@@ -23,15 +24,13 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Map it up"
-		android:layout_gravity="center_horizontal"
 		android:onClick="clickMapBtn" />
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Get Stop"
-		android:onClick="clickStpBtn"
-		android:layout_gravity="center_horizontal" />
+		android:onClick="clickStpBtn" />
 
 	<Button
 		android:layout_width="wrap_content"

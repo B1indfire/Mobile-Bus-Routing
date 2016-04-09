@@ -32,7 +32,7 @@ public class UserLocation implements Comparable<UserLocation>
 
 
 	@Override
-	public String toString(){return "LOCATION '" + name + "' -> '" + address + "'";}
+	public String toString(){return "LOCATION '" + name + "' -> '" + address + "' @ " + latitude + ", " + longitude;}
 
 	/**Compares locations by name.*/
 	@Override

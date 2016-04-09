@@ -1,8 +1,10 @@
 package uiuc.mbr;
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -14,11 +16,13 @@ import java.util.*;
 
 import uiuc.mbr.events.*;
 
+/**Lets the user quickly pick a destination to travel to.
+ * XXX this activity won't behave well if the user rotates the screen*/
 public class GotoActivity extends AppCompatActivity
 {
 	private List<UserLocation> locations;
 	private final Adapter adapter = new Adapter();
-	UserLocation chosen = null;
+	UserLocation chosenTo = null;
 
 	private final LocationRequest locationRequest = new LocationRequest();
 	private GoogleApiClient locationClient;
@@ -42,6 +46,7 @@ public class GotoActivity extends AppCompatActivity
 		stepRouting = findViewById(R.id.a_goto_step_routing);
 		to = (TextView)findViewById(R.id.a_goto_to);
 
+		AddressBook.initIfNecessary(getApplicationContext());//XXX db stuff on UI thread
 		locations = AddressBook.getAll(getApplicationContext());//XXX db stuff on UI thread
 		Collections.sort(locations);
 
@@ -99,9 +104,11 @@ public class GotoActivity extends AppCompatActivity
 		@Override
 		public void onItemClick(AdapterView<?> view, View view1, int i, long l)
 		{
+			Log.wtf("chose item", i + " @ " + getItem(i).latitude + ", " + getItem(i).longitude);
+
 			to.setText(getItem(i).name);
 			to.setVisibility(View.VISIBLE);
-			chosen = getItem(i);
+			chosenTo = getItem(i);
 
 			checkStep(stepTo);
 			list.setVisibility(View.GONE);
@@ -146,7 +153,12 @@ public class GotoActivity extends AppCompatActivity
 		{
 			checkStep(stepFrom);
 			stepRouting.setVisibility(View.VISIBLE);
-			Toast.makeText(getApplicationContext(), "TODO", Toast.LENGTH_LONG).show();//TODO
+
+			finish();
+
+			Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+			MapActivity.setupIntent(location.getLatitude(), location.getLongitude(), chosenTo.latitude, chosenTo.longitude, intent);
+			startActivity(intent);
 		}
 	}
 }
