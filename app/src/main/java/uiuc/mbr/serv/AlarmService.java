@@ -83,6 +83,15 @@ public class AlarmService extends Service
 		new UpdateAllAlarmsTask(context).execute();
 	}
 
+	private static int getIndex(Alarm[] alarms, Alarm alarm) {
+		int index=-1;
+		for (int i = 0; i < alarms.length; i++) {
+			if(alarms[i].equals(alarm))
+				index = i;
+		}
+		return index;
+	}
+
 
 	/**
 	 * An asynchronous Task that handles adding new Alarms to the schedule
@@ -101,17 +110,13 @@ public class AlarmService extends Service
 		protected Void doInBackground(Void... params) {
 			LatLng startingLoc = null;
 
-			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
-			Arrays.sort(temp);
-			int index=-1;
-			for(int i =0; i<temp.length; i++){
-				if(temp[i].equals(alarm))
-					index=i;
-			}
+			Alarm[] alarms = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
+			Arrays.sort(alarms);
+			int index = getIndex(alarms, alarm);
 
 			if(index>0){
-				if(within2Hours(temp[index-1], alarm)) {
-					startingLoc = temp[index-1].event.getLatLong();
+				if(within2Hours(alarms[index-1], alarm)) {
+					startingLoc = alarms[index-1].event.getLatLong();
 				}
 			}
 
@@ -124,14 +129,16 @@ public class AlarmService extends Service
 			alarm.setAlarmTime(startingLoc, context);
 
 			//Check if the next event is within two hours of this event's end time.
-			if(index!=temp.length-1){
-				if(within2Hours(alarm, temp[index+1])) {
-					temp[index+1].setAlarmTime(alarm.event.getLatLong(), context);
+			if(index!=alarms.length-1){
+				if(within2Hours(alarm, alarms[index+1])) {
+					alarms[index+1].setAlarmTime(alarm.event.getLatLong(), context);
 				}
 			}
 
 			return null;
 		}
+
+
 
 		@Override
 		protected void onPostExecute(Void result) {
@@ -193,26 +200,22 @@ public class AlarmService extends Service
 			if (untriggeredAlarms.size() == 0)
 				return null;
 
-			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
-			Arrays.sort(temp);
-			int index=-1;
-			for(int i =0; i<temp.length; i++){
-				if(temp[i].equals(alarm))
-					index=i;
-			}
+			Alarm[] alarms = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
+			Arrays.sort(alarms);
+			int index = getIndex(alarms, alarm);
 
 			if (index != untriggeredAlarms.size()-1) {
 				LatLng startLoc = null;
 
 				if (index != 0)
-					if (within2Hours(temp[index-1], temp[index+1]))
-						startLoc = temp[index-1].event.getLatLong();
+					if (within2Hours(alarms[index-1], alarms[index+1]))
+						startLoc = alarms[index-1].event.getLatLong();
 
 				if (startLoc == null) {
 					startLoc = getCurrentLocation(context);
 				}
 
-				temp[index+1].setAlarmTime(startLoc, context);
+				alarms[index+1].setAlarmTime(startLoc, context);
 			}
 
 			return null;
@@ -243,21 +246,21 @@ public class AlarmService extends Service
 		@Override
 		protected Void doInBackground(Void... params) {
 
-			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
+			Alarm[] alarms = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
 
-			for (int index = 0; index < temp.length; index++) {
+			for (int index = 0; index < alarms.length; index++) {
 
 				LatLng startLoc = null;
 
 				if (index != 0)
-					if (within2Hours(temp[index-1], temp[index]))
-						startLoc = temp[index].event.getLatLong();
+					if (within2Hours(alarms[index-1], alarms[index]))
+						startLoc = alarms[index].event.getLatLong();
 
 				if (startLoc == null) {
 					startLoc = getCurrentLocation(context);
 				}
 
-				temp[index].setAlarmTime(startLoc, context);
+				alarms[index].setAlarmTime(startLoc, context);
 			}
 
 			return null;
@@ -379,7 +382,7 @@ public class AlarmService extends Service
 			ois.close();
 			fis.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			e.printStackTrace();`
 		} catch (StreamCorruptedException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
