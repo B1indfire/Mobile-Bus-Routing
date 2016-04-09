@@ -35,6 +35,7 @@ public class AlarmService extends Service
 {
 	private static final String UNTRIGGERED_ALARMS_FILE = "untriggered_alarms";
 	private static final String IDSMAP_FILE = "idsmap";
+
 	private static Queue<Alarm> untriggeredAlarms = new PriorityQueue<>();
 	@Nullable private static Alarm triggeredAlarm = null;
 	private static Map<Long, Alarm> idsMap = new HashMap<>();
@@ -83,8 +84,6 @@ public class AlarmService extends Service
 		protected Void doInBackground(Void... params) {
 			LatLng startingLoc = null;
 
-			Log.wtf("AddAlarm", "AddAlarm Started");
-
 			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
 			Arrays.sort(temp);
 			int index=-1;
@@ -92,31 +91,24 @@ public class AlarmService extends Service
 				if(temp[i].equals(alarm))
 					index=i;
 			}
-			Log.wtf("AddAlarm", "Index = " + index);
 
 			if(index>0){
-				if((alarm.event.getStart().getTime()-temp[index-1].event.getEnd().getTime())<7200000){ //2 hrs in millis
+				if(within2Hours(temp[index-1], alarm)) {
 					startingLoc = temp[index-1].event.getLatLong();
 				}
 			}
 
 			//Not within 2 hrs of previous event = Use current GPS location
 			if (startingLoc == null) {
-				//Get the current location
-				LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-				Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
-				startingLoc = new LatLng(location.getLatitude(), location.getLongitude());
+				startingLoc = getCurrentLocation(context);
 			}
 
 			//Set when the alarm needs to go off based on the starting location
 			alarm.setAlarmTime(startingLoc, context);
 
 			//Check if the next event is within two hours of this event's end time.
-			if(index!=temp.length-1){//not end of array
-				long diff = temp[index+1].event.getStart().getTime()-alarm.event.getEnd().getTime();
-				Log.wtf("AddAlarm", Long.toString(diff));
-				if(diff<7200000){ //2 hrs in millis
-					Log.wtf("AddAlarm", "change next event start");
+			if(index!=temp.length-1){
+				if(within2Hours(alarm, temp[index+1])) {
 					temp[index+1].setAlarmTime(alarm.event.getLatLong(), context);
 				}
 			}
@@ -148,11 +140,7 @@ public class AlarmService extends Service
 			alarm = untriggeredAlarms.poll();
 
 			if (alarm != null) {
-				LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-				Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
-				currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
-
-				//Set when the alarm needs to go off based on the starting location
+				currentLoc = getCurrentLocation(context);
 				alarm.setAlarmTime(currentLoc, context);
 				untriggeredAlarms.add(alarm);
 			}
@@ -179,8 +167,8 @@ public class AlarmService extends Service
 
 		@Override
 		protected Void doInBackground(Void... params) {
-
-			Log.wtf("RemoveAlarm", "RemoveAlarm Started");
+			if (untriggeredAlarms.size() == 0)
+				return null;
 
 			Alarm[] temp = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
 			Arrays.sort(temp);
@@ -189,20 +177,16 @@ public class AlarmService extends Service
 				if(temp[i].equals(alarm))
 					index=i;
 			}
-			Log.wtf("RemoveAlarm", "Index = " + index);
 
 			if (index != untriggeredAlarms.size()-1) {
 				LatLng startLoc = null;
 
 				if (index != 0)
-					if (temp[index+1].event.getStart().getTime()-temp[index-1].event.getEnd().getTime() < 7200000) //Less than 2 hrs
+					if (within2Hours(temp[index-1], temp[index+1]))
 						startLoc = temp[index-1].event.getLatLong();
 
 				if (startLoc == null) {
-					//Get the current location
-					LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-					Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
-					startLoc = new LatLng(location.getLatitude(), location.getLongitude());
+					startLoc = getCurrentLocation(context);
 				}
 
 				temp[index+1].setAlarmTime(startLoc, context);
@@ -240,14 +224,11 @@ public class AlarmService extends Service
 				LatLng startLoc = null;
 
 				if (index != 0)
-					if (temp[index].event.getStart().getTime()-temp[index-1].event.getEnd().getTime() < 72000)
+					if (within2Hours(temp[index-1], temp[index]))
 						startLoc = temp[index].event.getLatLong();
 
 				if (startLoc == null) {
-					//Get the current location
-					LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-					Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
-					startLoc = new LatLng(location.getLatitude(), location.getLongitude());
+					startLoc = getCurrentLocation(context);
 				}
 
 				temp[index].setAlarmTime(startLoc, context);
@@ -258,12 +239,20 @@ public class AlarmService extends Service
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.wtf("UpdateAllAlarms", "Complete");
-
 			saveAlarms(context);
 		}
 	}
 
+
+	private static boolean within2Hours(Alarm a1, Alarm a2) {
+		return a2.event.getStart().getTime()-a1.event.getEnd().getTime() < 7200000;
+	}
+
+	private static LatLng getCurrentLocation(Context context) {
+		LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
+		return new LatLng(location.getLatitude(), location.getLongitude());
+	}
 
 
 	public static List<Alarm> getUntriggeredAlarms(){return new ArrayList<>(untriggeredAlarms);}
