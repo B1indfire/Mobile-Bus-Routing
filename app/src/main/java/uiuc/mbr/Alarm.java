@@ -24,9 +24,11 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		this.event = event;
 	}
 
-
+	/**
+	 * Sets an appropriate time for the alarm to go off assuming the user is leaving from startLocation
+	 * Takes app settings into account, such as maxWalkDistance and arrivalTimeOffset
+	 */
 	public void setAlarmTime(LatLng startLocation, Context c) {
-		CumtdApi api = CumtdApi.create();
 
 		//Set arrival time based on min arrival setting
 		Calendar arrivalTime = Calendar.getInstance();
@@ -36,34 +38,36 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		arrivalTime.add(Calendar.MINUTE, -1 * offset);
 		Date arrivalTimeAsDate = arrivalTime.getTime();
 
-		alarmTime = getTimeFromApi(startLocation, c, api, arrivalTime, arrivalTimeAsDate);
+		alarmTime = getTimeFromApi(startLocation, arrivalTimeAsDate, c);
 	}
 
-	private Calendar getTimeFromApi(LatLng startLocation, Context c, CumtdApi api, Calendar arrivalTime, Date arrivalTimeAsDate) {
-		Calendar time;
+	/**
+	 * Determines the appropriate departure time to get to the events location at arrivalTime when leaving from startLocation
+	 */
+	private Calendar getTimeFromApi(LatLng startLocation, Date arrivalTime, Context c) {
+		CumtdApi api = CumtdApi.create();
+
+		Calendar departTime = Calendar.getInstance();
+		departTime.setTime(arrivalTime);
+
 		try {
 			//Get directions from CUMTD API
 			Directions dir = api.getTripArriveBy("" + startLocation.latitude, "" + startLocation.longitude,
-					                             "" + event.getLatLong().latitude, "" + event.getLatLong().longitude,
-					                             "" + arrivalTimeAsDate.getDate(), "" + arrivalTimeAsDate.getTime(),
-					                             "arrive", c);
+					"" + event.getLatLong().latitude, "" + event.getLatLong().longitude,
+					"" + arrivalTime.getDate(), "" + arrivalTime.getTime(),
+					"arrive", c);
 
 			int duration = (dir == null) ? 0 : dir.getDuration();
 
 			//Determine appropriate leaving time from directions
-			Calendar departTime = Calendar.getInstance();
-			departTime.setTime(arrivalTimeAsDate);
 			departTime.add(Calendar.MINUTE, -1 * duration);
-			time = departTime;
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			time = arrivalTime;
 		} catch (JSONException e) {
 			e.printStackTrace();
-			time = arrivalTime;
 		}
-		return time;
+		return departTime;
 	}
 
 	public Calendar getAlarmTime()
