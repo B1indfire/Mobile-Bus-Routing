@@ -40,7 +40,10 @@ public class AlarmService extends Service
 	@Nullable private static Alarm triggeredAlarm = null;
 	private static Map<Long, Alarm> idsMap = new HashMap<>();
 
-
+	/**
+	 * Creates an alarm for the given Event
+	 * The Alarm's time is set based on the traveling distance to the event
+	 */
 	public static void addAlarm(Event event, Context context)
 	{
 		Alarm alarm = new Alarm(event);
@@ -54,10 +57,17 @@ public class AlarmService extends Service
 		new AlarmAddTask(alarm, context).execute();
 	}
 
+	/**
+	 * Updates the Alarm time for the next upcoming alarm using the phone's current GPS location
+	 */
 	public static void updateFirst(Context context) {
 		new UpdateFirstTask(context).execute();
 	}
 
+	/**
+	 * Removes any alarms associated with the given EventId
+	 * Updates the subsequent alarm's time if necessary
+	 */
 	public static void remove(long eventId, Context context)
 	{
 		Alarm alarm = idsMap.get(eventId);
@@ -65,11 +75,18 @@ public class AlarmService extends Service
 		new AlarmRemoveTask(alarm, context).execute();
 	}
 
+	/**
+	 * Updates the start time of all Alarms
+	 * Use this method when global changes have occured, such as changing Settings
+	 */
 	public static void updateAllAlarmTimes(Context context) {
 		new UpdateAllAlarmsTask(context).execute();
 	}
 
 
+	/**
+	 * An asynchronous Task that handles adding new Alarms to the schedule
+	 */
 	private static class AlarmAddTask extends AsyncTask<Void, Void, Void> {
 
 		private Context context;
@@ -125,6 +142,9 @@ public class AlarmService extends Service
 		}
 	}
 
+	/**
+	 * An asynchronous Task that handles updating the first Alarm in the queue
+	 */
 	private static class UpdateFirstTask extends AsyncTask<Void, Void, Void> {
 
 		private Context context;
@@ -155,6 +175,9 @@ public class AlarmService extends Service
 		}
 	}
 
+	/**
+	 * An asynchronous task that handles removing an Alarm
+	 */
 	private static class AlarmRemoveTask extends AsyncTask<Void, Void, Void> {
 
 		private Alarm alarm;
@@ -206,6 +229,9 @@ public class AlarmService extends Service
 		}
 	}
 
+	/**
+	 * An asynchronous task that handles updating all alarm times after a global settings change
+	 */
 	private static class UpdateAllAlarmsTask extends AsyncTask<Void, Void, Void> {
 
 		private Context context;
@@ -244,10 +270,16 @@ public class AlarmService extends Service
 	}
 
 
+	/**
+	 * Determines if the event associated with alarm1 ends within 2 hours of the event from alarm2's start time
+	 */
 	private static boolean within2Hours(Alarm a1, Alarm a2) {
 		return a2.event.getStart().getTime()-a1.event.getEnd().getTime() < 7200000;
 	}
 
+	/**
+	 * Returns the current device GPS coordinates as a LatLng
+	 */
 	private static LatLng getCurrentLocation(Context context) {
 		LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // Network provider doesn't require line of sight to the sky
@@ -266,6 +298,10 @@ public class AlarmService extends Service
 		run(context);
 	}
 
+
+	/**
+	 * Removes all alarms from the schedule
+	 */
 	public static void removeAll(Context c)
 	{
 		untriggeredAlarms.clear();
@@ -325,8 +361,9 @@ public class AlarmService extends Service
 	}
 
 
-
-
+	/**
+	 * Loads all Alarm data from device memory
+	 */
 	public static void loadAlarms(Context c){
 		Queue<Alarm> untriggeredTemp = new PriorityQueue<>();
 		try {
@@ -357,6 +394,9 @@ public class AlarmService extends Service
 			idsMap = new HashMap<>();
 	}
 
+	/**
+	 * Saves all Alarm data to device memory
+	 */
 	public static void saveAlarms(Context c){
 		FileOutputStream fos = null;
 		try {
