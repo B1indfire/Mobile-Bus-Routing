@@ -5,7 +5,7 @@ Test setting up an alarm:
     4. Verify that the event is present
     5. Check the event and verify that it gets checked
     6. Navigate to the alarms page and verify that the event now has a scheduled alarm
-    7. Verify that the alarm rings when it's time passes
+    7. Verify that the alarm rings when its time passes
 
 Test disabling a scheduled alarm:
     1. Add an event to calendar a short amount of time in the future
