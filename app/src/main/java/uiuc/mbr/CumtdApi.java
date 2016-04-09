@@ -1,5 +1,7 @@
 package uiuc.mbr;
 
+import android.content.Context;
+
 import android.util.Log;
 
 import java.io.IOException;
@@ -9,12 +11,16 @@ import org.json.*;
 
 public class CumtdApi {
 
-    String url;
-    String key;
+    private final String url;
+    private final String key;
 
-    public CumtdApi(String url, String key) {
+    private CumtdApi(String url, String key) {
         this.url = url;
         this.key = key;
+    }
+
+    public static CumtdApi create() {
+        return new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
     }
 
     private JSONObject getFromApi(String name) throws MalformedURLException, IOException, org.json.JSONException{
@@ -50,8 +56,7 @@ public class CumtdApi {
     }
 
     private JSONObject jsonFromString(String s) throws org.json.JSONException {
-        JSONObject json = new JSONObject(s);
-        return json;
+        return new JSONObject(s);
     }
 
     public JSONObject getCalendarDatesByDate(String date) throws MalformedURLException, IOException, org.json.JSONException{
@@ -224,7 +229,7 @@ public class CumtdApi {
         for (int i = 0; i < legs.length(); i++) {
             JSONObject current = legs.getJSONObject(i);
             String type = current.getString("type");
-            if (type.equals("Walk")) {;
+            if (type.equals("Walk")) {
                 JSONObject walk = current.getJSONObject("walk");
                 String direction = walk.getString("direction");
                 String distance = walk.get("distance").toString();
@@ -271,14 +276,23 @@ public class CumtdApi {
      * @param destination_lon
      * @param date
      * @param time
-     * @param max_walk
      * @param arrive_depart
      * @return
-     * @throws MalformedURLException
      * @throws IOException
+     * @throws JSONException
      */
-    public Directions getTripArriveBy(double origin_lat, double origin_lon, double destination_lat, double destination_lon, String date, String time, String max_walk, String arrive_depart) throws MalformedURLException, IOException, JSONException {
-        String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat + "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+ "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time + "&max_walk=" + max_walk + "&arrive_depart=" + arrive_depart;
+    public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat,
+                                      String destination_lon, String date, String time,
+                                      String arrive_depart, Context c)
+            throws IOException, JSONException {
+        Integer tempW = SettingsActivity.loadMaxWalkFromMemory(c);
+        int tempWInt = (tempW == null) ? 1 : tempW;
+        double maxWalk = tempWInt*.1;
+        System.out.println(maxWalk);
+        String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat +
+                "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+
+                "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time +
+                "&max_walk=" + Double.toString(maxWalk) + "&arrive_depart=" + arrive_depart;
         return parseTripData(jsonFromString(readFromUrl(url)));
     }
 }

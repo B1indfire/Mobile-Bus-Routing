@@ -4,9 +4,10 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Event {
+public class Event implements Serializable{
     private long calendarId;
     private long parentEventId;
     private String name;
@@ -15,7 +16,9 @@ public class Event {
     private Date start;
     private Date end;
 
-    private LatLng latLong;
+    //private LatLng latLong;
+    private double latitude;
+    private double longitude;
 
     public Event(long calendarId, long parentEventId, String name, String description, String location, Date start, Date end) {
         this.calendarId = calendarId;
@@ -61,11 +64,12 @@ public class Event {
     }
 
     public LatLng getLatLong() {
-        return latLong;
+        return new LatLng(latitude, longitude);
     }
 
     public void setLatLong(LatLng latLong) {
-        this.latLong = latLong;
+        this.latitude = latLong.latitude;
+        this.longitude = latLong.longitude;
     }
 
     public boolean equals(Object other) {

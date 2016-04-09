@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.SeekBar;
 
 import com.google.android.gms.appindexing.Action;
@@ -26,6 +27,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.HashMap;
 
+import uiuc.mbr.serv.AlarmService;
 
 
 /**
@@ -34,8 +36,8 @@ import java.util.HashMap;
 public class SettingsActivity extends AppCompatActivity {
 
     private static final String SETTINGS_FILE = "saved_settings";
-    private SeekBar maxWalkBar;
-    private SeekBar minArrBar;
+    private NumberPicker maxWalkBar;
+    private NumberPicker minArrBar;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -46,9 +48,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        maxWalkBar = (SeekBar) findViewById(R.id.maxDist);
+        maxWalkBar = (NumberPicker) findViewById(R.id.maxDist);
         System.out.println(maxWalkBar);
-        minArrBar = (SeekBar) findViewById(R.id.minArrTime);
+        minArrBar = (NumberPicker) findViewById(R.id.minArrTime);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -63,18 +65,19 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void displaySettings() {
         try {
-            maxWalkBar.setProgress(loadMaxWalkFromMemory(this.getApplicationContext()));
-            minArrBar.setProgress(loadMinArrFromMemory(this.getApplicationContext()));
+            maxWalkBar.setValue(loadMaxWalkFromMemory(this.getApplicationContext()));
+            minArrBar.setValue(loadMinArrFromMemory(this.getApplicationContext()));
         } catch(Exception e){
-            maxWalkBar.setProgress(5);
-            minArrBar.setProgress(50);
+            maxWalkBar.setValue(0);
+            minArrBar.setValue(0);
         }
     }
     public void saveSettings(View v){
-        saveSettings(v, this.getApplicationContext());
+        saveSettingsToFile(v, this.getApplicationContext());
+        AlarmService.updateAllAlarmTimes(this.getApplicationContext());
     }
 
-    public void saveSettings(View v, Context c) {
+    private void saveSettingsToFile(View v, Context c) {
         FileOutputStream fos = null;
         try {
             fos = c.openFileOutput(SETTINGS_FILE, Context.MODE_APPEND);
@@ -107,8 +110,8 @@ public class SettingsActivity extends AppCompatActivity {
             settings = new HashMap<>();
 //        maxWalkBar = (SeekBar)findViewById(R.id.maxDist);
 //        minArrBar = (SeekBar)findViewById(R.id.minArrTime);
-        settings.put("maxWalk", maxWalkBar.getProgress());
-        settings.put("minArr", minArrBar.getProgress());
+        settings.put("maxWalk", maxWalkBar.getValue());
+        settings.put("minArr", minArrBar.getValue());
 
         //Write to address_file
         fos = null;
@@ -124,7 +127,6 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     public static Integer loadMaxWalkFromMemory(Context c) {
         HashMap<String, Integer> settings = null;
         try {
@@ -145,7 +147,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (settings == null)
             return null;
-
+        System.out.println("maxWalk: "+settings.get("maxWalk"));
         return settings.get("maxWalk");
     }
 
@@ -170,6 +172,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (settings == null)
             return null;
 
+        System.out.println("minarr: "+settings.get("minArr"));
         return settings.get("minArr");
     }
 

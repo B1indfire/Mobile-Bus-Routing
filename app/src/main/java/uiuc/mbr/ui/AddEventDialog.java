@@ -172,7 +172,8 @@ public class AddEventDialog extends DialogFragment
 			}
 			else
 			{
-				AlarmService.addAlarm(new Alarm(event), context);
+				event.setLatLong(new LatLng(data.latitude, data.longitude));
+				AlarmService.addAlarm(event, context);
 				Snackbar.make(getActivity().findViewById(android.R.id.content), "Event added.", Snackbar.LENGTH_SHORT).show();
 				accepted = true;
 				dismiss();

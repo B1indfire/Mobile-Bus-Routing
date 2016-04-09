@@ -158,17 +158,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	@Override
 	public void onMapReady(GoogleMap googleMap)
 	{
+		LatLng debugPos = new LatLng(0, 0);
+		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
+
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		map = googleMap;
 
 		int[] colors = {Color.RED, Color.GREEN, Color.BLUE};
-		CumtdApi api = new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
+		CumtdApi api = CumtdApi.create();
 		Directions d;
 		try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			String[] dateTime = df.format(arrival).split(" ");
-			d = api.getTripArriveBy(oLatitude, oLongitude, dLatitude, dLongitude, dateTime[0], dateTime[1], "1", "arrive");
+			d = api.getTripArriveBy(Double.toString(oLatitude), Double.toString(oLongitude), Double.toString(dLatitude), Double.toString(dLongitude), dateTime[0], dateTime[1], "1", this);
 		} catch (Exception e) {throw new RuntimeException(e);}
 		if(d == null) {
 			Toast toast = Toast.makeText(this, "No bus route found.", Toast.LENGTH_LONG);
@@ -194,6 +197,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		}
 
 		map.moveCamera(CameraUpdateFactory.zoomTo(14));
+		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos));
 
 		googleClient = new GoogleApiClient.Builder(getApplicationContext())
 				.addApi(LocationServices.API)

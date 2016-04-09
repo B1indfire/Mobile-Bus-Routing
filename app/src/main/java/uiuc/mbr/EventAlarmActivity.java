@@ -23,14 +23,13 @@ public class EventAlarmActivity extends AppCompatActivity
 
 	public void handleButton(View v)
 	{
-		AlarmService.removeAll();
+		AlarmService.removeAll(getApplicationContext());
 
 		CalendarService service = new CalendarService(getApplicationContext());
 		List<Event> events = service.getEventsNext24Hours();
 		for(Event event : events)
 		{
-			Alarm alarm = new Alarm(event);
-			AlarmService.addAlarm(alarm, getApplicationContext());
+			AlarmService.addAlarm(event, getApplicationContext());
 		}
 	}
 }
