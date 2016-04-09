@@ -158,6 +158,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	@Override
 	public void onMapReady(GoogleMap googleMap)
 	{
+		LatLng debugPos = new LatLng(0, 0);
+		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
+
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		map = googleMap;
@@ -168,7 +171,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			String[] dateTime = df.format(arrival).split(" ");
-			d = api.getTripArriveBy(oLatitude, oLongitude, dLatitude, dLongitude, dateTime[0], dateTime[1], "1", "arrive");
+			d = api.getTripArriveBy(Double.toString(oLatitude), Double.toString(oLongitude), Double.toString(dLatitude), Double.toString(dLongitude), dateTime[0], dateTime[1], "1", this);
 		} catch (Exception e) {throw new RuntimeException(e);}
 		if(d == null) {
 			Toast toast = Toast.makeText(this, "No bus route found.", Toast.LENGTH_LONG);

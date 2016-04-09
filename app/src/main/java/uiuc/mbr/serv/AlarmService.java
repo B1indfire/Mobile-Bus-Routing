@@ -203,6 +203,8 @@ public class AlarmService extends Service
 			Alarm[] alarms = Arrays.copyOf(untriggeredAlarms.toArray(), untriggeredAlarms.size(), Alarm[].class);
 			Arrays.sort(alarms);
 			int index = getIndex(alarms, alarm);
+			if (index == -1)
+				return null;
 
 			if (index != untriggeredAlarms.size()-1) {
 				LatLng startLoc = null;
@@ -382,7 +384,7 @@ public class AlarmService extends Service
 			ois.close();
 			fis.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();`
+			e.printStackTrace();
 		} catch (StreamCorruptedException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
