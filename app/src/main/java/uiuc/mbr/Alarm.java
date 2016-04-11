@@ -50,12 +50,16 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		Calendar departTime = Calendar.getInstance();
 		departTime.setTime(arrivalTime);
 
+		Integer tempW = SettingsActivity.loadMaxWalkFromMemory(c);
+		int tempWInt = (tempW == null) ? 1 : tempW;
+		double maxWalk = tempWInt*.1;
+
 		try {
 			//Get directions from CUMTD API
 			Directions dir = api.getTripArriveBy("" + startLocation.latitude, "" + startLocation.longitude,
 					"" + event.getLatLong().latitude, "" + event.getLatLong().longitude,
 					"" + arrivalTime.getDate(), "" + arrivalTime.getTime(),
-					"arrive", c);
+					"" + maxWalk, "arrive");
 
 			int duration = (dir == null) ? 0 : dir.getDuration();
 

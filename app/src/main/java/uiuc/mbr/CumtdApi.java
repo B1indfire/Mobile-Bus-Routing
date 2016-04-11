@@ -283,16 +283,12 @@ public class CumtdApi {
      */
     public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat,
                                       String destination_lon, String date, String time,
-                                      String arrive_depart, Context c)
+                                      String maxWalk, String arrive_depart)
             throws IOException, JSONException {
-        Integer tempW = SettingsActivity.loadMaxWalkFromMemory(c);
-        int tempWInt = (tempW == null) ? 1 : tempW;
-        double maxWalk = tempWInt*.1;
-        System.out.println(maxWalk);
         String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat +
                 "&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+
                 "&destination_lon=" + destination_lon + "&date=" + date + "&time=" + time +
-                "&max_walk=" + Double.toString(maxWalk) + "&arrive_depart=" + arrive_depart;
+                "&max_walk=" + maxWalk + "&arrive_depart=" + arrive_depart;
         return parseTripData(jsonFromString(readFromUrl(url)));
     }
 }

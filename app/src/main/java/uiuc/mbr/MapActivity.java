@@ -171,7 +171,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			String[] dateTime = df.format(arrival).split(" ");
-			d = api.getTripArriveBy(Double.toString(oLatitude), Double.toString(oLongitude), Double.toString(dLatitude), Double.toString(dLongitude), dateTime[0], dateTime[1], "1", this);
+			d = api.getTripArriveBy(Double.toString(oLatitude),
+									Double.toString(oLongitude),
+									Double.toString(dLatitude),
+									Double.toString(dLongitude),
+									dateTime[0], dateTime[1], "1", "arrive");
 		} catch (Exception e) {throw new RuntimeException(e);}
 		if(d == null) {
 			Toast toast = Toast.makeText(this, "No bus route found.", Toast.LENGTH_LONG);

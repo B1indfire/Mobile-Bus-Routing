@@ -278,8 +278,9 @@ public class AlarmService extends Service
 	/**
 	 * Determines if the event associated with alarm1 ends within 2 hours of the event from alarm2's start time
 	 */
-	private static boolean within2Hours(Alarm a1, Alarm a2) {
-		return a2.event.getStart().getTime()-a1.event.getEnd().getTime() < 7200000;
+	public static boolean within2Hours(Alarm a1, Alarm a2) {
+		long difference = a2.event.getStart().getTime()-a1.event.getEnd().getTime();
+		return difference >= 0 && difference <= 7200000;
 	}
 
 	/**
