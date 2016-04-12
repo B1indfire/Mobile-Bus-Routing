@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 public class Event implements Serializable{
     private long calendarId;
@@ -78,6 +79,19 @@ public class Event implements Serializable{
         Event e2 = (Event) other;
         return this.name.equals(e2.getName()) && this.getStart().equals(e2.getStart());
     }
+
+
+	/**Tests all members for equality.*/
+	public boolean fullEquals(Event that)
+	{
+		return this.calendarId == that.calendarId &&
+				this.parentEventId == that.parentEventId &&
+				Objects.equals(this.name, that.name) &&
+				Objects.equals(this.description, that.description) &&
+				Objects.equals(this.location, that.location) &&
+				Objects.equals(this.start, that.start) &&
+				Objects.equals(this.end, that.end);
+	}
 
 
 
