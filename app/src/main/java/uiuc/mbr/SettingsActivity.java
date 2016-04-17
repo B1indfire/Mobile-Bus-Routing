@@ -14,6 +14,8 @@ import uiuc.mbr.serv.AlarmService;
 
 /**TODO this file desperately needs JavaDoc comments. What are the units for these settings?*/
 public class SettingsActivity extends AppCompatActivity {
+	private static final String KEY_WALK = "maxWalk", KEY_ARRIVAL_TIME = "minArr";
+
 
 	private static final String SETTINGS_FILE = "saved_settings";
 	private NumberPicker maxWalkBar;
@@ -67,14 +69,14 @@ public class SettingsActivity extends AppCompatActivity {
 
 		if (settings == null)
 			settings = new HashMap<>();
-		settings.put("maxWalk", maxWalkBar.getValue());
-		settings.put("minArr", minArrBar.getValue());
+		settings.put(KEY_WALK, maxWalkBar.getValue());
+		settings.put(KEY_ARRIVAL_TIME, minArrBar.getValue());
 
 		//Write to address_file
 		try(FileOutputStream fos = c.openFileOutput(SETTINGS_FILE, Context.MODE_PRIVATE)) {
 			try(ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 				oos.writeObject(settings);
-			};
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -86,13 +88,13 @@ public class SettingsActivity extends AppCompatActivity {
 			try(ObjectInputStream ois = new ObjectInputStream(fis)) {
 				settings = (HashMap<String, Integer>) ois.readObject();
 			}
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 
 		if (settings == null)
 			return 1;
-		return settings.get("maxWalk");
+		return settings.get(KEY_WALK);
 	}
 
 	public static int loadMinArrFromMemory(Context c) {
@@ -108,6 +110,6 @@ public class SettingsActivity extends AppCompatActivity {
 		if (settings == null)
 			return 0;
 
-		return settings.get("minArr");
+		return settings.get(KEY_ARRIVAL_TIME);
 	}
 }
