@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class Directions {
 	private int duration;
-	private List<String> directions = new ArrayList<String>();
-	private List<String> coordinates = new ArrayList<String>();
+	private List<String> directions = new ArrayList<>();
+	private List<String> coordinates = new ArrayList<>();
 	
 	public Directions(int duration) {
 		this.duration = duration;

@@ -1,8 +1,5 @@
 package uiuc.mbr.calendar;
 
-/**
- * Created by Richard Shen on 2/18/2016.
- */
 public class Calendar {
 	private long id;
 	private String name;

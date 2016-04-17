@@ -68,7 +68,7 @@ public class AddressBookActivity extends AppCompatActivity {
 
 			TableRow row = new TableRow(this);
 			row.setId(i);
-			row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+			row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
 
 			TextView tv = new TextView(this);
 			tv.setText(baseAddress + " -> " + current.address + " @ " + current.latitude + ", " + current.longitude);

@@ -16,13 +16,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import uiuc.mbr.Alarm;
 import uiuc.mbr.R;
-import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
 import uiuc.mbr.events.AddressBook;
 import uiuc.mbr.events.LocationLookup;
-import uiuc.mbr.events.RecurringEventList;
 import uiuc.mbr.events.UserLocation;
 import uiuc.mbr.serv.AlarmService;
 

@@ -8,11 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.Scanner;
 
 /**Manages a database of UserLocation objects.
  * Make sure to call initIfNecessary() early in the app's lifecyle.*/

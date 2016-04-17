@@ -148,7 +148,7 @@ public class CumtdApi {
 	}
 
 	public List<String> getShapeCoords(String shapeId) throws JSONException, IOException {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		JSONArray array = getShape(shapeId).getJSONArray("shapes");
 		for(int i = 0 ; i < array.length() ; i = i + 2){
 			list.add(array.getJSONObject(i).get("shape_pt_lat").toString());
@@ -158,7 +158,7 @@ public class CumtdApi {
 	}
 
 	public List<String> getShapeCoordsByStop(String beginStop, String endStop, String shapeId) throws JSONException, IOException {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		JSONArray array = getShapeBetweenStops(beginStop, endStop, shapeId).getJSONArray("shapes");
 		System.out.println(array);
 		for(int i = 0 ; i < array.length() ; i = i + 2){
@@ -178,7 +178,7 @@ public class CumtdApi {
 	 * @throws IOException
 	 */
 	public List<String> getNearestStops(String x, String y) throws JSONException, IOException {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		JSONArray array = getStopsByLatLon(x, y).getJSONArray("stops");
 		for (int i = 0; i < 5; i++) {
 			String stop_id = (String) array.getJSONObject(i).get("stop_id");
@@ -197,7 +197,7 @@ public class CumtdApi {
 	 * @throws IOException
 	 */
 	public List<String> getDepartures(String stop_id) throws JSONException, IOException {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		JSONArray array = getDeparturesByStop(stop_id).getJSONArray("departures");
 		for (int i = 0; i < array.length(); i++) {
 			String headsign = (String) array.getJSONObject(i).get("headsign");

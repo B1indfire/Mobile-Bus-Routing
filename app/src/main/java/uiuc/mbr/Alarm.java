@@ -33,8 +33,7 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		//Set arrival time based on min arrival setting
 		Calendar arrivalTime = Calendar.getInstance();
 		arrivalTime.setTime(event.getStart());
-		Integer arrivalOffset = SettingsActivity.loadMinArrFromMemory(c);
-		int offset = (arrivalOffset == null) ? 0 : arrivalOffset;
+		int offset = SettingsActivity.loadMinArrFromMemory(c);
 		arrivalTime.add(Calendar.MINUTE, -1 * offset);
 		Date arrivalTimeAsDate = arrivalTime.getTime();
 
@@ -50,9 +49,8 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		Calendar departTime = Calendar.getInstance();
 		departTime.setTime(arrivalTime);
 
-		Integer tempW = SettingsActivity.loadMaxWalkFromMemory(c);
-		int tempWInt = (tempW == null) ? 1 : tempW;
-		double maxWalk = tempWInt*.1;
+		int tempW = SettingsActivity.loadMaxWalkFromMemory(c);
+		double maxWalk = tempW*.1;
 
 		try {
 			//Get directions from CUMTD API
@@ -66,10 +64,8 @@ public class Alarm implements Comparable<Alarm>, Serializable
 			//Determine appropriate leaving time from directions
 			departTime.add(Calendar.MINUTE, -1 * duration);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} catch (IOException | JSONException e) {
+			throw new RuntimeException(e);
 		}
 		return departTime;
 	}

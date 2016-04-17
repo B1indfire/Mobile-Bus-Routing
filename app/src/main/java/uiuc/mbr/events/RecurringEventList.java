@@ -3,20 +3,8 @@ package uiuc.mbr.events;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.OutputStreamWriter;
-import java.io.StreamCorruptedException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 import uiuc.mbr.calendar.Event;
 
@@ -30,29 +18,16 @@ public class RecurringEventList {
 	public static final String EXCEPTIONS_FILE = "exceptions";
 
 	private static void createFileIfNotExists(Context c) {
-		FileOutputStream fos = null;
-		try {
-			fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_APPEND);
+		try(FileOutputStream fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_APPEND)) {
 			fos.write(("").getBytes());
-			fos.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
-		try {
-			fos = c.openFileOutput(EXCEPTIONS_FILE, Context.MODE_APPEND);
+		try(FileOutputStream fos = c.openFileOutput(EXCEPTIONS_FILE, Context.MODE_APPEND)) {
 			fos.write(("").getBytes());
-			fos.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -65,18 +40,12 @@ public class RecurringEventList {
 		if (contains(event, c))
 			return;
 
-		try {
-			FileOutputStream fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_APPEND);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-			writer.write("" + eventId + "\n");
-			writer.close();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+		try(FileOutputStream fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_APPEND)) {
+			try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos))) {
+				writer.write("" + eventId + "\n");
+			}
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -89,18 +58,12 @@ public class RecurringEventList {
 		if (containsException(event, c))
 			return;
 
-		try {
-			FileOutputStream fos = c.openFileOutput(EXCEPTIONS_FILE, Context.MODE_APPEND);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-			writer.write("" + eventId + "," + startTime + "\n");
-			writer.close();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+		try(FileOutputStream fos = c.openFileOutput(EXCEPTIONS_FILE, Context.MODE_APPEND)) {
+			try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos))) {
+				writer.write("" + eventId + "," + startTime + "\n");
+			}
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -114,43 +77,27 @@ public class RecurringEventList {
 			return;
 
 		ArrayList<Long> calIds = new ArrayList<>();
-		try {
-			FileInputStream fis = c.openFileInput(RECURRING_EVENT_FILE);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-			String line = reader.readLine();
-			while (line != null) {
-				calIds.add(Long.parseLong(line));
-				line = reader.readLine();
+		try(FileInputStream fis = c.openFileInput(RECURRING_EVENT_FILE)) {
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
+				String line = reader.readLine();
+				while(line != null) {
+					calIds.add(Long.parseLong(line));
+					line = reader.readLine();
+				}
 			}
-			reader.close();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
-		} catch (StreamCorruptedException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
-		calIds.remove(new Long(eventId));
+		calIds.remove(eventId);
 
-		try {
-			FileOutputStream fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_PRIVATE);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-			for (Long i : calIds) {
-				writer.write("" + i.toString() + "\n");
+		try(FileOutputStream fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_PRIVATE)) {
+			try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos))) {
+				for(Long i : calIds)
+					writer.write("" + i.toString() + "\n");
 			}
-			writer.close();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -164,46 +111,33 @@ public class RecurringEventList {
 			return;
 
 		ArrayList<String> lines = new ArrayList<>();
-		try {
-			FileInputStream fis = c.openFileInput(EXCEPTIONS_FILE);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-			String line = reader.readLine();
-			while (line != null) {
-				int middle = line.indexOf(",");
-				String id = line.substring(0, middle);
-				String start = line.substring(middle+1);
-				if((Long.parseLong(id) != eventId || Long.parseLong(start) != startTime) &&
-						Long.parseLong(start) >= Calendar.getInstance().getTimeInMillis())
-					lines.add(line);
-				line = reader.readLine();
+		try(FileInputStream fis = c.openFileInput(EXCEPTIONS_FILE)) {
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(fis)))
+			{
+				String line = reader.readLine();
+				while(line != null) {
+					int middle = line.indexOf(",");
+					String id = line.substring(0, middle);
+					String start = line.substring(middle + 1);
+					if((Long.parseLong(id) != eventId || Long.parseLong(start) != startTime) &&
+							Long.parseLong(start) >= Calendar.getInstance().getTimeInMillis())
+						lines.add(line);
+					line = reader.readLine();
+				}
 			}
-			reader.close();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
-		} catch (StreamCorruptedException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
-		try {
-			FileOutputStream fos = c.openFileOutput(EXCEPTIONS_FILE, Context.MODE_PRIVATE);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-			for (String i : lines) {
-				writer.write(i + "\n");
+		try(FileOutputStream fos = c.openFileOutput(EXCEPTIONS_FILE, Context.MODE_PRIVATE)) {
+			try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos)))
+			{
+				for(String i : lines) {
+					writer.write(i + "\n");
+				}
 			}
-			writer.close();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -214,27 +148,17 @@ public class RecurringEventList {
 		long eventId = event.getParentEventId();
 		createFileIfNotExists(c);
 
-		try {
-			FileInputStream fis = c.openFileInput(RECURRING_EVENT_FILE);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-			String line = reader.readLine();
-			while (line != null) {
-				if (Long.parseLong(line) == eventId) {
-					return true;
+		try(FileInputStream fis = c.openFileInput(RECURRING_EVENT_FILE)) {
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
+				String line = reader.readLine();
+				while(line != null) {
+					if(Long.parseLong(line) == eventId)
+						return true;
+					line = reader.readLine();
 				}
-				line = reader.readLine();
 			}
-			reader.close();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
-		} catch (StreamCorruptedException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 		return false;
@@ -248,30 +172,21 @@ public class RecurringEventList {
 		long startTime = event.getStart().getTime();
 		createFileIfNotExists(c);
 
-		try {
-			FileInputStream fis = c.openFileInput(EXCEPTIONS_FILE);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-			String line = reader.readLine();
-			while (line != null) {
-				int middle = line.indexOf(",");
-				String id = line.substring(0, middle);
-				String start = line.substring(middle+1);
-				if(Long.parseLong(id) == eventId && Long.parseLong(start) == startTime)
-					return true;
+		try(FileInputStream fis = c.openFileInput(EXCEPTIONS_FILE)) {
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
+				String line = reader.readLine();
+				while(line != null) {
+					int middle = line.indexOf(",");
+					String id = line.substring(0, middle);
+					String start = line.substring(middle + 1);
+					if(Long.parseLong(id) == eventId && Long.parseLong(start) == startTime)
+						return true;
 
-				line = reader.readLine();
+					line = reader.readLine();
+				}
 			}
-			reader.close();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
-		} catch (StreamCorruptedException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.d("ERROR", e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 		return false;

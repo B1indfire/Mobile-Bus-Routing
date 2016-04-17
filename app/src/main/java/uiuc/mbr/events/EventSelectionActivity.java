@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,16 +33,16 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 	@Nullable private List<Event> events;
 	private final Adapter adapter = new Adapter();
 
-    /**Provides access to the device calendar*/
-    private CalendarService calService;
+	/**Provides access to the device calendar*/
+	private CalendarService calService;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_events);
 
-        calService = new CalendarService(getApplicationContext());
+		calService = new CalendarService(getApplicationContext());
 		ListView list = (ListView)findViewById(R.id.a_events_list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(adapter);
@@ -71,54 +70,6 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 		new Loader().execute();
 	}
 
-
-
-    /**OnCheckChangeListener implementation for the Event list checkboxes*/
-    private class EventCheckboxListener implements CompoundButton.OnCheckedChangeListener {
-
-
-        //The Event associated with the checkbox
-        private Event event;
-
-
-        public EventCheckboxListener(Event e) {
-            event = e;
-        }
-
-        /**
-         * Triggered when the user clicks a checkbox
-         *
-         * If a Event is selected, it's location is checked for validity
-         * If invalid the user is prompted for a new, valid address
-         * Once a valid address is obtained, the Event is added to the schedule
-         * If the new address is blank or invalid, the Event is deselected
-         *
-         * If an Event is deselected, it is removed from the schedule
-         */
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (isChecked)//Event Selected
-			{
-				AddEventDialog dialog = new AddEventDialog();
-				Bundle args = new Bundle();
-				AddEventDialog.setup(event, args);
-				dialog.setArguments(args);
-				dialog.show(getFragmentManager(), null);
-			}
-			else//Event Deselected
-			{
-				AlarmService.remove(event.getParentEventId(), getApplicationContext());
-				if(calService.isEventRecurring(event) && RecurringEventList.contains(event, getApplicationContext()))
-				{
-					RemoveRecurringEventDialog dialog = new RemoveRecurringEventDialog();
-					Bundle args = new Bundle();
-					RemoveRecurringEventDialog.setup(event, args);
-					dialog.setArguments(args);
-					dialog.show(getFragmentManager(), null);
-				}
-			}
-        }
-    }
 
 
 

@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.graphics.Color;
 import android.text.InputType;
@@ -169,7 +170,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		CumtdApi api = CumtdApi.create();
 		Directions d;
 		try {
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 			String[] dateTime = df.format(arrival).split(" ");
 			d = api.getTripArriveBy(Double.toString(oLatitude),
 									Double.toString(oLongitude),

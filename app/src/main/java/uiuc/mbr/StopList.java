@@ -19,7 +19,7 @@ public class StopList extends AppCompatActivity {
 
 		Intent intent = getIntent();
 		ArrayList<String> departures = intent.getStringArrayListExtra("departures");
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, departures);
 
 		ListView listView = (ListView) findViewById(R.id.list_view);

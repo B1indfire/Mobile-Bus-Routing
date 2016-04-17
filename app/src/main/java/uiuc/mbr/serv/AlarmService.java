@@ -9,19 +9,16 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.IBinder;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
 import java.util.*;
 
 import uiuc.mbr.Alarm;
@@ -163,11 +160,10 @@ public class AlarmService extends Service
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			LatLng currentLoc = null;
 			alarm = untriggeredAlarms.poll();
 
 			if (alarm != null) {
-				currentLoc = getCurrentLocation(context);
+				LatLng currentLoc = getCurrentLocation(context);
 				alarm.setAlarmTime(currentLoc, context);
 				untriggeredAlarms.add(alarm);
 			}
@@ -371,27 +367,19 @@ public class AlarmService extends Service
 	 * Loads all Alarm data from device memory
 	 */
 	public static void loadAlarms(Context c){
-		Queue<Alarm> untriggeredTemp = new PriorityQueue<>();
-		try {
-			FileInputStream fis = c.openFileInput(UNTRIGGERED_ALARMS_FILE);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			untriggeredAlarms = (Queue<Alarm>) ois.readObject();
-			ois.close();
-			fis.close();
+		try(FileInputStream fis = c.openFileInput(UNTRIGGERED_ALARMS_FILE)) {
+			try(ObjectInputStream ois = new ObjectInputStream(fis)) {
+				untriggeredAlarms = (Queue<Alarm>) ois.readObject();
+			}
+		} catch (IOException | ClassNotFoundException  e) {
+			throw new RuntimeException(e);
 
-			fis = c.openFileInput(IDSMAP_FILE);
-			ois = new ObjectInputStream(fis);
-			idsMap = (Map<Long, Alarm>) ois.readObject();
-			ois.close();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (StreamCorruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		}try(FileInputStream fis = c.openFileInput(IDSMAP_FILE)) {
+			try(ObjectInputStream ois = new ObjectInputStream(fis)) {
+				idsMap = (Map<Long, Alarm>) ois.readObject();
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			throw new RuntimeException(e);
 		}
 
 		if (untriggeredAlarms == null)
@@ -404,41 +392,33 @@ public class AlarmService extends Service
 	 * Saves all Alarm data to device memory
 	 */
 	public static void saveAlarms(Context c){
-		FileOutputStream fos = null;
-		try {
-			fos = c.openFileOutput(UNTRIGGERED_ALARMS_FILE, Context.MODE_APPEND);
+		try(FileOutputStream fos = c.openFileOutput(UNTRIGGERED_ALARMS_FILE, Context.MODE_APPEND))
+		{
 			fos.write(("").getBytes());
-			fos.close();
-			fos = null;
-			fos = c.openFileOutput(IDSMAP_FILE, Context.MODE_APPEND);
+		} catch(IOException e){
+			throw new RuntimeException(e);
+		}
+
+		try(FileOutputStream fos = c.openFileOutput(IDSMAP_FILE, Context.MODE_APPEND)) {
 			fos.write(("").getBytes());
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch(IOException e){
+			throw new RuntimeException(e);
 		}
 
 		//Write to files
-		fos = null;
-		try {
-			fos = c.openFileOutput(UNTRIGGERED_ALARMS_FILE, Context.MODE_PRIVATE);
+		try(FileOutputStream fos = c.openFileOutput(UNTRIGGERED_ALARMS_FILE, Context.MODE_PRIVATE)) {
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(untriggeredAlarms);
-			oos.close();
-			fos.close();
-			fos = null;
-			oos = null;
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 
-			fos = c.openFileOutput(IDSMAP_FILE, Context.MODE_PRIVATE);
-			oos = new ObjectOutputStream(fos);
-			oos.writeObject(idsMap);
-			oos.close();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		try(FileOutputStream fos = c.openFileOutput(IDSMAP_FILE, Context.MODE_PRIVATE)) {
+			try(ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+				oos.writeObject(idsMap);
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 }

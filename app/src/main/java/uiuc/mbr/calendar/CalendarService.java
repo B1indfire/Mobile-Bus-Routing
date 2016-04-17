@@ -15,7 +15,7 @@ import java.util.Date;
  * API for accessing the Android calendar and events.
  */
 public class CalendarService {
-	public static final String[] CALENDAR_PROJECTION = new String[]{
+	private static final String[] CALENDAR_PROJECTION = new String[]{
 			CalendarContract.Calendars._ID,
 			CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
 	};
@@ -25,7 +25,7 @@ public class CalendarService {
 	private static final int CALENDAR_DISPLAY_NAME_INDEX = 1;
 
 	//Instances are occurrences of recurring events
-	public static final String[] INSTANCE_PROJECTION = new String[]{
+	private static final String[] INSTANCE_PROJECTION = new String[]{
 			CalendarContract.Instances.CALENDAR_ID,
 			CalendarContract.Instances.EVENT_ID,
 			CalendarContract.Instances.TITLE,
@@ -43,7 +43,7 @@ public class CalendarService {
 	private static final int EVENT_BEGIN_INDEX = 5;
 	private static final int EVENT_END_INDEX = 6;
 
-	public static final String[] EVENT_PROJECTION = new String[] {
+	private static final String[] EVENT_PROJECTION = new String[] {
 			CalendarContract.Events.RRULE
 	};
 
@@ -52,7 +52,7 @@ public class CalendarService {
 	private static final Uri CALENDAR_URI = Uri.parse("content://com.android.calendar/calendars");
 	private static final Uri INSTANCE_URI = Uri.parse("content://com.android.calendar/instances/when");
 
-	Context context;
+	private Context context;
 
 	public CalendarService(Context context) {
 		this.context = context;
@@ -64,7 +64,6 @@ public class CalendarService {
 	 */
 	public ArrayList<Calendar> getCalendars() {
 		// Run query
-		Cursor cur = null;
 		ContentResolver cr = context.getContentResolver();
 		String selection = "((" + CalendarContract.Calendars.VISIBLE + " = ?) AND (" +
 				CalendarContract.Calendars.SYNC_EVENTS + " = ?))";
@@ -72,9 +71,7 @@ public class CalendarService {
 		String[] selectionArgs = new String[]{"1", "1"};
 		ArrayList<Calendar> cals = new ArrayList<>();
 		// Submit the query and get a Cursor object back.
-		try {
-			cur = cr.query(CALENDAR_URI, CALENDAR_PROJECTION, selection, selectionArgs, null);
-
+		try(Cursor cur = cr.query(CALENDAR_URI, CALENDAR_PROJECTION, selection, selectionArgs, null)) {
 			while (cur.moveToNext()) {
 				long calID = 0;
 				String displayName = null;
@@ -85,8 +82,6 @@ public class CalendarService {
 
 				cals.add(new Calendar(calID, displayName));
 			}
-		} catch (SecurityException e) {
-			e.printStackTrace();
 		}
 
 		return cals;

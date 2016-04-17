@@ -58,13 +58,11 @@ public class GetStops extends AppCompatActivity {
 
 		// Get nearest stops.
 		CumtdApi api = CumtdApi.create();
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		try {
 			list = api.getNearestStops("" + latitude, "" + longitude);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (JSONException | IOException e) {
+			throw new RuntimeException(e);
 		}
 
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layout);
@@ -74,15 +72,13 @@ public class GetStops extends AppCompatActivity {
 			btn.setText(stop);
 			btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					ArrayList<String> list = new ArrayList<String>();
+					ArrayList<String> list;
 					CumtdApi api = CumtdApi.create();
 					try {
 						final Button button = (Button) v;
 						list = (ArrayList<String>) api.getDepartures(button.getText().toString().split(":")[0]);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
+					} catch (IOException | JSONException e) {
+						throw new RuntimeException(e);
 					}
 					Intent intent = new Intent(getBaseContext(), StopList.class);
 					intent.putExtra("departures", list);

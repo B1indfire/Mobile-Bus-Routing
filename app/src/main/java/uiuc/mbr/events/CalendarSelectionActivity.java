@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import uiuc.mbr.R;
 import uiuc.mbr.calendar.Calendar;
 import uiuc.mbr.calendar.CalendarService;
-import uiuc.mbr.calendar.Event;
 
 /**
  * An activity which displays a list of calendars on the device and allows to user to toggle
@@ -91,7 +90,7 @@ public class CalendarSelectionActivity extends AppCompatActivity {
 			Calendar cal = calendarList.get(i);
 			TableRow row = new TableRow(this);
 			row.setId(i);
-			row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+			row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
 			CheckBox checkBox = new CheckBox(this);
 
 			checkBox.setId(i);
