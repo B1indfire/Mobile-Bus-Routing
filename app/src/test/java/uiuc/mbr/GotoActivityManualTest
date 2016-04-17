@@ -1,16 +1,16 @@
 1. Verify user's named location is displayed in "Go-To Menu"
-      1. Add an event to calendar a short amount of time in the future, "John's Birthday"
-      2. Enter location as "John's House"
-      3. Open MBR app
-      4. Navigate to saved address and delete "John's House" if it is displayed
-      5. Go back to start page
-      6. Navigate to "Go-To" Page
-      7. Verify "John's House" is displayed
+	1. Add an event to calendar a short amount of time in the future, "John's Birthday"
+	2. Enter location as "John's House"
+	3. Open MBR app
+	4. Navigate to saved address and delete "John's House" if it is displayed
+	5. Go back to start page
+	6. Navigate to "Go-To" Page
+	7. Verify "John's House" is displayed
 
 
 2. Verify route from current location to selected "Go-To" location is drawn
-      1. Follow steps from test 1
-      2. Be at a location that has a bus route to "John's House" (Or use a mock GPS app to "be" at that location)
-      3. Select "John's House"
-      4. Verify that steps 1-3 are displayed and gradually checked off
-      5. Verify that a map pops up that displays a route from your current location to "John's House" (Including Walking )
+	1. Follow steps from test 1
+	2. Be at a location that has a bus route to "John's House" (Or use a mock GPS app to "be" at that location)
+	3. Select "John's House"
+	4. Verify that steps 1-3 are displayed and gradually checked off
+	5. Verify that a map pops up that displays a route from your current location to "John's House" (Including Walking )

@@ -15,19 +15,19 @@ public class LocationLookupTest extends ActivityInstrumentationTestCase2<StartAc
 	private static final double TOLERANCE = 0.001;
 
 
-    StartActivity thisActivity;
-    Instrumentation instrumentation;
+	StartActivity thisActivity;
+	Instrumentation instrumentation;
 
 	public LocationLookupTest(){super(StartActivity.class);}
 
 
-    @Before
-    protected void setUp() throws Exception {
-        super.setUp();
+	@Before
+	protected void setUp() throws Exception {
+		super.setUp();
 
-        thisActivity = getActivity();
-        instrumentation = getInstrumentation();
-    }
+		thisActivity = getActivity();
+		instrumentation = getInstrumentation();
+	}
 
 	@Test
 	public void testLookupIUB() {

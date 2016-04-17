@@ -1,17 +1,17 @@
 1. Verify invalid address message shows up when address is invalid
-  Click on Map It Up
-  Type in 'awerawerawer' and press OK
-  Note that Invalid address message is displayed
-  
+	Click on Map It Up
+	Type in 'awerawerawer' and press OK
+	Note that Invalid address message is displayed
+	
 2. Verify no bus message shows up when no buses route is possible
-  Click on Map It Up
-  Enter 'white house' and press OK
-  Enter 'illini union' and press OK
-  Note that No bus routes found message is displayed
-  
+	Click on Map It Up
+	Enter 'white house' and press OK
+	Enter 'illini union' and press OK
+	Note that No bus routes found message is displayed
+	
 3. Verify that routes are displayed properly
-  If the current time is past 2 am change your system time to 11 am
-  Click on Map It Up
-  Enter 'illini union' and press OK
-  Enter 'thomas m seibel center' and press OK
-  Note that walking paths are drawn in black and bus routes are draw in red, green, or blue
+	If the current time is past 2 am change your system time to 11 am
+	Click on Map It Up
+	Enter 'illini union' and press OK
+	Enter 'thomas m seibel center' and press OK
+	Note that walking paths are drawn in black and bus routes are draw in red, green, or blue

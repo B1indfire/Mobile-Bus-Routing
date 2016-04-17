@@ -15,10 +15,10 @@ public class EventTest extends AndroidTestCase
 {
 	private Bundle bundle;
 
-    @Override
-    public void setUp() {
+	@Override
+	public void setUp() {
 		bundle = mock(Bundle.class);
-    }
+	}
 
 
 	@Test

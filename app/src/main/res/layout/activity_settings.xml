@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1.0" >>
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:weightSum="1.0" >>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Maximum Walking Distance"
-        android:id="@+id/textView2"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.06"
-        android:layout_marginTop="10dp" />
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:text="Maximum Walking Distance"
+		android:id="@+id/textView2"
+		android:layout_gravity="center_horizontal"
+		android:layout_weight="0.06"
+		android:layout_marginTop="10dp" />
 
-    <uiuc.mbr.ui.MyNumberPicker
-        android:layout_width="180dp"
-        android:layout_height="70dp"
-        android:id="@+id/maxDist"
-        android:layout_gravity="center_horizontal"
-        max="11"
-        min="1"
-        incr = ".1"/>
+	<uiuc.mbr.ui.MyNumberPicker
+		android:layout_width="180dp"
+		android:layout_height="70dp"
+		android:id="@+id/maxDist"
+		android:layout_gravity="center_horizontal"
+		max="11"
+		min="1"
+		incr = ".1"/>
 
-    <TextView
-        android:layout_width="355dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Maximum distance to walk."
-        android:id="@+id/textView6"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.06" />
+	<TextView
+		android:layout_width="355dp"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="Maximum distance to walk."
+		android:id="@+id/textView6"
+		android:layout_gravity="center_horizontal"
+		android:layout_weight="0.06" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Minimum Pre Arrival Time"
-        android:id="@+id/textView3"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.05" />
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:text="Minimum Pre Arrival Time"
+		android:id="@+id/textView3"
+		android:layout_gravity="center_horizontal"
+		android:layout_weight="0.05" />
 
-    <uiuc.mbr.ui.MyNumberPicker
-        android:layout_width="180dp"
-        android:layout_height="70dp"
-        android:id="@+id/minArrTime"
-        android:layout_gravity="center_horizontal"
-        max="101"
-        min="0"
-        incr = "1.0"/>
+	<uiuc.mbr.ui.MyNumberPicker
+		android:layout_width="180dp"
+		android:layout_height="70dp"
+		android:id="@+id/minArrTime"
+		android:layout_gravity="center_horizontal"
+		max="101"
+		min="0"
+		incr = "1.0"/>
 
-    <TextView
-        android:layout_width="355dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Input how many minutes you want to arrive before your event starts."
-        android:id="@+id/textView4"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.06" />
+	<TextView
+		android:layout_width="355dp"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="Input how many minutes you want to arrive before your event starts."
+		android:id="@+id/textView4"
+		android:layout_gravity="center_horizontal"
+		android:layout_weight="0.06" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:id="@+id/saveSettings"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_weight="0.06"
-        android:onClick="saveSettings" />
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Save"
+		android:id="@+id/saveSettings"
+		android:layout_gravity="bottom|center_horizontal"
+		android:layout_weight="0.06"
+		android:onClick="saveSettings" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="1073079428729 "
-        android:id="@+id/google_app_id"
-        android:layout_gravity="right" />
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:text="1073079428729 "
+		android:id="@+id/google_app_id"
+		android:layout_gravity="right" />
 
 </LinearLayout>
