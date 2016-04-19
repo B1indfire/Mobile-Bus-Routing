@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,8 +34,8 @@ public class AlarmService extends Service
 	private static final String UNTRIGGERED_ALARMS_FILE = "untriggered_alarms";
 	private static final String IDSMAP_FILE = "idsmap";
 
-	private static Queue<Alarm> untriggeredAlarms = new PriorityQueue<>();
-	@Nullable private static Alarm triggeredAlarm = null;
+	private static Queue<Alarm> untriggeredAlarms;
+	@Nullable private static Alarm triggeredAlarm;
 	private static Map<Long, Alarm> idsMap = new HashMap<>();
 
 	/**
@@ -367,25 +368,29 @@ public class AlarmService extends Service
 	 * Loads all Alarm data from device memory
 	 */
 	public static void loadAlarms(Context c){
-		try(FileInputStream fis = c.openFileInput(UNTRIGGERED_ALARMS_FILE)) {
-			try(ObjectInputStream ois = new ObjectInputStream(fis)) {
-				untriggeredAlarms = (Queue<Alarm>) ois.readObject();
-			}
-		} catch (IOException | ClassNotFoundException  e) {
-			throw new RuntimeException(e);
-
-		}try(FileInputStream fis = c.openFileInput(IDSMAP_FILE)) {
-			try(ObjectInputStream ois = new ObjectInputStream(fis)) {
-				idsMap = (Map<Long, Alarm>) ois.readObject();
-			}
-		} catch (IOException | ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-
-		if (untriggeredAlarms == null)
+		File f = new File(c.getFilesDir(), UNTRIGGERED_ALARMS_FILE);
+		if(!f.exists())
 			untriggeredAlarms = new PriorityQueue<>();
-		if(idsMap == null)
+		else
+			try(FileInputStream fis = c.openFileInput(UNTRIGGERED_ALARMS_FILE)) {
+				try(ObjectInputStream ois = new ObjectInputStream(fis)) {
+					untriggeredAlarms = (Queue<Alarm>) ois.readObject();
+				}
+			} catch (IOException | ClassNotFoundException  e) {
+				throw new RuntimeException(e);
+			}
+
+		f = new File(c.getFilesDir(), IDSMAP_FILE);
+		if(!f.exists())
 			idsMap = new HashMap<>();
+		else
+			try(FileInputStream fis = c.openFileInput(IDSMAP_FILE)) {
+				try(ObjectInputStream ois = new ObjectInputStream(fis)) {
+					idsMap = (Map<Long, Alarm>) ois.readObject();
+				}
+			} catch (IOException | ClassNotFoundException e) {
+				throw new RuntimeException(e);
+			}
 	}
 
 	/**
