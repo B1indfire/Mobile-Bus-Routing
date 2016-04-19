@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import android.graphics.Color;
 import android.text.InputType;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		oLongitude = getIntent().getDoubleExtra("olon", Double.NaN);
 		dLatitude = getIntent().getDoubleExtra("dlat", Double.NaN);
 		dLongitude = getIntent().getDoubleExtra("dlon", Double.NaN);
+
+		Log.wtf("MapActivity", "Destination: " + Double.toString(dLatitude) + ", " + Double.toString(dLongitude));
 	}
 
 
@@ -54,28 +57,26 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	private final LocationRequest locationRequest = new LocationRequest();
 	private final GoogleCallbacks googleCallbacks = new GoogleCallbacks();
 	private GoogleApiClient googleClient;
+
 	/**Public for testing only*/
 	public final LocationHandler locationHandler = new LocationHandler();
 
 	public Marker userLocationMarker;
 
 	private double oLatitude, oLongitude, dLatitude, dLongitude;
-	Date arrival;
-	SupportMapFragment mapFragment;
-
-	private static final long MILLISECONDS_IN_HOUR = 3600000;
+	private SupportMapFragment mapFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+
 		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
 		mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+		mapFragment.getMapAsync(this);
 
 		readIntent();
-		arrival = new Date(System.currentTimeMillis() + MILLISECONDS_IN_HOUR);
-		nextStep();
 	}
 
 
@@ -88,8 +89,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		else if(Double.isNaN(dLatitude) || Double.isNaN(dLongitude))
 			promptForNewAddress(true);
 		else
-			mapFragment.getMapAsync(this);
-
+			drawRouteOnMap();
 	}
 
 
@@ -148,39 +148,34 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		.show();
 	}
 
-	/**
-	 * Manipulates the map once available.
-	 * This callback is triggered when the map is ready to be used.
-	 * This is where we can add markers or lines, add listeners or move the camera.
-	 * If Google Play services is not installed on the device, the user will be prompted to install
-	 * it inside the SupportMapFragment. This method will only be triggered once the user has
-	 * installed Google Play services and returned to the app.
-	 */
-	@Override
-	public void onMapReady(GoogleMap googleMap)
-	{
-		LatLng debugPos = new LatLng(0, 0);
-		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
-
+	private void drawRouteOnMap() {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		map = googleMap;
+
+		LatLng debugPos = new LatLng(0, 0);
+		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
 
 		int[] colors = {Color.RED, Color.GREEN, Color.BLUE};
 		CumtdApi api = CumtdApi.create();
 		Directions d;
 		try {
+			int tempW = SettingsActivity.loadMaxWalkFromMemory(getApplicationContext());
+			double maxWalk = tempW*.1;
+
+			Log.wtf("MapActivity", "Destination: " + Double.toString(dLatitude) + ", " + Double.toString(dLongitude));
+
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-			String[] dateTime = df.format(arrival).split(" ");
+			String[] dateTime = df.format(new Date()).split(" ");
+
 			d = api.getTripArriveBy(Double.toString(oLatitude),
-									Double.toString(oLongitude),
-									Double.toString(dLatitude),
-									Double.toString(dLongitude),
-									dateTime[0], dateTime[1], "1", "arrive");
+					Double.toString(oLongitude),
+					Double.toString(dLatitude),
+					Double.toString(dLongitude),
+					dateTime[0], dateTime[1],
+					""+maxWalk, "depart");
 		} catch (Exception e) {throw new RuntimeException(e);}
 		if(d == null) {
-			Toast toast = Toast.makeText(this, "No bus route found.", Toast.LENGTH_LONG);
-			toast.show();
+			Toast.makeText(this, "No bus route found.", Toast.LENGTH_LONG).show();
 			return;
 		}
 
@@ -202,13 +197,28 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		}
 
 		map.moveCamera(CameraUpdateFactory.zoomTo(14));
-		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos));
+		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos)); //TODO: Switch to actual LatLng
 
 		googleClient = new GoogleApiClient.Builder(getApplicationContext())
 				.addApi(LocationServices.API)
 				.addConnectionCallbacks(googleCallbacks)
 				.build();
 		googleClient.connect();
+	}
+
+	/**
+	 * Manipulates the map once available.
+	 * This callback is triggered when the map is ready to be used.
+	 * This is where we can add markers or lines, add listeners or move the camera.
+	 * If Google Play services is not installed on the device, the user will be prompted to install
+	 * it inside the SupportMapFragment. This method will only be triggered once the user has
+	 * installed Google Play services and returned to the app.
+	 */
+	@Override
+	public void onMapReady(GoogleMap googleMap)
+	{
+		map = googleMap;
+		nextStep();
 	}
 
 

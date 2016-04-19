@@ -156,6 +156,8 @@ public class GotoActivity extends AppCompatActivity
 
 			finish();
 
+			Log.wtf("GoToActivity", "Destination: " + Double.toString(chosenTo.latitude) + ", " + Double.toString(chosenTo.longitude));
+
 			Intent intent = new Intent(getApplicationContext(), MapActivity.class);
 			MapActivity.setupIntent(location.getLatitude(), location.getLongitude(), chosenTo.latitude, chosenTo.longitude, intent);
 			startActivity(intent);
