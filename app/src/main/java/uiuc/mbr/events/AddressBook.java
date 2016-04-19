@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,6 +115,8 @@ public class AddressBook
 					double lat = cursor.getDouble(1), lon = cursor.getDouble(2);
 					String name = cursor.getString(3);
 					out.add(new UserLocation(name, address, lat, lon));
+
+					Log.wtf("AddressBook.getAll()", name + " " + address + " " + lat + " " + lon);
 				}
 
 				return out;

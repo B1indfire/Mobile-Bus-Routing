@@ -8,8 +8,11 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import uiuc.mbr.calendar.Event;
 
@@ -52,11 +55,14 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		int tempW = SettingsActivity.loadMaxWalkFromMemory(c);
 		double maxWalk = tempW*.1;
 
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+		String[] dateTime = df.format(arrivalTime).split(" ");
+
 		try {
 			//Get directions from CUMTD API
 			Directions dir = api.getTripArriveBy("" + startLocation.latitude, "" + startLocation.longitude,
 					"" + event.getLatLong().latitude, "" + event.getLatLong().longitude,
-					"" + arrivalTime.getDate(), "" + arrivalTime.getTime(),
+					"" + dateTime[0], "" + dateTime[1],
 					"" + maxWalk, "arrive");
 
 			int duration = (dir == null) ? 0 : dir.getDuration();

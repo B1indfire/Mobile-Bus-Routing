@@ -71,7 +71,7 @@ public class AddEventDialog extends DialogFragment
 
 		location.setText(event.getLocation());
 		context = getActivity().getApplicationContext();
-		new Worker(false).execute();
+		new Worker().execute();
 		return out;
 	}
 
@@ -106,10 +106,6 @@ public class AddEventDialog extends DialogFragment
 	{
 		private UserLocation data = null;
 		private String newAddress;
-		private final boolean save;
-
-		/**@param save whether or not to save the value in the address text input into the AddressBook.*/
-		public Worker(boolean save){this.save = save;}
 
 		@Override
 		public void onPreExecute()
@@ -129,14 +125,14 @@ public class AddEventDialog extends DialogFragment
 				if(data == null)
 					AddressBook.create(data = new UserLocation(locStr), context);
 
-				if(save)
+				if(!newAddress.isEmpty())
 					data.address = newAddress;
 
 				String use = data.address != null && data.address.length() > 0 ? data.address : data.name;
 				LatLng pos = LocationLookup.lookupLocation(use, context);
 				data.latitude = pos == null ? Double.NaN : pos.latitude;
 				data.longitude = pos == null ? Double.NaN : pos.longitude;
-				if(save)
+				if(!Double.isNaN(data.latitude) && !Double.isNaN(data.longitude))
 				{
 					AddressBook.update(data, context);
 					Log.wtf("saved address", data.toString());
@@ -188,7 +184,7 @@ public class AddEventDialog extends DialogFragment
 		{
 			if(loading.getVisibility() == View.VISIBLE)
 				return;
-			new Worker(true).execute();
+			new Worker().execute();
 		}
 	}
 
