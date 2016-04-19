@@ -6,17 +6,18 @@ import java.util.*;
 import org.json.*;
 
 public class CumtdApi {
+	private static final CumtdApi INSTANCE = new CumtdApi();
 
-	private final String url;
-	private final String key;
 
-	private CumtdApi(String url, String key) {
-		this.url = url;
-		this.key = key;
-	}
+	private final String url = "https://developer.cumtd.com/api/v2.2/JSON";
+	private final String key = "c4d5e4bb2baa48ba85772b857c9839c8";
+
+
+	private CumtdApi(){}
+
 
 	public static CumtdApi create() {
-		return new CumtdApi("https://developer.cumtd.com/api/v2.2/JSON", "c4d5e4bb2baa48ba85772b857c9839c8");
+		return INSTANCE;
 	}
 
 	private JSONObject getFromApi(String name) throws IOException, org.json.JSONException{
@@ -170,12 +171,6 @@ public class CumtdApi {
 
 	/**
 	 * Get nearest stops from the current latitude and longitude.
-	 * @param x
-	 * @param y
-	 * @return
-	 * @throws JSONException
-	 * @throws MalformedURLException
-	 * @throws IOException
 	 */
 	public List<String> getNearestStops(String x, String y) throws JSONException, IOException {
 		List<String> list = new ArrayList<>();
@@ -190,11 +185,6 @@ public class CumtdApi {
 
 	/**
 	 * Get future departures from current stop id.
-	 * @param stop_id
-	 * @return
-	 * @throws JSONException
-	 * @throws MalformedURLException
-	 * @throws IOException
 	 */
 	public List<String> getDepartures(String stop_id) throws JSONException, IOException {
 		List<String> list = new ArrayList<>();
@@ -210,8 +200,6 @@ public class CumtdApi {
 	/**
 	 * This method parse the trip data from json to Directions object.
 	 * This methods return null if there is no way to get to the destination.
-	 * @param object
-	 * @return
 	 */
 	public Directions parseTripData(JSONObject object) throws JSONException, IOException {
 		JSONArray itineraries = object.getJSONArray("itineraries");
@@ -266,20 +254,10 @@ public class CumtdApi {
 
 	/**
 	 * Retrieves directions JSON data to be parsed.
-	 * @param origin_lat
-	 * @param origin_lon
-	 * @param destination_lat
-	 * @param destination_lon
-	 * @param date
-	 * @param time
-	 * @param arrive_depart
-	 * @return
-	 * @throws IOException
-	 * @throws JSONException
 	 */
 	public Directions getTripArriveBy(String origin_lat, String origin_lon, String destination_lat,
-									  String destination_lon, String date, String time,
-									  String maxWalk, String arrive_depart)
+	                                  String destination_lon, String date, String time,
+	                                  String maxWalk, String arrive_depart)
 			throws IOException, JSONException {
 		String url = this.url + "/GetPlannedTripsByLatLon?key=" + key + "&origin_lat=" + origin_lat +
 				"&origin_lon=" + origin_lon + "&destination_lat=" + destination_lat+

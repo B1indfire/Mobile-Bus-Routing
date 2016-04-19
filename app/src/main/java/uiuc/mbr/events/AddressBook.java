@@ -100,11 +100,11 @@ public class AddressBook
 	}
 
 
-    /**Returns all addresses in no particular order.*/
-    public static List<UserLocation> getAll(Context context)
-    {
-        try(SQLiteDatabase db = db(context))
-        {
+	/**Returns all addresses in no particular order.*/
+	public static List<UserLocation> getAll(Context context)
+	{
+		try(SQLiteDatabase db = db(context))
+		{
 			try(Cursor cursor = db.rawQuery("SELECT address, latitude, longitude, name FROM " + TABLE, null))
 			{
 				List<UserLocation> out = new ArrayList<>();
@@ -118,8 +118,8 @@ public class AddressBook
 
 				return out;
 			}
-        }
-    }
+		}
+	}
 
 
 	/**Updates all fields of a location except the name.*/

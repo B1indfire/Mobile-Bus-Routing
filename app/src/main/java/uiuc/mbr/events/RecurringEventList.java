@@ -1,7 +1,6 @@
 package uiuc.mbr.events;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.*;
 import java.util.*;

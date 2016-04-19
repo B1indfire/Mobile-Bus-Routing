@@ -59,10 +59,9 @@ public class SettingsActivity extends AppCompatActivity {
 
 		HashMap<String, Integer> settings;
 		try(FileInputStream fis = c.openFileInput(SETTINGS_FILE)) {
-			try(ObjectInputStream ois = new ObjectInputStream(fis))
-			{
+			try(ObjectInputStream ois = new ObjectInputStream(fis)) {
 				settings = (HashMap<String, Integer>) ois.readObject();
-			};
+			}
 		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
