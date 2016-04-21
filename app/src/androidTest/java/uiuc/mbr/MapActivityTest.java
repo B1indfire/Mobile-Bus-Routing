@@ -7,10 +7,9 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
-
 import uiuc.mbr.activities.MapActivity;
 
-/**TODO flaky test (ActivityExists always passes, MarkerExists always failes, MarkerLocation inconsistent)*/
+/**TODO flaky test (ActivityExists always passes, MarkerExists always fails, MarkerLocation inconsistent)*/
 public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivity>
 {
 	private static final LatLng testLocation = new LatLng(40.115009, -88.289264);//Clear Lake

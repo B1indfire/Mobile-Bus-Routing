@@ -9,7 +9,8 @@ import android.os.Bundle;
 import uiuc.mbr.calendar.Event;
 import uiuc.mbr.events.RecurringEventList;
 
-/**TODO*/
+/**Dialog triggered when the user tries to remove a recurring event from the schedule.
+ * Asks the user whether they want to remove all instances or just one.*/
 public class RemoveRecurringEventDialog extends DialogFragment
 {
 	public static void setup(Event event, Bundle args)

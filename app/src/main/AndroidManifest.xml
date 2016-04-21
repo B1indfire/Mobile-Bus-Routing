@@ -68,13 +68,10 @@
 			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
-		<activity android:name=".activities.EventAlarmActivity"
+        <activity android:name=".activities.SettingsActivity"
 			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
-		<activity android:name=".activities.SettingsActivity"
-			android:parentActivityName=".activities.StartActivity">
-		</activity>
 		<activity
 			android:name=".activities.EventSelectionActivity"
 			android:parentActivityName=".activities.StartActivity">
