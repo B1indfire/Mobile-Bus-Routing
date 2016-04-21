@@ -118,19 +118,6 @@
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Set Event Alarms"
-			android:background="@drawable/buttons"
-			android:layout_marginBottom="5dp"
-			android:layout_marginTop="5dp"
-			android:layout_marginRight="5dp"
-			android:layout_marginLeft="5dp"
-			android:layout_weight="1"
-			android:onClick="clickEventAlarmsBtn"
-			android:layout_gravity="center_horizontal" />
-
-		<Button
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
 			android:text="Calendar Blacklist"
 			android:background="@drawable/buttons"
 			android:layout_marginBottom="5dp"
