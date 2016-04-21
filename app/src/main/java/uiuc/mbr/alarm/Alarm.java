@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.alarm;
 
 import android.content.Context;
 
@@ -14,6 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import uiuc.mbr.directions.CumtdApi;
+import uiuc.mbr.directions.Directions;
+import uiuc.mbr.activities.SettingsActivity;
 import uiuc.mbr.calendar.Event;
 
 /**A time when the user should be notified, together with a name.*/

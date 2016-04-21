@@ -5,7 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
-import uiuc.mbr.events.EventSelectionActivity;
+import uiuc.mbr.activities.EventSelectionActivity;
 
 public class EventSelectionActivityTest extends ActivityInstrumentationTestCase2<EventSelectionActivity>{
 

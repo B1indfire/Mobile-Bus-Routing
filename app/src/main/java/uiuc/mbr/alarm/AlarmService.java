@@ -1,4 +1,4 @@
-package uiuc.mbr.serv;
+package uiuc.mbr.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -22,8 +22,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.*;
 
-import uiuc.mbr.Alarm;
-import uiuc.mbr.OnAlarmActivity;
+import uiuc.mbr.activities.OnAlarmActivity;
 import uiuc.mbr.calendar.Event;
 
 /**Keeps track of alarms and when they should trigger.

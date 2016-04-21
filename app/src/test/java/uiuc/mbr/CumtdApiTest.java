@@ -6,13 +6,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.lang.String;
 import java.net.MalformedURLException;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
 import org.json.JSONObject;
+
+import uiuc.mbr.directions.CumtdApi;
+import uiuc.mbr.directions.Directions;
 
 /**
  * Unit Tests for CumtdApi.java

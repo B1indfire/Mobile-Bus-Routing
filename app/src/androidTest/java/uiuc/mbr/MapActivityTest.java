@@ -8,6 +8,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
 
+import uiuc.mbr.activities.MapActivity;
+
 /**TODO flaky test (ActivityExists always passes, MarkerExists always failes, MarkerLocation inconsistent)*/
 public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivity>
 {

@@ -8,8 +8,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+import uiuc.mbr.alarm.Alarm;
 import uiuc.mbr.calendar.Event;
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.alarm.AlarmService;
 
 import static junit.framework.Assert.assertEquals;
 

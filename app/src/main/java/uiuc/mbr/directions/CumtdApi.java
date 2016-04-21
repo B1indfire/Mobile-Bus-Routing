@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.directions;
 
 import java.io.IOException;
 import java.net.*;
@@ -101,7 +101,7 @@ public class CumtdApi {
 	}
 
 	public JSONObject getStops(String in) throws IOException, org.json.JSONException{
-		return getFromApi("GetStops");
+		return getFromApi("GetStopsActivity");
 	}
 
 	public JSONObject getStopsByLatLon(String lat, String lon) throws IOException, org.json.JSONException{

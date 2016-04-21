@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 
 import android.content.Intent;
@@ -10,7 +10,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class StopList extends AppCompatActivity {
+import uiuc.mbr.R;
+
+public class StopListActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stop_list);

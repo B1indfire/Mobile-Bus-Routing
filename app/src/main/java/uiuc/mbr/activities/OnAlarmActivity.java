@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -18,7 +18,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.alarm.Alarm;
+import uiuc.mbr.R;
+import uiuc.mbr.alarm.AlarmService;
 
 
 /**Activity that runs when an alarm is triggered.*/

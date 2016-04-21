@@ -1,4 +1,4 @@
-package uiuc.mbr.events;
+package uiuc.mbr.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import uiuc.mbr.R;
 import uiuc.mbr.calendar.Calendar;
 import uiuc.mbr.calendar.CalendarService;
+import uiuc.mbr.events.CalendarBlacklist;
 
 /**
  * An activity which displays a list of calendars on the device and allows to user to toggle

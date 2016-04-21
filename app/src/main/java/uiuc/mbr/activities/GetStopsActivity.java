@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,8 +23,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import uiuc.mbr.directions.CumtdApi;
+import uiuc.mbr.R;
 
-public class GetStops extends AppCompatActivity {
+
+public class GetStopsActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,7 @@ public class GetStops extends AppCompatActivity {
 					} catch (IOException | JSONException e) {
 						throw new RuntimeException(e);
 					}
-					Intent intent = new Intent(getBaseContext(), StopList.class);
+					Intent intent = new Intent(getBaseContext(), StopListActivity.class);
 					intent.putExtra("departures", list);
 					startActivity(intent);
 				}

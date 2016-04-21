@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,6 +25,9 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import uiuc.mbr.directions.CumtdApi;
+import uiuc.mbr.directions.Directions;
+import uiuc.mbr.R;
 import uiuc.mbr.events.LocationLookup;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback

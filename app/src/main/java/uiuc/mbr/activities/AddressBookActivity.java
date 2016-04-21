@@ -1,4 +1,4 @@
-package uiuc.mbr.events;
+package uiuc.mbr.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,9 +19,12 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import uiuc.mbr.Alarm;
+import uiuc.mbr.alarm.Alarm;
 import uiuc.mbr.R;
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.events.AddressBook;
+import uiuc.mbr.events.LocationLookup;
+import uiuc.mbr.events.UserLocation;
+import uiuc.mbr.alarm.AlarmService;
 
 /**
  * Displays a list of all addresses inputted into the AddressBook

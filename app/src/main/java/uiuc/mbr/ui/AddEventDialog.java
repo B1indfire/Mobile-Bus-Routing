@@ -21,7 +21,7 @@ import uiuc.mbr.calendar.Event;
 import uiuc.mbr.events.AddressBook;
 import uiuc.mbr.events.LocationLookup;
 import uiuc.mbr.events.UserLocation;
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.alarm.AlarmService;
 
 /**Dialog that tries to add an alarm for an event, prompting the user for more information if needed.
  * Args must be setup().*/

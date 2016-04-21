@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import uiuc.mbr.events.AddressBookActivity;
-import uiuc.mbr.events.CalendarSelectionActivity;
-import uiuc.mbr.events.EventSelectionActivity;
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.R;
+import uiuc.mbr.alarm.AlarmService;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -54,7 +52,7 @@ public class StartActivity extends AppCompatActivity {
 	}
 
 	public void clickStpBtn(View v) {
-		startActivity(new Intent(getApplicationContext(), GetStops.class));
+		startActivity(new Intent(getApplicationContext(), GetStopsActivity.class));
 	}
 
 

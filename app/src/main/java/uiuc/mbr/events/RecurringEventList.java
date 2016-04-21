@@ -11,7 +11,8 @@ import uiuc.mbr.calendar.Event;
  * Used by EventSelectionActivity to keep track of recurring events which the user wants automatically added to their schedule.
  * Also keeps track of instances of the recurring events which the user does not want in their schedule (called exceptions).
  */
-public class RecurringEventList {
+public class RecurringEventList
+{
 
 	public static final String RECURRING_EVENT_FILE = "recurring_list";
 	public static final String EXCEPTIONS_FILE = "exceptions";

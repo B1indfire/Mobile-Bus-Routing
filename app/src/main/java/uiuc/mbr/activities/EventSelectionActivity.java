@@ -1,4 +1,4 @@
-package uiuc.mbr.events;
+package uiuc.mbr.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +16,11 @@ import java.util.*;
 import uiuc.mbr.*;
 import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.events.AddressBook;
+import uiuc.mbr.events.CalendarBlacklist;
+import uiuc.mbr.events.RecurringEventList;
+import uiuc.mbr.events.UserLocation;
+import uiuc.mbr.alarm.AlarmService;
 import uiuc.mbr.ui.AddEventDialog;
 import uiuc.mbr.ui.AddRecurringEventDialog;
 import uiuc.mbr.ui.RemoveRecurringEventDialog;

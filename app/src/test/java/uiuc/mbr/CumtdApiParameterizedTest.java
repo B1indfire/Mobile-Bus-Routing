@@ -1,13 +1,16 @@
 package uiuc.mbr;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import org.json.JSONException;
 import org.junit.runner.RunWith;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.experimental.theories.suppliers.TestedOn;
+
+import uiuc.mbr.directions.CumtdApi;
+import uiuc.mbr.directions.Directions;
+
 import static org.junit.Assert.*;
 
 @RunWith(Theories.class)

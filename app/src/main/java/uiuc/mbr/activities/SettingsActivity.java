@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,7 +9,8 @@ import android.widget.NumberPicker;
 import java.io.*;
 import java.util.HashMap;
 
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.R;
+import uiuc.mbr.alarm.AlarmService;
 
 
 /**TODO this file desperately needs JavaDoc comments. What are the units for these settings?*/

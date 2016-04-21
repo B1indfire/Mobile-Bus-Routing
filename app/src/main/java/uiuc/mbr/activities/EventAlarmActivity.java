@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,9 +6,10 @@ import android.view.View;
 
 import java.util.List;
 
+import uiuc.mbr.R;
 import uiuc.mbr.calendar.CalendarService;
 import uiuc.mbr.calendar.Event;
-import uiuc.mbr.serv.AlarmService;
+import uiuc.mbr.alarm.AlarmService;
 
 public class EventAlarmActivity extends AppCompatActivity
 {

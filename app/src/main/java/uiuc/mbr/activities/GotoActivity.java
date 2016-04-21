@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.activities;
 
 import android.content.Intent;
 import android.location.Location;
@@ -14,6 +14,7 @@ import com.google.android.gms.location.*;
 
 import java.util.*;
 
+import uiuc.mbr.R;
 import uiuc.mbr.events.*;
 
 /**Lets the user quickly pick a destination to travel to.
@@ -37,7 +38,7 @@ public class GotoActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_goto);
+		setContentView(uiuc.mbr.R.layout.activity_goto);
 
 		progress = findViewById(R.id.a_goto_progress);
 		list = (ListView)findViewById(R.id.a_goto_list);

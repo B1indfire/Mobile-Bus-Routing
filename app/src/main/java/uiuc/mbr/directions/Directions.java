@@ -1,4 +1,4 @@
-package uiuc.mbr;
+package uiuc.mbr.directions;
 
 import java.util.ArrayList;
 import java.util.List;

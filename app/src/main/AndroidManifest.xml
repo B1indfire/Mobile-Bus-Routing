@@ -21,7 +21,7 @@
 		android:theme="@style/AppTheme"
 		android:supportsRtl="false">
 		<activity
-			android:name=".StartActivity"
+			android:name=".activities.StartActivity"
 			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>
@@ -45,47 +45,47 @@
 			android:value="@string/google_maps_key"/>
 
 		<activity
-			android:name=".MapActivity"
+			android:name=".activities.MapActivity"
 			android:label="@string/title_activity_map"
-			android:parentActivityName=".StartActivity">
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
 		<activity
-			android:name=".GetStops"
+			android:name=".activities.GetStopsActivity"
 			android:label="GetStops"
 			android:theme="@style/AppTheme.NoActionBar"
-			android:parentActivityName=".StartActivity">
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
 		<activity
-			android:name=".StopList"
+			android:name=".activities.StopListActivity"
 			android:label="StopList"
 			android:theme="@style/AppTheme.NoActionBar"
-			android:parentActivityName=".StartActivity">
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
-		<activity android:name=".OnAlarmActivity"
-			android:parentActivityName=".StartActivity">
+		<activity android:name=".activities.OnAlarmActivity"
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
-		<activity android:name=".EventAlarmActivity"
-			android:parentActivityName=".StartActivity">
+		<activity android:name=".activities.EventAlarmActivity"
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
-		<activity android:name=".SettingsActivity"
-			android:parentActivityName=".StartActivity">
+		<activity android:name=".activities.SettingsActivity"
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 		<activity
-			android:name=".events.EventSelectionActivity"
-			android:parentActivityName=".StartActivity">
+			android:name=".activities.EventSelectionActivity"
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 		<activity
-			android:name=".events.CalendarSelectionActivity"
-			android:parentActivityName=".StartActivity">
+			android:name=".activities.CalendarSelectionActivity"
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 		<activity
-			android:name=".events.AddressBookActivity"
-			android:parentActivityName=".StartActivity">
+			android:name=".activities.AddressBookActivity"
+			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
 		<!--
@@ -96,9 +96,9 @@
 			android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version"/>
 
-		<service android:name=".serv.AlarmService"/>
+		<service android:name=".alarm.AlarmService"/>
 
-		<activity android:name=".GotoActivity">
+		<activity android:name=".activities.GotoActivity">
 		</activity>
 	</application>
 
