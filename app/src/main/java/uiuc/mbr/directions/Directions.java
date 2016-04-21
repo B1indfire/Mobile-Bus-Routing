@@ -8,30 +8,25 @@ import java.util.List;
  * parsed from JSON data.
  */
 public class Directions {
-	private int duration;
-	private List<String> directions = new ArrayList<>();
-	private List<String> coordinates = new ArrayList<>();
+	public final int duration;
+	private final List<String> directions = new ArrayList<>();
+	private final List<String> coordinates = new ArrayList<>();
 	
 	public Directions(int duration) {
 		this.duration = duration;
 	}
-	
-	public void addDirections(String s) {
-		directions.add(s);
+
+	/**Adds a directions string and a coordinates string.*/
+	public void add(String directions, String coordinates) {
+		this.directions.add(directions);
+		this.coordinates.add(coordinates);
 	}
 
-	public void addCoordinates(String s) {
-		coordinates.add(s);
-	}
-	
-	public int getDuration() {
-		return duration;
-	}
-	
+	/**Public for testing only.*/
 	public List<String> getDirections() {
 		return directions;
 	}
-
+	/**Public for testing only.*/
 	public List<String> getCoordinates() {
 		return coordinates;
 	}

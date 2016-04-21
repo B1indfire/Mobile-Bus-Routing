@@ -206,10 +206,12 @@ public class CumtdApi {
 		if (itineraries.length() <= 0) {
 			return null;
 		}
+
 		JSONObject itinerary = itineraries.getJSONObject(0);
 		int duration = itinerary.getInt("travel_time");
 		Directions d = new Directions(duration);
 		JSONArray legs = itinerary.getJSONArray("legs");
+
 		for (int i = 0; i < legs.length(); i++) {
 			JSONObject current = legs.getJSONObject(i);
 			String type = current.getString("type");
@@ -224,11 +226,15 @@ public class CumtdApi {
 				double endLat = end.getDouble("lat");
 				double endLon = end.getDouble("lon");
 				String target = end.getString("name");
-				d.addDirections("Head " + direction + " for " + distance + " miles to " + target + ".");
-				d.addCoordinates("W:" + beginLat + "," + beginLon + "," + endLat + "," + endLon);            }
+				String sd = "Head " + direction + " for " + distance + " miles to " + target + ".";
+				String sc = "W:" + beginLat + "," + beginLon + "," + endLat + "," + endLon;
+				d.add(sd, sc);
+			}
+
 			if (type.equals("Service")) {
 				JSONArray services = current.getJSONArray("services");
-				for (int j = 0; j < services.length(); j++) {
+				for (int j = 0; j < services.length(); j++)
+				{
 					JSONObject service = services.getJSONObject(j);
 					JSONObject begin = service.getJSONObject("begin");
 					JSONObject end = service.getJSONObject("end");
@@ -242,11 +248,14 @@ public class CumtdApi {
 					String endStopId = end.getString("stop_id");
 					List<String> coords = getShapeCoordsByStop(beginStopId, endStopId, shape);
 					String shapeCoords = "";
-					for(int k = 0; k < coords.size(); k=k+2) {
-						shapeCoords += coords.get(k) + "," + coords.get(k+1) + ",";
+					for(int k = 0; k < coords.size(); k = k + 2)
+					{
+						shapeCoords += coords.get(k) + "," + coords.get(k + 1) + ",";
 					}
-					d.addCoordinates("S:" + shapeCoords.substring(0, shapeCoords.length()-1));
-					d.addDirections("Take the " + bus + " bus from " + start + " to " + finish + ".");                }
+					String sd = "Take the " + bus + " bus from " + start + " to " + finish + ".";
+					String sc = "S:" + shapeCoords.substring(0, shapeCoords.length() - 1);
+					d.add(sd, sc);
+				}
 			}
 		}
 		return d;

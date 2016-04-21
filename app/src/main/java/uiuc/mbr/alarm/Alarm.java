@@ -68,7 +68,7 @@ public class Alarm implements Comparable<Alarm>, Serializable
 					"" + dateTime[0], "" + dateTime[1],
 					"" + maxWalk, "arrive");
 
-			int duration = (dir == null) ? 0 : dir.getDuration();
+			int duration = (dir == null) ? 0 : dir.duration;
 
 			//Determine appropriate leaving time from directions
 			departTime.add(Calendar.MINUTE, -1 * duration);

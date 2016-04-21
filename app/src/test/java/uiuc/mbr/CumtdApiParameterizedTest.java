@@ -31,8 +31,8 @@ public class CumtdApiParameterizedTest {
 		                                   Double.toString(startLon + 0.01 *lonMultiplier),
 		                                   "2016-03-12", "1:00", "1", "arrive");
 		if (d!=null) {
-			assertNotNull(d.getDuration());
-			assert(d.getDuration()>0);
+			assertNotNull(d.duration);
+			assertTrue(d.duration > 0);
 		}
 	}
 
@@ -44,7 +44,7 @@ public class CumtdApiParameterizedTest {
 		Directions d = api.getTripArriveBy(Double.toString(startLat + 0.01 *latMultiplier), Double.toString(startLon + 0.01 *lonMultiplier), Double.toString(startLat + 0.01 *latMultiplier), Double.toString(startLon + 0.01 *lonMultiplier), "2016-03-12", "1:00", "1", "arrive");
 		if (d!=null) {
 			assertNotNull(d.getDirections());
-			assert(!d.getDirections().isEmpty());
+			assertFalse(!d.getDirections().isEmpty());
 		}
 	}
 
@@ -56,7 +56,7 @@ public class CumtdApiParameterizedTest {
 		Directions d = api.getTripArriveBy(Double.toString(startLat + 0.01 *latMultiplier), Double.toString(startLon + 0.01 * lonMultiplier), Double.toString(startLat + 0.01 *latMultiplier), Double.toString(startLon + 0.01 *lonMultiplier), "2016-03-12", "1:00", "1", "arrive");
 		if (d!=null) {
 			assertNotNull(d.getCoordinates());
-			assert(!d.getCoordinates().isEmpty());
+			assertFalse(!d.getCoordinates().isEmpty());
 		}
 	}
 }
