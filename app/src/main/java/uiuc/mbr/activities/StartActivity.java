@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
@@ -41,6 +42,7 @@ public class StartActivity extends AppCompatActivity {
 
 		//noinspection SimplifiableIfStatement
 		if(id == R.id.action_settings) {
+			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		}
 
