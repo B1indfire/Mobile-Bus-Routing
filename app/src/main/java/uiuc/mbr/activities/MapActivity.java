@@ -25,6 +25,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import uiuc.mbr.Settings;
 import uiuc.mbr.directions.CumtdApi;
 import uiuc.mbr.directions.Directions;
 import uiuc.mbr.R;
@@ -162,7 +163,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		CumtdApi api = CumtdApi.create();
 		Directions d;
 		try {
-			int tempW = SettingsActivity.loadMaxWalkFromMemory(getApplicationContext());
+			int tempW = Settings.getMaxWalkTenthsMiles(getApplicationContext());
 			double maxWalk = tempW*.1;
 
 			Log.wtf("MapActivity", "Destination: " + Double.toString(dLatitude) + ", " + Double.toString(dLongitude));
