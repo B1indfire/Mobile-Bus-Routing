@@ -183,6 +183,27 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 			return;
 		}
 
+		List<String> directions = d.getDirections();
+		System.out.println(directions);
+		String formatedDirections = "";
+		for (int i = 0; i < directions.size(); i++) {
+			formatedDirections = formatedDirections + "    " + directions.get(i) + "\n";
+		}
+		// User feedback.
+		AlertDialog alertDialog = new AlertDialog.Builder(MapActivity.this)
+				.setTitle("Directions")
+				.setMessage(formatedDirections.substring(0, formatedDirections.length()-1))
+				.create();
+		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+				new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int which)
+					{
+						dialog.dismiss();
+					}
+				});
+		alertDialog.show();
+
 		List<String> list = d.getCoordinates();
 		for (int i = 0; i < list.size(); i++) {
 			String[] p1 = list.get(i).split(":");
