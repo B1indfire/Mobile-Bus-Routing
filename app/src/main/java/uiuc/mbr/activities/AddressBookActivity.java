@@ -21,9 +21,9 @@ import java.util.List;
 
 import uiuc.mbr.alarm.Alarm;
 import uiuc.mbr.R;
-import uiuc.mbr.events.AddressBook;
-import uiuc.mbr.events.LocationLookup;
-import uiuc.mbr.events.UserLocation;
+import uiuc.mbr.event_selection.AddressBook;
+import uiuc.mbr.event_selection.LocationLookup;
+import uiuc.mbr.event_selection.UserLocation;
 import uiuc.mbr.alarm.AlarmService;
 
 /**

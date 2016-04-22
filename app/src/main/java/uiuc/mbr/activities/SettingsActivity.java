@@ -1,6 +1,8 @@
 package uiuc.mbr.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -47,6 +49,17 @@ public class SettingsActivity extends AppCompatActivity {
 		}
 	}
 	public void saveSettings(View v){
+		// User feedback.
+		AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
+		alertDialog.setTitle("Alert");
+		alertDialog.setMessage("Settings saved!");
+		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		alertDialog.show();
 		saveSettingsToFile(v, this.getApplicationContext());
 		AlarmService.updateAllAlarmTimes(this.getApplicationContext());
 	}

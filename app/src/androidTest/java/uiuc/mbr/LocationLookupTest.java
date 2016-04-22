@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uiuc.mbr.activities.StartActivity;
-import uiuc.mbr.events.LocationLookup;
+import uiuc.mbr.event_selection.LocationLookup;
 
 public class LocationLookupTest extends ActivityInstrumentationTestCase2<StartActivity>
 {

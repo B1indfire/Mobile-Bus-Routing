@@ -18,9 +18,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import uiuc.mbr.R;
 import uiuc.mbr.calendar.Event;
-import uiuc.mbr.events.AddressBook;
-import uiuc.mbr.events.LocationLookup;
-import uiuc.mbr.events.UserLocation;
+import uiuc.mbr.event_selection.AddressBook;
+import uiuc.mbr.event_selection.LocationLookup;
+import uiuc.mbr.event_selection.UserLocation;
 import uiuc.mbr.alarm.AlarmService;
 
 /**Dialog that tries to add an alarm for an event, prompting the user for more information if needed.

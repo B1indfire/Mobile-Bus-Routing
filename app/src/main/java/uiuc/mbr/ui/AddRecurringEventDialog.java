@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import uiuc.mbr.calendar.Event;
-import uiuc.mbr.events.RecurringEventList;
+import uiuc.mbr.event_selection.RecurringEventList;
 
 /**Dialog triggered when the user tries to add a recurring event to the schedule.
  * Asks the user whether they want to add all instances or just one.*/

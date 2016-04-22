@@ -30,9 +30,8 @@ import uiuc.mbr.alarm.Alarm;
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
 import uiuc.mbr.calendar.Event;
-import uiuc.mbr.events.AddressBook;
-import uiuc.mbr.events.UserLocation;
-
+import uiuc.mbr.event_selection.AddressBook;
+import uiuc.mbr.event_selection.UserLocation;
 
 /**Activity that runs when an alarm is triggered.*/
 public class OnAlarmActivity extends AppCompatActivity

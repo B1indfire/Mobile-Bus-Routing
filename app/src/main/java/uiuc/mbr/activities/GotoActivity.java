@@ -15,7 +15,7 @@ import com.google.android.gms.location.*;
 import java.util.*;
 
 import uiuc.mbr.R;
-import uiuc.mbr.events.*;
+import uiuc.mbr.event_selection.*;
 
 /**Lets the user quickly pick a destination to travel to.
  * XXX this activity won't behave well if the user rotates the screen*/
