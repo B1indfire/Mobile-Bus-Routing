@@ -45,17 +45,12 @@ public class Settings
 		Settings.arrivalDifferenceMinutes = arrivalDiffMinutes;
 	}
 
-
-
-
 	public static void saveSettings(Context context){
 		saveSettingsToFile(context);
 		AlarmService.updateAllAlarmTimes(context);
 	}
 
 	private static void saveSettingsToFile(Context c) {
-		loadIfNecessary(c);
-
 		//create the file if it doesn't exist
 		try(FileOutputStream fos = c.openFileOutput(SETTINGS_FILE, Context.MODE_APPEND)) {
 			fos.write(("").getBytes());
@@ -78,7 +73,6 @@ public class Settings
 		}
 	}
 
-
 	/**Loads settings if necessary.*/
 	private static void loadIfNecessary(Context context) {
 		if(loaded)
@@ -91,14 +85,15 @@ public class Settings
 				settings = (HashMap<String, Integer>) ois.readObject();
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			throw new RuntimeException(e);
+			//throw new RuntimeException(e);
 		}
 
-		Integer w = settings.get(KEY_WALK);
-		if(w != null)
-			maxWalkMiles = w;
-		Integer a = settings.get(KEY_ARRIVAL_DIFF);
-		if(a != null)
-			arrivalDifferenceMinutes = a;
+		if (settings == null) {
+			maxWalkMiles = 1;
+			arrivalDifferenceMinutes = 0;
+		} else {
+			maxWalkMiles = settings.get(KEY_WALK);
+			arrivalDifferenceMinutes = settings.get(KEY_ARRIVAL_DIFF);
+		}
 	}
 }
