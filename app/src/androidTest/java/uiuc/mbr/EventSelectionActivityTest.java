@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import uiuc.mbr.activities.EventSelectionActivity;
 
+/**TODO expand on this; while the current test is extremely deep and complex, more would be nice*/
 public class EventSelectionActivityTest extends ActivityInstrumentationTestCase2<EventSelectionActivity>{
 
 	public Context ctxt;
