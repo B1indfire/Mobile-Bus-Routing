@@ -37,13 +37,24 @@
 			android:textColor="#FF0000"
 			android:id="@+id/a_onalarm_current_name"
 			android:layout_gravity="center_horizontal"/>
-		<Button
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-			android:text="Shut up!"
-			android:onClick="clickAlarmOffBtn"
-			android:id="@+id/turn_off_alarm_btn"/>
+
+
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:gravity="center_horizontal">
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Shut up!"
+				android:onClick="clickAlarmOffBtn"
+				android:id="@+id/turn_off_alarm_btn"/>
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Shut up and show map!"
+				android:onClick="clickOffAndMapBtn"
+				android:id="@+id/off_and_map_btn"/>
+		</LinearLayout>
+
 	</LinearLayout>
 
 
