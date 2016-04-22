@@ -184,7 +184,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		}
 
 		List<String> directions = d.getDirections();
-		System.out.println(directions);
 		String formatedDirections = "";
 		for (int i = 0; i < directions.size(); i++) {
 			formatedDirections = formatedDirections + "    " + directions.get(i) + "\n";
