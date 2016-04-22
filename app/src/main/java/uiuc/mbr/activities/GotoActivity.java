@@ -105,8 +105,6 @@ public class GotoActivity extends AppCompatActivity
 		@Override
 		public void onItemClick(AdapterView<?> view, View view1, int i, long l)
 		{
-			Log.wtf("chose item", i + " @ " + getItem(i).latitude + ", " + getItem(i).longitude);
-
 			to.setText(getItem(i).name);
 			to.setVisibility(View.VISIBLE);
 			chosenTo = getItem(i);
