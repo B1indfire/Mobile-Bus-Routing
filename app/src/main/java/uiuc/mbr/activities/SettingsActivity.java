@@ -49,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
 		}
 	}
 	public void saveSettings(View v){
+		// User feedback.
 		AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
 		alertDialog.setTitle("Alert");
 		alertDialog.setMessage("Settings saved!");
