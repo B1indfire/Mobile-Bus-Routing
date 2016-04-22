@@ -1,6 +1,8 @@
-package uiuc.mbr.event_selection;
+package uiuc.mbr;
 
 import org.junit.Test;
+
+import uiuc.mbr.event_selection.UserLocation;
 
 import static org.junit.Assert.*;
 
