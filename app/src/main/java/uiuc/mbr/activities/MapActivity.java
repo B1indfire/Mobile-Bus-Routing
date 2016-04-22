@@ -28,7 +28,7 @@ import android.widget.Toast;
 import uiuc.mbr.directions.CumtdApi;
 import uiuc.mbr.directions.Directions;
 import uiuc.mbr.R;
-import uiuc.mbr.events.LocationLookup;
+import uiuc.mbr.event_selection.LocationLookup;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 {

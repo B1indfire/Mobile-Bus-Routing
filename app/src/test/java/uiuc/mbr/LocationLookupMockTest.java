@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.*;
 
-import uiuc.mbr.events.LocationLookup;
+import uiuc.mbr.event_selection.LocationLookup;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

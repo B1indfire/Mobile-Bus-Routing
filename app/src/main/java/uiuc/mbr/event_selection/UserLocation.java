@@ -1,4 +1,4 @@
-package uiuc.mbr.events;
+package uiuc.mbr.event_selection;
 
 import android.support.annotation.Nullable;
 
