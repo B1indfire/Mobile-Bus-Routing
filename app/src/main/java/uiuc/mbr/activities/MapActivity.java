@@ -25,6 +25,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import uiuc.mbr.Settings;
 import uiuc.mbr.directions.CumtdApi;
 import uiuc.mbr.directions.Directions;
 import uiuc.mbr.R;
@@ -162,7 +163,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		CumtdApi api = CumtdApi.create();
 		Directions d;
 		try {
-			int tempW = SettingsActivity.loadMaxWalkFromMemory(getApplicationContext());
+			int tempW = Settings.getMaxWalkTenthsMiles(getApplicationContext());
 			double maxWalk = tempW*.1;
 
 			Log.wtf("MapActivity", "Destination: " + Double.toString(dLatitude) + ", " + Double.toString(dLongitude));
@@ -181,6 +182,26 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 			Toast.makeText(this, "No bus route found.", Toast.LENGTH_LONG).show();
 			return;
 		}
+
+		List<String> directions = d.getDirections();
+		String formatedDirections = "";
+		for (int i = 0; i < directions.size(); i++) {
+			formatedDirections = formatedDirections + "    " + directions.get(i) + "\n";
+		}
+		// User feedback.
+		AlertDialog alertDialog = new AlertDialog.Builder(MapActivity.this)
+				.setTitle("Directions")
+				.setMessage(formatedDirections.substring(0, formatedDirections.length()-1))
+				.create();
+		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+				new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int which)
+					{
+						dialog.dismiss();
+					}
+				});
+		alertDialog.show();
 
 		List<String> list = d.getCoordinates();
 		for (int i = 0; i < list.size(); i++) {

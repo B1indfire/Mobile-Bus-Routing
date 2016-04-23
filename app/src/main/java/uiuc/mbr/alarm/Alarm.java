@@ -14,9 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import uiuc.mbr.Settings;
 import uiuc.mbr.directions.CumtdApi;
 import uiuc.mbr.directions.Directions;
-import uiuc.mbr.activities.SettingsActivity;
 import uiuc.mbr.calendar.Event;
 
 /**A time when the user should be notified, together with a name.*/
@@ -39,7 +39,7 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		//Set arrival time based on min arrival setting
 		Calendar arrivalTime = Calendar.getInstance();
 		arrivalTime.setTime(event.getStart());
-		int offset = SettingsActivity.loadMinArrFromMemory(c);
+		int offset = Settings.getArrivalDiffMinutes(c);
 		arrivalTime.add(Calendar.MINUTE, -1 * offset);
 		Date arrivalTimeAsDate = arrivalTime.getTime();
 
@@ -55,7 +55,7 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		Calendar departTime = Calendar.getInstance();
 		departTime.setTime(arrivalTime);
 
-		int tempW = SettingsActivity.loadMaxWalkFromMemory(c);
+		int tempW = Settings.getMaxWalkTenthsMiles(c);
 		double maxWalk = tempW*.1;
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
