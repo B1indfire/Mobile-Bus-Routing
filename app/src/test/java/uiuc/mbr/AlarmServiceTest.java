@@ -53,7 +53,7 @@ public class AlarmServiceTest {
 	}
 
 	@Test
-	public void testPrimeNumberChecker() {
+	public void testWithinTwoHours() {
 		assertEquals(expectedResult.booleanValue(),
 				AlarmService.within2Hours(alarm1, alarm2));
 	}

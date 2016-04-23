@@ -289,7 +289,11 @@ public class AlarmService extends Service
 	}
 
 
-	public static List<Alarm> getUntriggeredAlarms(){return new ArrayList<>(untriggeredAlarms);}
+	@Nullable public static List<Alarm> getUntriggeredAlarms(){
+		if(untriggeredAlarms !=null)
+			return new ArrayList<>(untriggeredAlarms);
+		else return null;
+	}
 
 	@Nullable public static Alarm getTriggeredAlarm(){return triggeredAlarm;}
 	public static void clearTriggeredAlarm(Context context)

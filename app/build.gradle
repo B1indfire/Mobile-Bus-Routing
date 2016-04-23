@@ -1,40 +1,54 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 23
-	buildToolsVersion "23.0.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
 
-	defaultConfig {
-		applicationId "uiuc.mbr"
-		minSdkVersion 19
-		//can't put up to 23 because then we'd have to deal with runtime permissions
-		targetSdkVersion 22
-		versionCode 1
-		versionName "1.0"
-	}
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-		}
-	}
-	testOptions {
-		unitTests.returnDefaultValues = true
-	}
+    defaultConfig {
+        applicationId "uiuc.mbr"
+        minSdkVersion 19
+        //can't put up to 23 because then we'd have to deal with runtime permissions
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
-	testCompile 'junit:junit:4.12'
-	androidTestCompile 'junit:junit:4.12'
-	testCompile 'org.mockito:mockito-core:1.10.19'
-	testCompile 'org.json:json:20140107'
-	testCompile 'org.powermock:powermock-mockito-release-full:1.6.1'
-	compile 'com.android.support:appcompat-v7:23.2.0'
-	compile 'com.android.support:design:23.2.0'
-	compile 'com.google.android.gms:play-services:8.4.0'
-	compile 'org.json:json:20090211'
-	compile 'com.google.android.gms:play-services-ads:8.4.0'
-	compile 'com.google.android.gms:play-services-identity:8.4.0'
-	compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    testCompile 'junit:junit:4.12'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.json:json:20140107'
+    testCompile 'org.powermock:powermock-mockito-release-full:1.6.1'
+    androidTestCompile 'com.android.support:support-annotations:23.2.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+        exclude module: 'support-annotations'
+        exclude module: 'support-v4'
+        exclude module: 'support-v13'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'org.json:json:20090211'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
 }

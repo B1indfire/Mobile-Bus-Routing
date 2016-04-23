@@ -2,8 +2,10 @@ package uiuc.mbr.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
@@ -50,9 +52,14 @@ public class AddressBookActivity extends AppCompatActivity {
 	 * Loads and displays a scrollable list of Saved Addresses
 	 * Provides buttons for editing and deleting each address
 	 */
+
+
 	private void displayAddressBookList() {
 		LinearLayout my_layout = (LinearLayout) findViewById(R.id.address_book);
 		my_layout.removeAllViews();
+
+		Button addButton = (Button) findViewById(R.id.addAddress);
+		addButton.setOnClickListener(new AddAddressButtonListener(this));
 
 		AddressBook.initIfNecessary(getApplicationContext());
 		List<UserLocation> fullAddressBook = AddressBook.getAll(getApplicationContext());
@@ -97,7 +104,10 @@ public class AddressBookActivity extends AppCompatActivity {
 			my_layout.addView(row);
 			my_layout.addView(editButton);
 			my_layout.addView(delButton);
+
+
 		}
+
 	}
 
 	/**
@@ -195,12 +205,142 @@ public class AddressBookActivity extends AppCompatActivity {
 		@Override
 		public void onClick(View v) {
 			AddressBook.delete(location.name, parent);
-			for(Alarm alarm : AlarmService.getUntriggeredAlarms())
-			{
-				if(location.name.equals(alarm.event.getLocation()))
-					AlarmService.remove(alarm.event.getParentEventId(), getApplicationContext());
+			if(AlarmService.getUntriggeredAlarms()!=null) {
+				for (Alarm alarm : AlarmService.getUntriggeredAlarms()) {
+					if (location.name.equals(alarm.event.getLocation()))
+						AlarmService.remove(alarm.event.getParentEventId(), getApplicationContext());
+				}
 			}
 			displayAddressBookList();
 		}
+
 	}
+
+	/**
+	 * OnClickListener implementation for the Add Address button
+	 */
+	private class AddAddressButtonListener implements View.OnClickListener {
+		private UserLocation location;
+		private Activity parent;
+
+		private String addressInput;
+		private String locInput;
+
+		public AddAddressButtonListener(Activity a) {
+			parent = a;
+		}
+
+		@Override
+		public void onClick(View v) {
+			promptForNewLocation();
+		}
+
+		/**
+		 * Prompts the user for a new location
+		 * Continues to promptForLocAddress if valid string.
+		 */
+		private void promptForNewLocation() {
+			final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+			builder.setTitle("Enter a new location");
+
+			// Set up the input
+			final EditText input = new EditText(parent);
+			input.setInputType(InputType.TYPE_CLASS_TEXT);
+			builder.setView(input);
+
+			locInput = "";
+
+			// Set up the buttons
+			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					locInput = input.getText().toString();
+
+					if (locInput!=null && locInput.length() > 0 && locInput.length()<100) {
+					//Valid location string length
+						if(AddressBook.getByName(locInput, getApplicationContext())==null) {
+						//Valid location string
+							UserLocation temp = new UserLocation(locInput);
+							promptForLocAddress(temp);
+						}
+						else{
+							Toast toast = Toast.makeText(parent, "There's already a saved location with this name!",
+									Toast.LENGTH_SHORT);
+							toast.show();
+						}
+					}
+					else { //Invalid location string
+						if(!(locInput.length()>0)) {
+							Toast toast = Toast.makeText(parent, "You need at least one character",
+									Toast.LENGTH_SHORT);
+							toast.show();
+						}
+						if(locInput.length()>100){
+							Toast toast = Toast.makeText(parent, "Too many characters! You've only got 100.",
+									Toast.LENGTH_SHORT);
+							toast.show();
+						}
+					}
+				}
+			});
+			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+				}
+			});
+
+			parent.runOnUiThread(new Runnable() {
+				public void run() {
+					builder.show();
+				}
+			});
+		}
+
+		/**
+		 * Only called when the user enters a valid string for a new location
+		 */
+		private void promptForLocAddress(UserLocation loc) {
+			final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+			builder.setTitle("Enter a new address");
+
+			// Set up the input
+			final EditText input = new EditText(parent);
+			input.setInputType(InputType.TYPE_CLASS_TEXT);
+			builder.setView(input);
+
+			addressInput = "";
+
+			// Set up the buttons
+			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					addressInput = input.getText().toString();
+					LatLng ll = LocationLookup.lookupLocation(addressInput, getApplicationContext());
+					if (ll != null) { //Valid address
+						location = new UserLocation(locInput, addressInput, ll.latitude, ll.longitude);
+						if (AddressBook.getByName(location.name, getApplicationContext()) == null)
+							AddressBook.create(location, getApplicationContext());
+					} else { //Invalid Address
+						Toast toast = Toast.makeText(parent, "Invalid Address", Toast.LENGTH_SHORT);
+						toast.show();
+					}
+					displayAddressBookList();
+				}
+			});
+			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+				}
+			});
+
+			parent.runOnUiThread(new Runnable() {
+				public void run() {
+					builder.show();
+				}
+			});
+		}
+	}
+
 }
