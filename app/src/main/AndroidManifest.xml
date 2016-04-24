@@ -48,25 +48,25 @@
 		<activity
 			android:name=".activities.MapActivity"
 			android:label="@string/title_activity_map"
-			android:parentActivityName=".activities.StartActivity">
+			android:parentActivityName=".activities.Navigation">
 		</activity>
 
 		<activity
 			android:name=".activities.GetStopsActivity"
 			android:label="GetStops"
 			android:theme="@style/AppTheme.NoActionBar"
-			android:parentActivityName=".activities.StartActivity">
+			android:parentActivityName=".activities.Navigation">
 		</activity>
 
 		<activity
 			android:name=".activities.StopListActivity"
 			android:label="StopList"
 			android:theme="@style/AppTheme.NoActionBar"
-			android:parentActivityName=".activities.StartActivity">
+			android:parentActivityName=".activities.Navigation">
 		</activity>
 
 		<activity android:name=".activities.OnAlarmActivity"
-			android:parentActivityName=".activities.StartActivity">
+			android:parentActivityName=".activities.Alarms">
 		</activity>
 
         <activity android:name=".activities.SettingsActivity"
@@ -75,14 +75,23 @@
 
 		<activity
 			android:name=".activities.EventSelectionActivity"
-			android:parentActivityName=".activities.StartActivity">
+			android:parentActivityName=".activities.Events">
 		</activity>
 		<activity
 			android:name=".activities.CalendarSelectionActivity"
-			android:parentActivityName=".activities.StartActivity">
+			android:parentActivityName=".activities.Events">
 		</activity>
 		<activity
 			android:name=".activities.AddressBookActivity"
+			android:parentActivityName=".activities.Events">
+		</activity>
+		<activity android:name=".activities.Navigation"
+			android:parentActivityName=".activities.StartActivity">
+		</activity>
+		<activity android:name=".activities.Events"
+			android:parentActivityName=".activities.StartActivity">
+		</activity>
+		<activity android:name=".activities.Alarms"
 			android:parentActivityName=".activities.StartActivity">
 		</activity>
 

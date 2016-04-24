@@ -11,8 +11,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Events"
-            android:onClick="clickEventBtn"
+            android:text="View Alarms"
             android:background="@drawable/buttons"
             android:textColor="#f5f5f5"
             android:layout_marginBottom="5dp"
@@ -20,27 +19,14 @@
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:onClick="clickViewAlarmsBtn"
             android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Calendar Blacklist"
-            android:background="@drawable/buttons"
-            android:textColor="#f5f5f5"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:onClick="clickCalendarsBtn" />
 
         <Button
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="Edit Saved Addresses"
+            android:text="Update Location For First Alarm"
             android:background="@drawable/buttons"
             android:textColor="#f5f5f5"
             android:layout_marginBottom="5dp"
@@ -48,9 +34,8 @@
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:layout_gravity="center_horizontal"
-            android:onClick="clickAddressListBtn" />
+            android:onClick="clickUpdateFirst" />
+
     </LinearLayout>
-
-
 
 </LinearLayout>
