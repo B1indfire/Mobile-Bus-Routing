@@ -33,7 +33,7 @@
 		android:text="Navigation"
 		android:background="@drawable/buttons"
 		android:textColor="#f5f5f5"
-		android:layout_marginBottom="5dp"
+		android:layout_marginBottom="10dp"
 		android:layout_marginTop="5dp"
 		android:layout_marginRight="5dp"
 		android:layout_marginLeft="5dp"

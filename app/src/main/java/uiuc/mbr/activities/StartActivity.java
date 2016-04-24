@@ -21,8 +21,6 @@ public class StartActivity extends AppCompatActivity {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-
-
 		AlarmService.loadAlarms(getApplicationContext());
 	}
 
@@ -49,46 +47,17 @@ public class StartActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void clickMapBtn(View v) {
-		startActivity(new Intent(getApplicationContext(), MapActivity.class));
+	public void clickNavigationBtn (View v) {
+		startActivity(new Intent(getApplicationContext(), Navigation.class));
 	}
 
-	public void clickStpBtn(View v) {
-		startActivity(new Intent(getApplicationContext(), GetStopsActivity.class));
+	public void clickEventsBtn (View v) {
+		startActivity(new Intent(getApplicationContext(), Events.class));
+	}
+
+	public void clickAlarmsBtn (View v) {
+		startActivity(new Intent(getApplicationContext(), Alarms.class));
 	}
 
 
-	public void clickViewAlarmsBtn(View v)
-	{
-		startActivity(new Intent(getApplicationContext(), OnAlarmActivity.class));
-	}
-
-	public void clickQuickGotoVtn(View v)
-	{
-		startActivity(new Intent(getApplicationContext(), GotoActivity.class));
-	}
-
-	public void clickEventBtn (View v){
-
-		startActivity(new Intent(getApplicationContext(), EventSelectionActivity.class));
-	}
-
-	public void clickSettingsBtn (View v)
-	{
-		startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-	}
-
-	public void clickCalendarsBtn (View v)
-	{
-		startActivity(new Intent(getApplicationContext(), CalendarSelectionActivity.class));
-	}
-
-	public void clickAddressListBtn (View v)
-	{
-		startActivity(new Intent(getApplicationContext(), AddressBookActivity.class));
-	}
-
-	public void clickUpdateFirst(View view) {
-		AlarmService.updateFirst(this);
-	}
 }

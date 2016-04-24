@@ -44,7 +44,7 @@ public class EventSelectionActivity extends AppCompatActivity implements AddEven
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_events);
+		setContentView(R.layout.activity_events_list);
 
 		calService = new CalendarService(getApplicationContext());
 		ListView list = (ListView)findViewById(R.id.a_events_list);
