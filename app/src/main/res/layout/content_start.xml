@@ -39,8 +39,7 @@
 		android:layout_marginLeft="5dp"
 		android:layout_below="@+id/icon"
 		android:layout_centerHorizontal="true"
-		android:onClick="clickNavigationBtn"
-		android:paddingBottom="10dp"/>
+		android:onClick="clickNavigationBtn"/>
 
 	<Button
 		style="?android:attr/buttonStyleSmall"
@@ -50,14 +49,13 @@
 		android:text="Events"
 		android:background="@drawable/buttons"
 		android:textColor="#f5f5f5"
-		android:layout_marginBottom="5dp"
+		android:layout_marginBottom="10dp"
 		android:layout_marginTop="5dp"
 		android:layout_marginRight="5dp"
 		android:layout_marginLeft="5dp"
 		android:layout_below="@+id/navigation_button"
 		android:layout_centerHorizontal="true"
-		android:onClick="clickEventsBtn"
-		android:paddingBottom="10dp"/>
+		android:onClick="clickEventsBtn"/>
 
 	<Button
 		style="?android:attr/buttonStyleSmall"
@@ -67,13 +65,12 @@
 		android:text="Alarms"
 		android:background="@drawable/buttons"
 		android:textColor="#f5f5f5"
-		android:layout_marginBottom="5dp"
+		android:layout_marginBottom="10dp"
 		android:layout_marginTop="5dp"
 		android:layout_marginRight="5dp"
 		android:layout_marginLeft="5dp"
 		android:layout_below="@+id/event_button"
 		android:layout_centerHorizontal="true"
-		android:onClick="clickAlarmsBtn"
-		android:paddingBottom="10dp"/>
+		android:onClick="clickAlarmsBtn"/>
 
 </RelativeLayout>

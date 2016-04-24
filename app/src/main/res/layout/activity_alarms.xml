@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    android:gravity="center_horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/view_alarms_button"
+        android:text="View Alarms"
+        android:background="@drawable/buttons"
+        android:textColor="#f5f5f5"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:onClick="clickViewAlarmsBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View Alarms"
-            android:background="@drawable/buttons"
-            android:textColor="#f5f5f5"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:onClick="clickViewAlarmsBtn"
-            android:layout_gravity="center_horizontal" />
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/update_button"
+        android:text="Update Location For First Alarm"
+        android:layout_below="@id/view_alarms_button"
+        android:background="@drawable/buttons"
+        android:textColor="#f5f5f5"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:onClick="clickUpdateFirst"
+        android:layout_centerHorizontal="true"/>
 
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="Update Location For First Alarm"
-            android:background="@drawable/buttons"
-            android:textColor="#f5f5f5"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_gravity="center_horizontal"
-            android:onClick="clickUpdateFirst" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

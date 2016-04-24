@@ -3,7 +3,8 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:weightSum="1.0" >
+	android:weightSum="1.0"
+	android:background="@drawable/back">
 
 	<TextView
 		android:layout_width="wrap_content"
@@ -69,7 +70,10 @@
 		android:id="@+id/saveSettings"
 		android:layout_gravity="bottom|center_horizontal"
 		android:layout_weight="0.06"
-		android:onClick="saveSettings" />
+		android:onClick="saveSettings"
+		android:background="@drawable/buttons"
+		android:textColor="#f5f5f5"
+		android:layout_margin="5dp"/>
 
 	<TextView
 		android:layout_width="wrap_content"
