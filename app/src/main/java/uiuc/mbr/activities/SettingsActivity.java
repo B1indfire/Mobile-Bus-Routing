@@ -1,11 +1,10 @@
 package uiuc.mbr.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import uiuc.mbr.R;
 import uiuc.mbr.Settings;
@@ -42,19 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
 		Settings.setArrivalDiffMinutesTemporarily(minArrBar.getValue(), getApplicationContext());
 		Settings.saveSettings(getApplicationContext());
 
-		// User feedback.
-		AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this)
-				.setTitle("Alert")
-				.setMessage("Settings saved!")
-				.create();
-		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-				new DialogInterface.OnClickListener()
-				{
-					public void onClick(DialogInterface dialog, int which)
-					{
-						dialog.dismiss();
-					}
-				});
-		alertDialog.show();
+		Toast.makeText(this, "Settings saved", Toast.LENGTH_LONG).show();
+		finish();
 	}
 }
