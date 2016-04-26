@@ -12,7 +12,7 @@ import android.view.View;
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
 
-public class Events extends AppCompatActivity {
+public class EventsMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

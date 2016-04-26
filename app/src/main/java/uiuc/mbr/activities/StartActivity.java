@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
@@ -48,15 +47,15 @@ public class StartActivity extends AppCompatActivity {
 	}
 
 	public void clickNavigationBtn (View v) {
-		startActivity(new Intent(getApplicationContext(), Navigation.class));
+		startActivity(new Intent(getApplicationContext(), NavigationMenuActivity.class));
 	}
 
 	public void clickEventsBtn (View v) {
-		startActivity(new Intent(getApplicationContext(), Events.class));
+		startActivity(new Intent(getApplicationContext(), EventsMenuActivity.class));
 	}
 
 	public void clickAlarmsBtn (View v) {
-		startActivity(new Intent(getApplicationContext(), Alarms.class));
+		startActivity(new Intent(getApplicationContext(), AlarmsMenuActivity.class));
 	}
 
 

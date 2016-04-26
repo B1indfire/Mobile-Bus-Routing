@@ -12,7 +12,7 @@ import android.view.View;
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
 
-public class Alarms  extends AppCompatActivity {
+public class AlarmsMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
