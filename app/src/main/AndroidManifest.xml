@@ -48,25 +48,25 @@
 		<activity
 			android:name=".activities.MapActivity"
 			android:label="@string/title_activity_map"
-			android:parentActivityName=".activities.Navigation">
+			android:parentActivityName=".activities.NavigationMenuActivity">
 		</activity>
 
 		<activity
 			android:name=".activities.GetStopsActivity"
 			android:label="GetStops"
 			android:theme="@style/AppTheme.NoActionBar"
-			android:parentActivityName=".activities.Navigation">
+			android:parentActivityName=".activities.NavigationMenuActivity">
 		</activity>
 
 		<activity
 			android:name=".activities.StopListActivity"
 			android:label="StopList"
 			android:theme="@style/AppTheme.NoActionBar"
-			android:parentActivityName=".activities.Navigation">
+			android:parentActivityName=".activities.NavigationMenuActivity">
 		</activity>
 
 		<activity android:name=".activities.OnAlarmActivity"
-			android:parentActivityName=".activities.Alarms">
+			android:parentActivityName=".activities.AlarmsMenuActivity">
 		</activity>
 
         <activity android:name=".activities.SettingsActivity"
@@ -75,23 +75,23 @@
 
 		<activity
 			android:name=".activities.EventSelectionActivity"
-			android:parentActivityName=".activities.Events">
+			android:parentActivityName=".activities.EventsMenuActivity">
 		</activity>
 		<activity
 			android:name=".activities.CalendarSelectionActivity"
-			android:parentActivityName=".activities.Events">
+			android:parentActivityName=".activities.EventsMenuActivity">
 		</activity>
 		<activity
 			android:name=".activities.AddressBookActivity"
-			android:parentActivityName=".activities.Events">
+			android:parentActivityName=".activities.EventsMenuActivity">
 		</activity>
-		<activity android:name=".activities.Navigation"
+		<activity android:name=".activities.NavigationMenuActivity"
 			android:parentActivityName=".activities.StartActivity">
 		</activity>
-		<activity android:name=".activities.Events"
+		<activity android:name=".activities.EventsMenuActivity"
 			android:parentActivityName=".activities.StartActivity">
 		</activity>
-		<activity android:name=".activities.Alarms"
+		<activity android:name=".activities.AlarmsMenuActivity"
 			android:parentActivityName=".activities.StartActivity">
 		</activity>
 
@@ -105,8 +105,7 @@
 
 		<service android:name=".alarm.AlarmService"/>
 
-		<activity android:name=".activities.GotoActivity">
-		</activity>
+		<activity android:name=".activities.GotoActivity"/>
 	</application>
 
 </manifest>
