@@ -22,7 +22,9 @@ import java.util.Locale;
 import android.graphics.Color;
 import android.text.InputType;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import uiuc.mbr.Settings;
@@ -183,25 +185,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 			return;
 		}
 
-		List<String> directions = d.getDirections();
-		String formatedDirections = "";
-		for (int i = 0; i < directions.size(); i++) {
-			formatedDirections = formatedDirections + "    " + directions.get(i) + "\n";
-		}
-		// User feedback.
-		AlertDialog alertDialog = new AlertDialog.Builder(MapActivity.this)
-				.setTitle("Directions")
-				.setMessage(formatedDirections.substring(0, formatedDirections.length()-1))
-				.create();
-		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-				new DialogInterface.OnClickListener()
-				{
-					public void onClick(DialogInterface dialog, int which)
-					{
-						dialog.dismiss();
-					}
-				});
-		alertDialog.show();
+		ListView lv = (ListView) findViewById(R.id.listView);
+		ArrayAdapter<String> adapter=new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, d.getDirections());
+		lv.setAdapter(adapter);
 
 		List<String> list = d.getCoordinates();
 		for (int i = 0; i < list.size(); i++) {
