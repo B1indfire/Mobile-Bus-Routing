@@ -29,7 +29,6 @@ import uiuc.mbr.ui.RemoveRecurringEventDialog;
  * Activity where the User can select from a list of upcoming Events and choose which to add to the Schedule
  * If an Event has an invalid address, they will be prompted for a valid address
  * If they supply a valid address, the address will be saved to the device memory
- * XXX db stuff in UI thread
  */
 
 public class EventSelectionActivity extends AppCompatActivity implements AddEventDialog.CloseListener

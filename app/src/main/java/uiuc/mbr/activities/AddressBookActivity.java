@@ -55,8 +55,8 @@ public class AddressBookActivity extends AppCompatActivity {
 
 
 	private void displayAddressBookList() {
-		LinearLayout my_layout = (LinearLayout) findViewById(R.id.address_book);
-		my_layout.removeAllViews();
+		LinearLayout myLayout = (LinearLayout) findViewById(R.id.address_book);
+		myLayout.removeAllViews();
 
 		Button addButton = (Button) findViewById(R.id.addAddress);
 		addButton.setOnClickListener(new AddAddressButtonListener(this));
@@ -66,7 +66,7 @@ public class AddressBookActivity extends AppCompatActivity {
 		if(fullAddressBook == null) {
 			TextView tv = new TextView(this);
 			tv.setText("No addresses found.");
-			my_layout.addView(tv);
+			myLayout.addView(tv);
 			return;
 		}
 		//From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
@@ -101,9 +101,9 @@ public class AddressBookActivity extends AppCompatActivity {
 			delButton.setOnClickListener(new DeleteButtonListener(current, this));
 			//row.addView(delButton, new TableRow.LayoutParams(2));
 
-			my_layout.addView(row);
-			my_layout.addView(editButton);
-			my_layout.addView(delButton);
+			myLayout.addView(row);
+			myLayout.addView(editButton);
+			myLayout.addView(delButton);
 
 
 		}

@@ -46,8 +46,8 @@ public class GotoActivity extends AppCompatActivity
 		stepRouting = findViewById(R.id.a_goto_step_routing);
 		to = (TextView)findViewById(R.id.a_goto_to);
 
-		AddressBook.initIfNecessary(getApplicationContext());//XXX db stuff on UI thread
-		locations = AddressBook.getAll(getApplicationContext());//XXX db stuff on UI thread
+		AddressBook.initIfNecessary(getApplicationContext());
+		locations = AddressBook.getAll(getApplicationContext());
 		Collections.sort(locations);
 
 		progress.setVisibility(View.GONE);
