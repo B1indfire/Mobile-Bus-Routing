@@ -15,13 +15,14 @@ import uiuc.mbr.alarm.AlarmService;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class AlarmServiceTest {
+public class AlarmServiceParameterizedTest
+{
 
 	private Alarm alarm1;
 	private Alarm alarm2;
 	private Boolean expectedResult;
 
-	public AlarmServiceTest(Alarm a1, Alarm a2, Boolean expected) {
+	public AlarmServiceParameterizedTest(Alarm a1, Alarm a2, Boolean expected) {
 		this.alarm1 = a1;
 		this.alarm2 = a2;
 		this.expectedResult = expected;
