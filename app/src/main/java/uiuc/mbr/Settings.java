@@ -17,7 +17,7 @@ public class Settings
 	private static final String KEY_WALK = "maxWalk", KEY_ARRIVAL_DIFF = "minArr";
 	private static final String SETTINGS_FILE = "saved_settings";
 
-	private static int maxWalkMiles = 1, arrivalDifferenceMinutes = 0;
+	private static int maxWalkMiles = 3, arrivalDifferenceMinutes = 0;
 	private static boolean loaded = false;
 
 
@@ -89,7 +89,7 @@ public class Settings
 		}
 
 		if (settings == null) {
-			maxWalkMiles = 1;
+			maxWalkMiles = 3;
 			arrivalDifferenceMinutes = 0;
 		} else {
 			maxWalkMiles = settings.get(KEY_WALK);

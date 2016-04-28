@@ -158,9 +158,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 
-		LatLng debugPos = new LatLng(0, 0);
-		userLocationMarker = map.addMarker(new MarkerOptions().position(debugPos).title("You are here."));
-
 		int[] colors = {Color.RED, Color.GREEN, Color.BLUE};
 		CumtdApi api = CumtdApi.create();
 		Directions d;
@@ -207,7 +204,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		}
 
 		map.moveCamera(CameraUpdateFactory.zoomTo(14));
-		map.moveCamera(CameraUpdateFactory.newLatLng(debugPos)); //TODO: Switch to actual LatLng
 
 		googleClient = new GoogleApiClient.Builder(getApplicationContext())
 				.addApi(LocationServices.API)
