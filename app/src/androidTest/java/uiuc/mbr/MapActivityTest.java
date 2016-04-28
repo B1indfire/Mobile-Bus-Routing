@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng;
 import org.junit.Test;
 import uiuc.mbr.activities.MapActivity;
 
-/**TODO flaky test (ActivityExists always passes, MarkerExists always fails, MarkerLocation inconsistent)*/
 public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivity>
 {
 	private static final LatLng testLocation = new LatLng(40.115009, -88.289264);//Clear Lake
@@ -23,14 +22,9 @@ public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivit
 
 	@Test
 	public void testActivityExists() {
-		MapActivity activity = getActivity();
-		assertNotNull(activity);
-	}
-
-	@Test
-	public void testMarkerExists() {
-		assertNotNull(getActivity().userLocationMarker);
-	}
+        MapActivity activity = getActivity();
+        assertNotNull(activity);
+    }
 
 	@Test
 	public void testMarkerLocation() {
@@ -44,6 +38,7 @@ public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivit
 				loc.setLatitude(testLocation.latitude);
 				loc.setLongitude(testLocation.longitude);
 				activity.locationHandler.onLocationChanged(loc);
+                assertNotNull(activity.userLocationMarker);
 				assertEquals(testLocation, activity.userLocationMarker.getPosition());
 			}
 		});
