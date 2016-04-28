@@ -21,7 +21,7 @@ public class Settings
 	private static boolean loaded = false;
 
 
-	/**Returns how far the user is willing to walk, in tenths of a mile.*/
+	/**Returns how far the user is willing to walk, in tenths of miles.*/
 	public static int getMaxWalkTenthsMiles(Context c) {
 		loadIfNecessary(c);
 		return maxWalkMiles;
