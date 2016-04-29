@@ -1,0 +1,11 @@
+1. Verify Home Screen Buttons
+	1. Open the MBR App
+	2. Click on Navigation
+	3. Verify that a screen with 3 buttons: "Map it Up", "Get Stop", "Quick Go To", is displayed
+	4. Go back to start page
+	5. Click on Events
+	6. Verify that a screen with 3 buttons: "Events", "Calendar Blacklist", "Edit Saved Addresses", is displayed
+	7. Go back to start page
+	8. Click on Alarms
+	9. Verify that a screen with 2 buttons: "View Alarms", "Update Location for First Alarm", is displayed
+
