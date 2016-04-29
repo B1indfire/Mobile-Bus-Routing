@@ -84,8 +84,10 @@ public class AddressBookActivity extends AppCompatActivity {
 			tv.setText(baseAddress + " -> " + current.address + " @ " + current.latitude + ", " + current.longitude);
 			row.addView(tv, new TableRow.LayoutParams(0));
 
+
 			//TODO: Improve button layout
 			Button editButton = new Button(this);
+			editButton.setId(i*100);
 			editButton.setText("Edit");
 			editButton.setMinHeight(50);
 			editButton.setMinWidth(50);
@@ -94,6 +96,7 @@ public class AddressBookActivity extends AppCompatActivity {
 			//row.addView(editButton, new TableRow.LayoutParams(1));
 
 			Button delButton = new Button(this);
+			editButton.setId((i*100)+1);
 			delButton.setText("Delete");
 			delButton.setMinHeight(50);
 			delButton.setMinWidth(50);
