@@ -1,7 +1,5 @@
 package uiuc.mbr;
 
-
-
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
@@ -14,8 +12,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uiuc.mbr.activities.StartActivity;
-import uiuc.mbr.event_selection.AddressBook;
+import uiuc.mbr.activities.EventsMenuActivity;
+
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -35,22 +33,21 @@ import static org.hamcrest.Matchers.endsWith;
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class HomeScreenTest {
+public class EventsScreenTest {
 
     @Rule
-    public ActivityTestRule<StartActivity> mActivityRule = new ActivityTestRule<>(StartActivity.class);
+    public ActivityTestRule<EventsMenuActivity> mActivityRule = new ActivityTestRule<>(EventsMenuActivity.class);
 
     @Test
     public void testButton() {
 
-        Espresso.onView(withId(R.id.event_button)).check(matches(isDisplayed()));
-        Espresso.onView(withId(R.id.event_button)).check(matches(isClickable()));
+        Espresso.onView(withId(R.id.blacklist_button)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.blacklist_button)).check(matches(isClickable()));
 
-        Espresso.onView(withId(R.id.navigation_button)).check(matches(isDisplayed()));
-        Espresso.onView(withId(R.id.navigation_button)).check(matches(isClickable()));
+        Espresso.onView(withId(R.id.events_button)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.events_button)).check(matches(isClickable()));
 
-        Espresso.onView(withId(R.id.alarm_button)).check(matches(isDisplayed()));
-        Espresso.onView(withId(R.id.alarm_button)).check(matches(isClickable()));
+        Espresso.onView(withId(R.id.edit_button)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.edit_button)).check(matches(isClickable()));
     }
 }
-
