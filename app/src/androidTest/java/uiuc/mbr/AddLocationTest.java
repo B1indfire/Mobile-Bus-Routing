@@ -41,7 +41,10 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.hasToString;
 
-
+/**
+ * This test suite requires the tester to start with an empty addressBook since the Delete buttons
+ * are not unique and cannot be easily chosen by espresso.
+ */
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class AddLocationTest {
@@ -95,31 +98,5 @@ public class AddLocationTest {
         //cleanup
         onView(allOf(withText("Delete"))).perform(click());
     }
-
-    /**
-     * Test adding of two different name/address pairs.
-     */
-    /*@Test
-    public void testAddTwoLocations(){
-        //add first one
-        onView(withId(R.id.addAddress)).perform(click());
-        onView(allOf(withClassName(endsWith("EditText")), withText(is("")))).perform(replaceText(string1));
-        onView(withText("OK")).perform(click());
-        onView(allOf(withClassName(endsWith("EditText")), withText(is("")))).perform(replaceText(address1));
-        onView(withText("OK")).perform(click());
-        Assert.assertNotNull(AddressBook.getByName(string1, InstrumentationRegistry.getTargetContext()));
-
-        onView(withId(R.id.addAddress)).perform(click());
-        onView(allOf(withClassName(endsWith("EditText")), withText(is("")))).perform(replaceText(string2));
-        onView(withText("OK")).perform(click());
-        onView(allOf(withClassName(endsWith("EditText")), withText(is("")))).perform(replaceText(address2));
-        onView(withText("OK")).perform(click());
-        Assert.assertNotNull(AddressBook.getByName(string2, InstrumentationRegistry.getTargetContext()));
-
-        //cleanup
-        //onData(anything()).inAdapterView(withId(R.id.address_book)).atPosition(3).perform(click());
-        //onData(hasToString(startsWith("Delete"))).inAdapterView(withId(R.id.address_book)).atPosition(0).perform(click());
-
-    }*/
 
 }

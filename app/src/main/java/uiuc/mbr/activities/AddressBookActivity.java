@@ -82,7 +82,7 @@ public class AddressBookActivity extends AppCompatActivity {
 
 			//TODO: Improve button layout
 			Button editButton = new Button(this);
-			editButton.setId(i*100);
+			//editButton.setId(i*100);
 			editButton.setText("Edit");
 			editButton.setMinHeight(50);
 			editButton.setMinWidth(50);
