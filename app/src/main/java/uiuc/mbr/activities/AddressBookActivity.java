@@ -31,8 +31,6 @@ import uiuc.mbr.alarm.AlarmService;
 /**
  * Displays a list of all addresses inputted into the AddressBook
  * Allows the user to edit or delete any entry
- *
- * Created by Scott on 3/10/2016.
  */
 public class AddressBookActivity extends AppCompatActivity {
 
@@ -52,8 +50,6 @@ public class AddressBookActivity extends AppCompatActivity {
 	 * Loads and displays a scrollable list of Saved Addresses
 	 * Provides buttons for editing and deleting each address
 	 */
-
-
 	private void displayAddressBookList() {
 		LinearLayout myLayout = (LinearLayout) findViewById(R.id.address_book);
 		myLayout.removeAllViews();
@@ -63,27 +59,26 @@ public class AddressBookActivity extends AppCompatActivity {
 
 		AddressBook.initIfNecessary(getApplicationContext());
 		List<UserLocation> fullAddressBook = AddressBook.getAll(getApplicationContext());
-		if(fullAddressBook == null) {
+		if(fullAddressBook == null || fullAddressBook.size() == 0) {
 			TextView tv = new TextView(this);
 			tv.setText("No addresses found.");
 			myLayout.addView(tv);
 			return;
 		}
+
 		//From: http://stackoverflow.com/questions/13226353/android-checkbox-dynamically
 		for (int i = 0; i < fullAddressBook.size(); i++) {
-			UserLocation current = fullAddressBook.get(i);
-			if(current.address == null || current.address.length() == 0)
-				continue;
-			String baseAddress = current.name;
+			UserLocation curUserLoc = fullAddressBook.get(i);
 
 			TableRow row = new TableRow(this);
 			row.setId(i);
 			row.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
 
 			TextView tv = new TextView(this);
-			tv.setText(baseAddress + " -> " + current.address + " @ " + current.latitude + ", " + current.longitude);
+			String baseAddress = curUserLoc.name;
+			String mapAddress = (curUserLoc.address == null) ? "" : curUserLoc.address;
+			tv.setText(baseAddress + " -> " + mapAddress + " @ " + curUserLoc.latitude + ", " + curUserLoc.longitude);
 			row.addView(tv, new TableRow.LayoutParams(0));
-
 
 			//TODO: Improve button layout
 			Button editButton = new Button(this);
@@ -92,8 +87,7 @@ public class AddressBookActivity extends AppCompatActivity {
 			editButton.setMinHeight(50);
 			editButton.setMinWidth(50);
 			editButton.setVisibility(View.VISIBLE);
-			editButton.setOnClickListener(new EditButtonListener(current, this));
-			//row.addView(editButton, new TableRow.LayoutParams(1));
+			editButton.setOnClickListener(new EditButtonListener(curUserLoc, this));
 
 			Button delButton = new Button(this);
 			editButton.setId((i*100)+1);
@@ -101,16 +95,12 @@ public class AddressBookActivity extends AppCompatActivity {
 			delButton.setMinHeight(50);
 			delButton.setMinWidth(50);
 			delButton.setVisibility(View.VISIBLE);
-			delButton.setOnClickListener(new DeleteButtonListener(current, this));
-			//row.addView(delButton, new TableRow.LayoutParams(2));
+			delButton.setOnClickListener(new DeleteButtonListener(curUserLoc, this));
 
 			myLayout.addView(row);
 			myLayout.addView(editButton);
 			myLayout.addView(delButton);
-
-
 		}
-
 	}
 
 	/**
@@ -259,30 +249,20 @@ public class AddressBookActivity extends AppCompatActivity {
 				public void onClick(DialogInterface dialog, int which) {
 					locInput = input.getText().toString();
 
-					if (locInput!=null && locInput.length() > 0 && locInput.length()<100) {
-					//Valid location string length
-						if(AddressBook.getByName(locInput, getApplicationContext())==null) {
-						//Valid location string
+					if (locInput!=null && locInput.length() > 0 && locInput.length()<100) { //Valid location string length
+						if(AddressBook.getByName(locInput, getApplicationContext())==null) { //Valid location string
 							UserLocation temp = new UserLocation(locInput);
 							promptForLocAddress(temp);
 						}
-						else{
-							Toast toast = Toast.makeText(parent, "There's already a saved location with this name!",
-									Toast.LENGTH_SHORT);
-							toast.show();
+						else {
+							Toast.makeText(parent, "There's already a saved location with this name!", Toast.LENGTH_SHORT).show();
 						}
 					}
 					else { //Invalid location string
-						if(!(locInput.length()>0)) {
-							Toast toast = Toast.makeText(parent, "You need at least one character",
-									Toast.LENGTH_SHORT);
-							toast.show();
-						}
-						if(locInput.length()>100){
-							Toast toast = Toast.makeText(parent, "Too many characters! You've only got 100.",
-									Toast.LENGTH_SHORT);
-							toast.show();
-						}
+						if(!(locInput.length()>0))
+							Toast.makeText(parent, "You need at least one character", Toast.LENGTH_SHORT).show();
+						if(locInput.length()>100)
+							Toast.makeText(parent, "Too many characters! You've only got 100.", Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
@@ -302,6 +282,7 @@ public class AddressBookActivity extends AppCompatActivity {
 
 		/**
 		 * Only called when the user enters a valid string for a new location
+		 * Prompts the user for a valid address string to map their location name to
 		 */
 		private void promptForLocAddress(UserLocation loc) {
 			final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
@@ -324,9 +305,10 @@ public class AddressBookActivity extends AppCompatActivity {
 						location = new UserLocation(locInput, addressInput, ll.latitude, ll.longitude);
 						if (AddressBook.getByName(location.name, getApplicationContext()) == null)
 							AddressBook.create(location, getApplicationContext());
+						else
+							AddressBook.update(location, getApplicationContext());
 					} else { //Invalid Address
-						Toast toast = Toast.makeText(parent, "Invalid Address", Toast.LENGTH_SHORT);
-						toast.show();
+						Toast.makeText(parent, "Invalid Address", Toast.LENGTH_SHORT).show();
 					}
 					displayAddressBookList();
 				}
