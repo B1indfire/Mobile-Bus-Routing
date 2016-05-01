@@ -78,9 +78,7 @@ public class AddressBookActivity extends AppCompatActivity {
 			tv.setText(baseAddress + " -> " + mapAddress + " @ " + curUserLoc.latitude + ", " + curUserLoc.longitude);
 			row.addView(tv, new TableRow.LayoutParams(0));
 
-			//TODO: Improve button layout
 			Button editButton = new Button(this);
-			//editButton.setId(i*100);
 			editButton.setText("Edit");
 			editButton.setMinHeight(50);
 			editButton.setMinWidth(50);
@@ -88,7 +86,6 @@ public class AddressBookActivity extends AppCompatActivity {
 			editButton.setOnClickListener(new EditButtonListener(curUserLoc, this));
 
 			Button delButton = new Button(this);
-			editButton.setId((i*100)+1);
 			delButton.setText("Delete");
 			delButton.setMinHeight(50);
 			delButton.setMinWidth(50);

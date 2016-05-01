@@ -37,7 +37,6 @@ import uiuc.mbr.R;
 		setSupportActionBar(toolbar);
 
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		//TODO what does this code do and why do we have it?
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 			return;
 		}
