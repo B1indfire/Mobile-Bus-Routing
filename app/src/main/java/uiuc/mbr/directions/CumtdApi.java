@@ -23,7 +23,7 @@ public class CumtdApi {
 
 	/**
 	 * This method takes parameter name and parameter as a parameter and generates a URL to be
-	 * passed on to the offical CUMTD API and retrieved a JSONObject from it.
+	 * passed on to the official CUMTD API and retrieved a JSONObject from it.
 	 */
 	private JSONObject getFromApi(String name, String parameterName, String parameter) throws IOException, org.json.JSONException{
 		String url = this.url + "/" + name + "?key=" + key + "&" + parameterName + "=" + parameter;
@@ -32,7 +32,7 @@ public class CumtdApi {
 
 	/**
 	 * This method takes parameter names and parameters as a parameter and generates a URL to be
-	 * passed on to the offical CUMTD API and retrieved a JSONObject from it.
+	 * passed on to the official CUMTD API and retrieved a JSONObject from it.
 	 */
 	private JSONObject getFromApi(String name, String parameterName1, String parameter1, String parameterName2, String parameter2) throws IOException, org.json.JSONException{
 		String url = this.url + "/" + name + "?key=" + key + "&" + parameterName1 + "=" + parameter1 + "&" + parameterName2 + "=" + parameter2;
@@ -41,7 +41,7 @@ public class CumtdApi {
 
 	/**
 	 * This method takes parameter names and parameters as a parameter and generates a URL to be
-	 * passed on to the offical CUMTD API and retrieved a JSONObject from it.
+	 * passed on to the official CUMTD API and retrieved a JSONObject from it.
 	 */
 	private JSONObject getFromApi(String name, String parameterName1, String parameter1, String parameterName2, String parameter2, String parameterName3, String parameter3) throws IOException, org.json.JSONException{
 		String url = this.url + "/" + name + "?key=" + key + "&" + parameterName1 + "=" + parameter1 + "&" + parameterName2 + "=" + parameter2 + "&" + parameterName3 + "=" + parameter3;
@@ -203,8 +203,7 @@ public class CumtdApi {
 
 	/**
 	 * This method takes the following parameters in order to generate a directions object,
-	 * containing a list of coordinates to follow, as well as the list of string directions, as
-	 * well as the expected duration of the travel.
+	 * which contains a list of coordinates, a list of directions, and the expected duration of the travel.
 	 */
 	public Directions getTripArriveBy(String originLat, String originLon, String destinationLat,
 									  String destinationLon, String date, String time,
