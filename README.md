@@ -16,7 +16,7 @@ Then run this configuration using the "Run" button on the main screen, as before
 
 
 ##Installing and Running the App Without Android Studio
-MBR can run on any Android device that's running version Lollipop or later.
+MBR can run on any Android device that's running version Lollipop or later. Your Android phone should also have installing from Unknown sources settings enabled.
 To run MBR, get the MBR.apk file onto your Android device, then click on it using any file explorer app and choose the "install" option.
 MBR can then be launched at any time by clicking on the MBR icon in the "all apps" screen.
 As with any app, you can click and drag MBR onto your home screen, which is useful since we're sure you'll want to start it quite often.
