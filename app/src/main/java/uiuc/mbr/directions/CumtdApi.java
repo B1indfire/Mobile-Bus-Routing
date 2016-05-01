@@ -131,7 +131,7 @@ public class CumtdApi {
 		for (int i = 0; i < array.length(); i++) {
 			String headsign = (String) array.getJSONObject(i).get("headsign");
 			String expected = (String) array.getJSONObject(i).get("expected");
-			list.add(expected + ":" + headsign);
+			list.add(expected.substring(11, 16) + " - " + headsign);
 		}
 		return list;
 	}
