@@ -5,8 +5,7 @@ import java.net.*;
 import java.util.*;
 import org.json.*;
 
-/**Gets data from the CUMTD API.*/
-/**
+/**Gets data from the CUMTD API.
  * This class interacts with the offical API provided by CUMTD in order to retrieve data and process
  * it for MBR application.
  */
@@ -25,12 +24,6 @@ public class CumtdApi {
 	/**
 	 * This method takes parameter name and parameter as a parameter and generates a URL to be
 	 * passed on to the offical CUMTD API and retrieved a JSONObject from it.
-	 * @param name
-	 * @param parameterName
-	 * @param parameter
-	 * @return
-	 * @throws IOException
-	 * @throws org.json.JSONException
 	 */
 	private JSONObject getFromApi(String name, String parameterName, String parameter) throws IOException, org.json.JSONException{
 		String url = this.url + "/" + name + "?key=" + key + "&" + parameterName + "=" + parameter;
@@ -40,14 +33,6 @@ public class CumtdApi {
 	/**
 	 * This method takes parameter names and parameters as a parameter and generates a URL to be
 	 * passed on to the offical CUMTD API and retrieved a JSONObject from it.
-	 * @param name
-	 * @param parameterName1
-	 * @param parameter1
-	 * @param parameterName2
-	 * @param parameter2
-	 * @return
-	 * @throws IOException
-	 * @throws org.json.JSONException
 	 */
 	private JSONObject getFromApi(String name, String parameterName1, String parameter1, String parameterName2, String parameter2) throws IOException, org.json.JSONException{
 		String url = this.url + "/" + name + "?key=" + key + "&" + parameterName1 + "=" + parameter1 + "&" + parameterName2 + "=" + parameter2;
@@ -57,16 +42,6 @@ public class CumtdApi {
 	/**
 	 * This method takes parameter names and parameters as a parameter and generates a URL to be
 	 * passed on to the offical CUMTD API and retrieved a JSONObject from it.
-	 * @param name
-	 * @param parameterName1
-	 * @param parameter1
-	 * @param parameterName2
-	 * @param parameter2
-	 * @param parameterName3
-	 * @param parameter3
-	 * @return
-	 * @throws IOException
-	 * @throws org.json.JSONException
 	 */
 	private JSONObject getFromApi(String name, String parameterName1, String parameter1, String parameterName2, String parameter2, String parameterName3, String parameter3) throws IOException, org.json.JSONException{
 		String url = this.url + "/" + name + "?key=" + key + "&" + parameterName1 + "=" + parameter1 + "&" + parameterName2 + "=" + parameter2 + "&" + parameterName3 + "=" + parameter3;
@@ -74,11 +49,7 @@ public class CumtdApi {
 	}
 
 	/**
-	 * This method takes the url as a parameter and reads the returned data and return it as a
-	 * String.
-	 * @param s
-	 * @return
-	 * @throws IOException
+	 * This method takes the url as a parameter and reads the returned data and return it as a String.
 	 */
 	private String readFromUrl(String s) throws IOException {
 		Scanner scanner = new Scanner(new URL(s.replace(" ", "%20")).openStream(), "UTF-8");
@@ -91,21 +62,14 @@ public class CumtdApi {
 	/**
 	 * This method takes a string as a parameter and returns a JSONObject from the string.
 	 * This method will fail if the string is not in a JSON format.
-	 * @param s
-	 * @return
-	 * @throws org.json.JSONException
 	 */
-	private JSONObject jsonFromString(String s) throws org.json.JSONException {
+	private JSONObject jsonFromString(String s) throws JSONException {
 		return new JSONObject(s);
 	}
 
 	/**
 	 * This method takes a stopId and return a JSONObject representing the list of upcoming
 	 * departures that will happen at that specific stop.
-	 * @param stopId
-	 * @return
-	 * @throws IOException
-	 * @throws org.json.JSONException
 	 */
 	public JSONObject getDeparturesByStop(String stopId) throws IOException, org.json.JSONException{
 		return getFromApi("GetDeparturesByStop", "stop_id", stopId);
@@ -115,12 +79,6 @@ public class CumtdApi {
 	 * This method takes the beginning and end stopId and the shapeId, and uses this to to return
 	 * a JSONObject containing the part of the shape between the two stopIds. This is used to draw
 	 * the appropriate path on the map.
-	 * @param beginStopId
-	 * @param endStopId
-	 * @param shapeId
-	 * @return
-	 * @throws IOException
-	 * @throws org.json.JSONException
 	 */
 	public JSONObject getShapeBetweenStops(String beginStopId, String endStopId, String shapeId) throws IOException, org.json.JSONException{
 		return getFromApi("GetShapeBetweenStops", "begin_stop_id", beginStopId, "end_stop_id", endStopId, "shape_id", shapeId);
@@ -129,11 +87,6 @@ public class CumtdApi {
 	/**
 	 * This method takes the latitude and longitude of the user as a parameter and returns a
 	 * JSONObject representing all the nearby stops.
-	 * @param lat
-	 * @param lon
-	 * @return
-	 * @throws IOException
-	 * @throws org.json.JSONException
 	 */
 	public JSONObject getStopsByLatLon(String lat, String lon) throws IOException, org.json.JSONException{
 		return getFromApi("GetStopsByLatLon", "lat", lat, "lon", lon);
@@ -143,12 +96,6 @@ public class CumtdApi {
 	 * This takes the beginning stopId, ending stopId, and the shapeId in order to return a list of
 	 * the coordinates required to draw the path on the map. This method calls the
 	 * getShapeBetweenStops method in order to do this.
-	 * @param beginStop
-	 * @param endStop
-	 * @param shapeId
-	 * @return
-	 * @throws JSONException
-	 * @throws IOException
 	 */
 	public List<String> getShapeCoordsByStop(String beginStop, String endStop, String shapeId) throws JSONException, IOException {
 		List<String> list = new ArrayList<>();
@@ -164,11 +111,6 @@ public class CumtdApi {
 	/**
 	 * This method calls the getStopsByLatLon with the appropriate parameters and parses the
 	 * JSONObject into a List<String> instead.
-	 * @param x
-	 * @param y
-	 * @return
-	 * @throws JSONException
-	 * @throws IOException
 	 */
 	public List<String> getNearestStops(String x, String y) throws JSONException, IOException {
 		List<String> list = new ArrayList<>();
@@ -182,12 +124,7 @@ public class CumtdApi {
 	}
 
 	/**
-	 * This method takes the stopId as a parameter and parses the JSONobject as a List<String>
-	 * instead.
-	 * @param stopId
-	 * @return
-	 * @throws JSONException
-	 * @throws IOException
+	 * This method takes the stopId as a parameter and parses the JSONobject as a List<String> instead.
 	 */
 	public List<String> getDepartures(String stopId) throws JSONException, IOException {
 		List<String> list = new ArrayList<>();
@@ -203,10 +140,6 @@ public class CumtdApi {
 	/**
 	 * This method parse the trip data from json to Directions object. This methods return null if
 	 * there is no way to get to the destination.
-	 * @param object
-	 * @return
-	 * @throws JSONException
-	 * @throws IOException
 	 */
 	public Directions parseTripData(JSONObject object) throws JSONException, IOException {
 		JSONArray itineraries = object.getJSONArray("itineraries");
@@ -272,17 +205,6 @@ public class CumtdApi {
 	 * This method takes the following parameters in order to generate a directions object,
 	 * containing a list of coordinates to follow, as well as the list of string directions, as
 	 * well as the expected duration of the travel.
-	 * @param originLat
-	 * @param originLon
-	 * @param destinationLat
-	 * @param destinationLon
-	 * @param date
-	 * @param time
-	 * @param maxWalk
-	 * @param arriveDepart
-	 * @return
-	 * @throws IOException
-	 * @throws JSONException
 	 */
 	public Directions getTripArriveBy(String originLat, String originLon, String destinationLat,
 									  String destinationLon, String date, String time,
