@@ -16,7 +16,8 @@ import static org.junit.Assert.*;
 /**
  * This class is a multi parameter parameterized test that tests the getTripArriveBy method
  * using a bunch of generated beginning and ending lat lon coordinates in order to see if it
- * returns a valid Directions object.
+ * returns a valid Directions object. These tests will fail if there is no internet connection
+ * or Android Studios is not allowed internet access.
  */
 @RunWith(Theories.class)
 public class CumtdApiParameterizedTest {
