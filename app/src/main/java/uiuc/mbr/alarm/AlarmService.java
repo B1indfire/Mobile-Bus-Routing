@@ -10,7 +10,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 

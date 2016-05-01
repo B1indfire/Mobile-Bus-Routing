@@ -5,8 +5,7 @@ import java.net.*;
 import java.util.*;
 import org.json.*;
 
-/**Gets data from the CUMTD API.
- * TODO we should probably delete the unused methods.*/
+/**Gets data from the CUMTD API.*/
 public class CumtdApi {
 	private static final CumtdApi INSTANCE = new CumtdApi();
 

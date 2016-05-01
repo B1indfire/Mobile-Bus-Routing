@@ -22,9 +22,9 @@ public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivit
 
 	@Test
 	public void testActivityExists() {
-        MapActivity activity = getActivity();
-        assertNotNull(activity);
-    }
+		MapActivity activity = getActivity();
+		assertNotNull(activity);
+	}
 
 	@Test
 	public void testMarkerLocation() {
@@ -38,7 +38,7 @@ public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivit
 				loc.setLatitude(testLocation.latitude);
 				loc.setLongitude(testLocation.longitude);
 				activity.locationHandler.onLocationChanged(loc);
-                assertNotNull(activity.userLocationMarker);
+				assertNotNull(activity.userLocationMarker);
 				assertEquals(testLocation, activity.userLocationMarker.getPosition());
 			}
 		});
