@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -17,7 +16,7 @@ import java.util.*;
 import uiuc.mbr.R;
 import uiuc.mbr.event_selection.*;
 
-/**Lets the user quickly pick a destination to travel to.*/
+/**Lets the user quickly pick a destination to travel to out of the locations in the AddressBook.*/
 public class GotoActivity extends AppCompatActivity
 {
 	private List<UserLocation> locations;
@@ -153,8 +152,6 @@ public class GotoActivity extends AppCompatActivity
 			stepRouting.setVisibility(View.VISIBLE);
 
 			finish();
-
-			Log.wtf("GoToActivity", "Destination: " + Double.toString(chosenTo.latitude) + ", " + Double.toString(chosenTo.longitude));
 
 			Intent intent = new Intent(getApplicationContext(), MapActivity.class);
 			MapActivity.setupIntent(location.getLatitude(), location.getLongitude(), chosenTo.latitude, chosenTo.longitude, intent);

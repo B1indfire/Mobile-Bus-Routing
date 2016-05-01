@@ -1,5 +1,6 @@
 package uiuc.mbr.calendar;
 
+/**Data class that describes an Android calendar.*/
 public class Calendar {
 	private long id;
 	private String name;

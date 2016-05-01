@@ -22,11 +22,9 @@ public class Directions {
 		this.coordinates.add(coordinates);
 	}
 
-	/**Public for testing only.*/
 	public List<String> getDirections() {
 		return directions;
 	}
-	/**Public for testing only.*/
 	public List<String> getCoordinates() {
 		return coordinates;
 	}

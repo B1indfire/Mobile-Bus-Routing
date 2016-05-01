@@ -16,6 +16,7 @@ import uiuc.mbr.event_selection.LocationLookup;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**Mockito mock test for LocationLookup, ensuring it handles the results it gets correctly.*/
 public class LocationLookupMockTest extends AndroidTestCase
 {
 	private static final double lllat = 39.47, lllon = -88.95, urlat = 40.49, urlon = -87.43;

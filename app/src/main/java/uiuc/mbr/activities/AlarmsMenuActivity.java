@@ -10,6 +10,7 @@ import android.widget.Toast;
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
 
+/**Activity that lets the user access activities related to viewing and managing alarms.*/
 public class AlarmsMenuActivity extends AppCompatActivity {
 
 	@Override

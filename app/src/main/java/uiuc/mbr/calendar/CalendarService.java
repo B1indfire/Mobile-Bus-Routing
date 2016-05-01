@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class CalendarService {
 	 * Gets all calendars associated the current Google account on the device.
 	 * @return An ArrayList of Calendars, null if no account was found.
 	 */
+	@Nullable
 	public ArrayList<Calendar> getCalendars() {
 		// Run query
 		ContentResolver cr = context.getContentResolver();
@@ -72,15 +74,14 @@ public class CalendarService {
 		ArrayList<Calendar> cals = new ArrayList<>();
 		// Submit the query and get a Cursor object back.
 		try(Cursor cur = cr.query(CALENDAR_URI, CALENDAR_PROJECTION, selection, selectionArgs, null)) {
-			while (cur.moveToNext()) {
-				long calID = 0;
-				String displayName = null;
+			if(cur != null) {
+				while(cur.moveToNext()) {
+					// Get the field values
+					long calID = cur.getLong(CALENDAR_ID_INDEX);
+					String displayName = cur.getString(CALENDAR_DISPLAY_NAME_INDEX);
 
-				// Get the field values
-				calID = cur.getLong(CALENDAR_ID_INDEX);
-				displayName = cur.getString(CALENDAR_DISPLAY_NAME_INDEX);
-
-				cals.add(new Calendar(calID, displayName));
+					cals.add(new Calendar(calID, displayName));
+				}
 			}
 		}
 

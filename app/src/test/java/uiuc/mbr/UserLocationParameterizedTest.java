@@ -11,6 +11,7 @@ import uiuc.mbr.event_selection.UserLocation;
 
 import static org.junit.Assert.assertEquals;
 
+/**Parameterized unit test that tests the UserLocation.compareTo().*/
 @RunWith(Parameterized.class)
 public class UserLocationParameterizedTest {
 	private String name1;

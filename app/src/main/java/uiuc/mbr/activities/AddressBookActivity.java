@@ -2,10 +2,8 @@ package uiuc.mbr.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
@@ -29,8 +27,8 @@ import uiuc.mbr.event_selection.UserLocation;
 import uiuc.mbr.alarm.AlarmService;
 
 /**
- * Displays a list of all addresses inputted into the AddressBook
- * Allows the user to edit or delete any entry
+ * Displays a list of all addresses inputted into the AddressBook.
+ * Allows the user to edit or delete any entry.
  */
 public class AddressBookActivity extends AppCompatActivity {
 
@@ -47,8 +45,8 @@ public class AddressBookActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * Loads and displays a scrollable list of Saved Addresses
-	 * Provides buttons for editing and deleting each address
+	 * Loads and displays a scrollable list of Saved Addresses.
+	 * Provides buttons for editing and deleting each address.
 	 */
 	private void displayAddressBookList() {
 		LinearLayout myLayout = (LinearLayout) findViewById(R.id.address_book);
@@ -104,7 +102,7 @@ public class AddressBookActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * OnClickListener implementation for the Edit button
+	 * OnClickListener implementation for the Edit button.
 	 */
 	private class EditButtonListener implements View.OnClickListener {
 
@@ -124,9 +122,8 @@ public class AddressBookActivity extends AppCompatActivity {
 		}
 
 		/**
-		 * Prompts the user for a new address target
-		 * Changes the AddressBook entry if valid
-		 * Rejects the user's input if invalid
+		 * Prompts the user for a new address target.
+		 * Changes the AddressBook entry if valid; rejects the user's input if invalid.
 		 */
 		private void promptForNewAddress() {
 			final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
@@ -191,9 +188,9 @@ public class AddressBookActivity extends AppCompatActivity {
 		}
 
 		/**
-		 * Removes the Address entry from AddressBook
-		 * Removes all events using the given address from the Schedule (since they're all now invalid)
-		 * Refreshes the display
+		 * Removes the Address entry from AddressBook.
+		 * Removes all events using the given address from the Schedule (since they're all now invalid).
+		 * Refreshes the display.
 		 */
 		@Override
 		public void onClick(View v) {
@@ -229,8 +226,8 @@ public class AddressBookActivity extends AppCompatActivity {
 		}
 
 		/**
-		 * Prompts the user for a new location
-		 * Continues to promptForLocAddress if valid string.
+		 * Prompts the user for a new location.
+		 * Continues to promptForLocAddress if valid string..
 		 */
 		private void promptForNewLocation() {
 			final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
@@ -281,7 +278,7 @@ public class AddressBookActivity extends AppCompatActivity {
 		}
 
 		/**
-		 * Only called when the user enters a valid string for a new location
+		 * Only called when the user enters a valid string for a new location.
 		 * Prompts the user for a valid address string to map their location name to
 		 */
 		private void promptForLocAddress(UserLocation loc) {

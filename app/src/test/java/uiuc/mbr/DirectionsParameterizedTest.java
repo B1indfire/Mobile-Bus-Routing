@@ -9,9 +9,9 @@ import java.util.Collection;
 
 import uiuc.mbr.directions.Directions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+/**Parameterized unit test for Directions, ensuring it adds entries the way we expect.*/
 @RunWith(Parameterized.class)
 public class DirectionsParameterizedTest
 {

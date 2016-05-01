@@ -10,15 +10,13 @@ import uiuc.mbr.R;
 import uiuc.mbr.Settings;
 
 
-/**Activity that lets the user edit settings.*/
+/**Activity that lets the user edit our 2 settings: max walk distance and extra time before arrival (min arrival time).*/
 public class SettingsActivity extends AppCompatActivity {
 	private NumberPicker maxWalkBar;
 	private NumberPicker minArrBar;
 
 	/**
-	 * Overrides super.
 	 * Sets the two number picker objects to the two views from the xml.
-	 * @param savedInstanceState
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
 	/**
 	 * Saves the values currently in the number picker by calling the saveSettings
 	 * function from Settings.
-	 * @param v
 	 */
 	public void saveSettings(View v){
 		Settings.setMaxWalkTenthsMilesTemporarily(maxWalkBar.getValue(), getApplicationContext());

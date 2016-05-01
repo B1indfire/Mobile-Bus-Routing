@@ -8,6 +8,8 @@ import uiuc.mbr.calendar.Event;
 
 import static org.junit.Assert.*;
 
+
+/**Tests the equality check in Event.*/
 public class EventTest
 {
 	private static final Event test  = new Event(5, 8, "name", "description", "location", new Date(12345), new Date(9999));

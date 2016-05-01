@@ -6,6 +6,7 @@ import uiuc.mbr.event_selection.UserLocation;
 
 import static org.junit.Assert.*;
 
+/**Tests the comparison function of UserLocations.*/
 public class UserLocationTest
 {
 	@Test

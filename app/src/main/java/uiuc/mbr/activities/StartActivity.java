@@ -11,6 +11,10 @@ import android.view.View;
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
 
+/**Activity that runs when our app first launches.
+ * Since our app has so many features, this activity merely lets the user navigate to a set of second-level "Menu" activities
+ * that will allow them to reach the real, feature-related activities.
+ * This activity does provide direct access to SettingsActivity via a menu item.*/
 public class StartActivity extends AppCompatActivity {
 
 	@Override

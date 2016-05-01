@@ -33,7 +33,8 @@ import uiuc.mbr.calendar.Event;
 import uiuc.mbr.event_selection.AddressBook;
 import uiuc.mbr.event_selection.UserLocation;
 
-/**Activity that runs when an alarm is triggered.*/
+/**Activity that runs when an alarm is triggered.
+ * Lets the user deactivate the alarm (and optionally see how to get to the destination on a map) and see upcoming alarms.*/
 public class OnAlarmActivity extends AppCompatActivity
 {
 	private TextView currentAlarmName;
@@ -152,6 +153,7 @@ public class OnAlarmActivity extends AppCompatActivity
 
 
 
+	/**Provides Views for entries inthe alarms list.*/
 	private class Adapter extends BaseAdapter
 	{
 		@Override

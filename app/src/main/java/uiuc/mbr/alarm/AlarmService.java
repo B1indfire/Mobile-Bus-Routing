@@ -28,8 +28,7 @@ import uiuc.mbr.calendar.Event;
 /**Keeps track of alarms and when they should trigger.
  * Launches OnAlarmActivity when an alarm is triggered.
  * Don't launch this service directly--stick to using the static methods.*/
-public class AlarmService extends Service
-{
+public class AlarmService extends Service {
 	private static final String UNTRIGGERED_ALARMS_FILE = "untriggered_alarms";
 	private static final String IDSMAP_FILE = "idsmap";
 
@@ -41,8 +40,7 @@ public class AlarmService extends Service
 	 * Creates an alarm for the given Event
 	 * The Alarm's time is set based on the traveling distance to the event
 	 */
-	public static void addAlarm(Event event, Context context)
-	{
+	public static void addAlarm(Event event, Context context) {
 		Alarm alarm = new Alarm(event);
 
 		//Add alarm to the queues
@@ -91,7 +89,7 @@ public class AlarmService extends Service
 
 
 	/**
-	 * An asynchronous Task that handles adding new Alarms to the schedule
+	 * An asynchronous task that handles adding new Alarms to the schedule
 	 */
 	private static class AlarmAddTask extends AsyncTask<Void, Void, Void> {
 
@@ -139,15 +137,13 @@ public class AlarmService extends Service
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.wtf("AddAlarm", "Completed AddAlarm for " + alarm.event.toString());
-
 			saveAlarms(context);
 			run(context);
 		}
 	}
 
 	/**
-	 * An asynchronous Task that handles updating the first Alarm in the queue
+	 * An asynchronous task that handles updating the first Alarm in the queue
 	 */
 	private static class UpdateFirstTask extends AsyncTask<Void, Void, Void> {
 
@@ -289,12 +285,15 @@ public class AlarmService extends Service
 	}
 
 
+	/**Returns all outstanding alarms, excluding the one that is currently triggered (if any).
+	 * Returns null if there are no outstanding alarms.*/
 	@Nullable public static List<Alarm> getUntriggeredAlarms(){
 		if(untriggeredAlarms !=null)
 			return new ArrayList<>(untriggeredAlarms);
 		else return null;
 	}
 
+	/**Returns the alarm that is currently triggered (ringing), if any.*/
 	@Nullable public static Alarm getTriggeredAlarm(){return triggeredAlarm;}
 	public static void clearTriggeredAlarm(Context context)
 	{

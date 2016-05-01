@@ -12,6 +12,7 @@ import android.view.View;
 import uiuc.mbr.R;
 import uiuc.mbr.alarm.AlarmService;
 
+/**Activity that lets the user reach activities that let them navigate places.*/
 public class NavigationMenuActivity extends AppCompatActivity {
 
     @Override

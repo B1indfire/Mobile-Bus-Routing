@@ -33,6 +33,10 @@ import uiuc.mbr.directions.Directions;
 import uiuc.mbr.R;
 import uiuc.mbr.event_selection.LocationLookup;
 
+/**Activity that shows how to ride CUMTD from an origin to a destination.
+ * Shows this on both a map and via text directions.
+ * The origin and/or destination can be provided via setupIntent().
+ * If they aren't the user will be asked to input them.*/
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 {
 	/**Sets up the intent used to start this activity with an origin and/or destination latitude+longitude.
@@ -183,7 +187,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 		}
 
 		ListView lv = (ListView) findViewById(R.id.listView);
-		ArrayAdapter<String> adapter=new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, d.getDirections());
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, d.getDirections());
 		lv.setAdapter(adapter);
 
 		List<String> list = d.getCoordinates();

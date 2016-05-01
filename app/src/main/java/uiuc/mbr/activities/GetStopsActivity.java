@@ -27,7 +27,9 @@ import uiuc.mbr.directions.CumtdApi;
 import uiuc.mbr.R;
 
 
-public class GetStopsActivity extends AppCompatActivity {
+/**Displays the names of the closest CUMTD stops to the device’s current location.
+ * Selecting a stop will launch the StopListActivity for the chosen stop.*/
+ public class GetStopsActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,12 @@ public class GetStopsActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		//TODO what does this code do and why do we have it?
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 			return;
 		}
 
-		// Allow network.
+		// Allow network code on the main thread
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 
@@ -52,7 +55,7 @@ public class GetStopsActivity extends AppCompatActivity {
 
 		// Get nearest stops.
 		CumtdApi api = CumtdApi.create();
-		List<String> list = new ArrayList<>();
+		List<String> list;
 		try {
 			list = api.getNearestStops("" + latitude, "" + longitude);
 		} catch (JSONException | IOException e) {

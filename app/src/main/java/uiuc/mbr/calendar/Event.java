@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+/**An Android calendar event.*/
 public class Event implements Serializable{
 	private long calendarId;
 	private long parentEventId;
@@ -17,7 +18,6 @@ public class Event implements Serializable{
 	private Date start;
 	private Date end;
 
-	//private LatLng latLong;
 	private double latitude;
 	private double longitude;
 
@@ -73,6 +73,8 @@ public class Event implements Serializable{
 		this.longitude = latLong.longitude;
 	}
 
+	/**Tests for equality based only on the event names and start times.*/
+	@Override
 	public boolean equals(Object other) {
 		if (!(other instanceof Event))
 			return false;

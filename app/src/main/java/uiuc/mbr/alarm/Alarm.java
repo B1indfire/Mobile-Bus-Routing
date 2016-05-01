@@ -84,12 +84,14 @@ public class Alarm implements Comparable<Alarm>, Serializable
 		return alarmTime;
 	}
 
+	/**Compares alarms by their corresponding event start times.*/
 	@Override
 	public int compareTo(Alarm alarm)
 	{
 		return event.getStart().compareTo(alarm.event.getStart());
 	}
 
+	/**Alarms are equal if they are for the same event.*/
 	@Override
 	public boolean equals(Object other){
 		if(!(other instanceof Alarm))

@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 import uiuc.mbr.R;
 
+
+/**Lists upcoming departures at a stop.
+ * Tightly coupled to GetStopsActivity.*/
 public class StopListActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

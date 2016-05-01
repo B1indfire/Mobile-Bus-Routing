@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.*;
 import org.json.*;
 
+/**Gets data from the CUMTD API.
+ * TODO we should probably delete the unused methods.*/
 public class CumtdApi {
 	private static final CumtdApi INSTANCE = new CumtdApi();
 
@@ -15,10 +17,11 @@ public class CumtdApi {
 
 	private CumtdApi(){}
 
-
 	public static CumtdApi create() {
 		return INSTANCE;
 	}
+
+
 
 	private JSONObject getFromApi(String name) throws IOException, org.json.JSONException{
 		return jsonFromString(readFromUrl(url + "/" + name + "?key=" + key));

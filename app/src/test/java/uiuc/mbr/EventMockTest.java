@@ -11,6 +11,7 @@ import uiuc.mbr.calendar.Event;
 
 import static org.mockito.Mockito.*;
 
+/**Mockito mock tests for the export/import functionality in Event.*/
 public class EventMockTest extends AndroidTestCase
 {
 	private Bundle bundle;
