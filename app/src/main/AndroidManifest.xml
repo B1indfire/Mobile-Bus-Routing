@@ -53,15 +53,11 @@
 
 		<activity
 			android:name=".activities.GetStopsActivity"
-			android:label="GetStops"
-			android:theme="@style/AppTheme.NoActionBar"
 			android:parentActivityName=".activities.NavigationMenuActivity">
 		</activity>
 
 		<activity
 			android:name=".activities.StopListActivity"
-			android:label="StopList"
-			android:theme="@style/AppTheme.NoActionBar"
 			android:parentActivityName=".activities.NavigationMenuActivity">
 		</activity>
 

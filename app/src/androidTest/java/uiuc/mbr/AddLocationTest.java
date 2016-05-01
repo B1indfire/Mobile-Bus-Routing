@@ -40,7 +40,7 @@ public class AddLocationTest {
 	private String address2 = "509 bash ct";
 
 	@Rule
-	public ActivityTestRule<AddressBookActivity> mActivityRule = new ActivityTestRule<AddressBookActivity>(AddressBookActivity.class);
+	public ActivityTestRule<AddressBookActivity> mActivityRule = new ActivityTestRule<>(AddressBookActivity.class);
 
 	/**
 	 * Tests to see if an address can be added.

@@ -19,8 +19,6 @@ public class StopListActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stop_list);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
 
 		Intent intent = getIntent();
 		ArrayList<String> departures = intent.getStringArrayListExtra("departures");

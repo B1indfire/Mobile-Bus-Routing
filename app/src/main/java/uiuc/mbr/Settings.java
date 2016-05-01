@@ -17,20 +17,20 @@ public class Settings
 	private static final String KEY_WALK = "maxWalk", KEY_ARRIVAL_DIFF = "minArr";
 	private static final String SETTINGS_FILE = "saved_settings";
 
-	private static int maxWalkMiles = 3, arrivalDifferenceMinutes = 0;
+	private static int maxWalkTenthsMiles = 10, arrivalDifferenceMinutes = 0;
 	private static boolean loaded = false;
 
 
 	/**Returns how far the user is willing to walk, in tenths of miles.*/
 	public static int getMaxWalkTenthsMiles(Context c) {
 		loadIfNecessary(c);
-		return maxWalkMiles;
+		return maxWalkTenthsMiles;
 	}
 
 	/**Changes won't be saved until you call saveSettings().*/
 	public static void setMaxWalkTenthsMilesTemporarily(int maxWalkMiles, Context c) {
 		loadIfNecessary(c);
-		Settings.maxWalkMiles = maxWalkMiles;
+		Settings.maxWalkTenthsMiles = maxWalkMiles;
 	}
 
 	/**Get the number of minutes early the user wants to arrive.*/
@@ -60,7 +60,7 @@ public class Settings
 
 		//put settings into a hashmap
 		HashMap<String, Integer> settings = new HashMap<>(2);
-		settings.put(KEY_WALK, maxWalkMiles);
+		settings.put(KEY_WALK, maxWalkTenthsMiles);
 		settings.put(KEY_ARRIVAL_DIFF, arrivalDifferenceMinutes);
 
 		//save the hashmap to a file
@@ -89,10 +89,10 @@ public class Settings
 		}
 
 		if (settings == null) {
-			maxWalkMiles = 3;
+			maxWalkTenthsMiles = 3;
 			arrivalDifferenceMinutes = 0;
 		} else {
-			maxWalkMiles = settings.get(KEY_WALK);
+			maxWalkTenthsMiles = settings.get(KEY_WALK);
 			arrivalDifferenceMinutes = settings.get(KEY_ARRIVAL_DIFF);
 		}
 	}

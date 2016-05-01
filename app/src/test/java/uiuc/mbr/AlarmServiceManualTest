@@ -35,6 +35,6 @@ Test updating first alarm time with current location:
 	1. Add an event to calendar
 	2. Check the event
 	3. Note the start time of the event
-	4. Physically move to a distant enough place
+	4. Physically move to a distant enough place (or use a mock GPS app to move virtually)
 	5. On start screen click button to update location for first event
 	6. Make sure the first event's alarm has been updated

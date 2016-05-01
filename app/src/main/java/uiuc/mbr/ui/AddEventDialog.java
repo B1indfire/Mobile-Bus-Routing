@@ -99,8 +99,6 @@ public class AddEventDialog extends DialogFragment
 	}
 
 
-
-
 	/**Tries to look up the event's location / address, and lets the user know the result.*/
 	private class Worker extends AsyncTask<Void, Void, Void>
 	{

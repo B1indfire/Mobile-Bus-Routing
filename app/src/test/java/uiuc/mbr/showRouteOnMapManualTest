@@ -1,17 +1,22 @@
 1. Verify invalid address message shows up when address is invalid
-	Click on Map It Up
+	From the start screen, click on Navication, then Map It Up
 	Type in 'awerawerawer' and press OK
-	Note that Invalid address message is displayed
+	Ensure that the "Invalid address" message is displayed
 	
 2. Verify no bus message shows up when no buses route is possible
-	Click on Map It Up
+	From the start screen, click on Navication, then Map It Up
 	Enter 'white house' and press OK
 	Enter 'illini union' and press OK
-	Note that No bus routes found message is displayed
+	Ensure that the "No bus routes found" message is displayed
 	
 3. Verify that routes are displayed properly
-	If the current time is past 2 am change your system time to 11 am
-	Click on Map It Up
+	Ensure that it's a weekday between 11:00 AM and 2:00AM on a day when the university is in session.
+	 		(i.e. not on summer break)
+	 		Change the system date/time if necessary.
+			(If you are outside this time range, there may not be enough buses running.)
+	From the start screen, click on Navication, then Map It Up
 	Enter 'illini union' and press OK
 	Enter 'thomas m seibel center' and press OK
-	Note that walking paths are drawn in black and bus routes are draw in red, green, or blue
+	Verify that a route along Green St. is drawn in green, with a black line at each end connecting it to each building.
+	Verify that text directions appear at the bottom of the screen and (based on your knowledge of CUMTD) are reasonable.
+			Note that the precise times, distances, etc. may depend on the time of day somewhat.

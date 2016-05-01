@@ -117,13 +117,13 @@ public class CalendarService {
 
 		ArrayList<Event> eventList = new ArrayList<>();
 		while (cur.moveToNext()) {
-			long calID = 0;
-			long parentEventId = 0;
-			String title = null;
-			String description = null;
-			String location = null;
-			long begin = 0;
-			long end = 0;
+			long calID;
+			long parentEventId;
+			String title;
+			String description;
+			String location;
+			long begin;
+			long end;
 
 			// Get the field values
 			calID = cur.getLong(EVENT_CALENDAR_ID_INDEX);
@@ -149,7 +149,7 @@ public class CalendarService {
 		long eventId = event.getParentEventId();
 
 		// Run query
-		Cursor cur = null;
+		Cursor cur;
 		ContentResolver cr = context.getContentResolver();
 
 		Uri u = ContentUris.withAppendedId(Uri.parse("content://com.android.calendar/events"), eventId);
@@ -161,7 +161,7 @@ public class CalendarService {
 			cur = cr.query(u, EVENT_PROJECTION, null, null, null);
 
 			while (cur.moveToNext()) {
-				String rrule = "";
+				String rrule;
 
 				// Get the field values
 				rrule = cur.getString(0);

@@ -9,9 +9,7 @@ import android.test.AndroidTestCase;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 
 import uiuc.mbr.calendar.Calendar;

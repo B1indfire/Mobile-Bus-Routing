@@ -37,13 +37,11 @@ import uiuc.mbr.event_selection.LocationLookup;
  * Shows this on both a map and via text directions.
  * The origin and/or destination can be provided via setupIntent().
  * If they aren't the user will be asked to input them.*/
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback
-{
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 	/**Sets up the intent used to start this activity with an origin and/or destination latitude+longitude.
 	 * Calling this function is optional. Not calling it is equivalent to calling it with all NaN arguments.
 	 * Anything you don't provide here (anything that's NaN) will be requested in a dialog.*/
-	public static void setupIntent(double oLat, double oLon, double dLat, double dLon, Intent intent)
-	{
+	public static void setupIntent(double oLat, double oLon, double dLat, double dLon, Intent intent) {
 		intent.putExtra("olat", oLat);
 		intent.putExtra("olon", oLon);
 		intent.putExtra("dlat", dLat);
@@ -51,14 +49,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	}
 
 	/**Pulls data out of the intent used to start this activity.*/
-	private void readIntent()
-	{
+	private void readIntent() {
 		oLatitude = getIntent().getDoubleExtra("olat", Double.NaN);
 		oLongitude = getIntent().getDoubleExtra("olon", Double.NaN);
 		dLatitude = getIntent().getDoubleExtra("dlat", Double.NaN);
 		dLongitude = getIntent().getDoubleExtra("dlon", Double.NaN);
-
-		Log.wtf("MapActivity", "Destination: " + Double.toString(dLatitude) + ", " + Double.toString(dLongitude));
 	}
 
 
@@ -77,8 +72,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	private SupportMapFragment mapFragment;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
@@ -92,8 +86,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 
 	/**Prompts the user for an origin or destination if one is needed;
 	 * displays the route on the map otherwise.*/
-	private void nextStep()
-	{
+	private void nextStep() {
 		if(Double.isNaN(oLatitude) || Double.isNaN(oLongitude))
 			promptForNewAddress(false);
 		else if(Double.isNaN(dLatitude) || Double.isNaN(dLongitude))
@@ -225,8 +218,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	 * installed Google Play services and returned to the app.
 	 */
 	@Override
-	public void onMapReady(GoogleMap googleMap)
-	{
+	public void onMapReady(GoogleMap googleMap) {
 		map = googleMap;
 		nextStep();
 	}
@@ -234,11 +226,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 	/**Handles connecting to the Google APIs when the activity starts.*/
-	private class GoogleCallbacks implements GoogleApiClient.ConnectionCallbacks
-	{
+	private class GoogleCallbacks implements GoogleApiClient.ConnectionCallbacks {
 		@Override
-		public void onConnected(Bundle bundle) throws SecurityException
-		{
+		public void onConnected(Bundle bundle) throws SecurityException {
 			//request a location update every 30 seconds
 			locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);//GPS, not network-based location
 			locationRequest.setInterval(30 * 1000);
@@ -250,12 +240,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback
 	}
 
 
-	/**Handles location updates.*/
-	public class LocationHandler implements LocationListener
-	{
+	/**Handles location updates.
+	 * Public for testing only.*/
+	public class LocationHandler implements LocationListener {
 		@Override
-		public void onLocationChanged(Location location)
-		{
+		public void onLocationChanged(Location location) {
 			LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
 			if(userLocationMarker == null)
 				userLocationMarker = map.addMarker(new MarkerOptions().position(here).title("You are here."));
