@@ -9,13 +9,11 @@ import com.google.android.gms.maps.model.LatLng;
 import org.junit.Test;
 import uiuc.mbr.activities.MapActivity;
 
-public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivity>
-{
+public class MapActivityTest extends ActivityInstrumentationTestCase2<MapActivity> {
 	private static final LatLng testLocation = new LatLng(40.115009, -88.289264);//Clear Lake
 
 
-	public MapActivityTest()
-	{
+	public MapActivityTest() {
 		super(MapActivity.class);
 	}
 
