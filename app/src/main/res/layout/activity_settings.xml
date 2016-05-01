@@ -27,7 +27,7 @@
 		incr = ".1"/>
 
 	<TextView
-		android:layout_width="355dp"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="Maximum distance to walk."
@@ -55,7 +55,7 @@
 		incr = "1.0"/>
 
 	<TextView
-		android:layout_width="355dp"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="Input how many minutes you want to arrive before your event starts."
@@ -79,8 +79,9 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:text="1073079428729 "
+		android:text="1073079428729"
 		android:id="@+id/google_app_id"
+		android:textColor="#ffffff"
 		android:layout_gravity="right" />
 
 </LinearLayout>
