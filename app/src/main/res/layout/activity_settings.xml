@@ -79,6 +79,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textSize="1px"
 		android:text="1073079428729"
 		android:id="@+id/google_app_id"
 		android:textColor="#ffffff"
