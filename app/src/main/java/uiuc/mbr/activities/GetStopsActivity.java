@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -33,14 +34,8 @@ import uiuc.mbr.R;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_get_stops);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
 
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		//TODO what does this code do and why do we have it?
-		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			return;
-		}
 
 		// Allow network code on the main thread
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -60,12 +55,15 @@ import uiuc.mbr.R;
 			throw new RuntimeException(e);
 		}
 
-		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layout);
+		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.get_stop_list);
 		for (String stop : list) {
 			Button btn = new Button(this);
-			btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			params.setMargins(0, 0, 0, 30);
+			btn.setLayoutParams(params);
 			btn.setText(stop);
-			btn.setBackground(getResources().getDrawable(R.drawable.back));
+			btn.setBackgroundResource(R.drawable.buttons);
+			btn.setTextColor(Color.WHITE);
 			btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					ArrayList<String> list;
