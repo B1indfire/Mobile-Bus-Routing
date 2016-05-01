@@ -7,32 +7,28 @@
 	android:background="@drawable/back">
 
 
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center_horizontal"
-		android:id="@+id/address_book"
-		android:weightSum="1">
-			<!--elements inserted dynamically-->
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
 		android:layout_height="0dip"
-		android:layout_weight="1"
-		android:gravity="center|bottom"
-		android:orientation="vertical" >
+		android:layout_weight="1">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/address_book">
+                <!--elements inserted dynamically-->
+        </LinearLayout>
+    </ScrollView>
 
-		<Button
-			android:text="Add Address"
-			android:id="@+id/addAddress"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal|center"
-			android:background="@drawable/buttons"
-			android:textColor="#f5f5f5"
-			/>
-	</LinearLayout>
+	<Button
+	android:text="Add Address"
+	android:id="@+id/addAddress"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center_horizontal"
+	android:background="@drawable/buttons"
+	android:textColor="#f5f5f5"
+	/>
 
 </LinearLayout>
