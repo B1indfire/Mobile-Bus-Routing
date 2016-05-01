@@ -7,7 +7,7 @@ MBR can also plot how to get around town via CUMTD on a map, and can tell you ab
 We wrote MBR using Android Studio. To compile and run MBR, first clone the code from our Github repo: https://github.com/B1indfire/Mobile-Bus-Routing.
 Once you have the code, open Android Studio and use the Import Project option on the downloaded code.
 Once Android Studio imports the code, you can run it by selecting the "app" run configuration and hitting the "Run" button (shaped like a "play" icon).
-TODO verify that this is how importing works^
+
 
 If there is no "app" run configuration in the dropdown next to the Run button, you'll have to create one.
 Choose the "Edit Configurations" option in that dropdown.
