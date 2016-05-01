@@ -5,14 +5,11 @@ import java.net.*;
 import java.util.*;
 import org.json.*;
 
-<<<<<<< Updated upstream
 /**Gets data from the CUMTD API.*/
-		=======
 /**
  * This class interacts with the offical API provided by CUMTD in order to retrieve data and process
  * it for MBR application.
  */
-		>>>>>>> Stashed changes
 public class CumtdApi {
 	private static final CumtdApi INSTANCE = new CumtdApi();
 
