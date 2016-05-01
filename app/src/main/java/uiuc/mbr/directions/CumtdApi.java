@@ -100,7 +100,6 @@ public class CumtdApi {
 	public List<String> getShapeCoordsByStop(String beginStop, String endStop, String shapeId) throws JSONException, IOException {
 		List<String> list = new ArrayList<>();
 		JSONArray array = getShapeBetweenStops(beginStop, endStop, shapeId).getJSONArray("shapes");
-		System.out.println(array);
 		for(int i = 0 ; i < array.length() ; i = i + 2){
 			list.add(array.getJSONObject(i).get("shape_pt_lat").toString());
 			list.add(array.getJSONObject(i).get("shape_pt_lon").toString());
