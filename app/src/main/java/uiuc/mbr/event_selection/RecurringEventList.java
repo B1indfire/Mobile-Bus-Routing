@@ -14,8 +14,8 @@ import uiuc.mbr.calendar.Event;
 public class RecurringEventList
 {
 
-	public static final String RECURRING_EVENT_FILE = "recurring_list";
-	public static final String EXCEPTIONS_FILE = "exceptions";
+	private static final String RECURRING_EVENT_FILE = "recurring_list";
+	private static final String EXCEPTIONS_FILE = "exceptions";
 
 	private static void createFileIfNotExists(Context c) {
 		try(FileOutputStream fos = c.openFileOutput(RECURRING_EVENT_FILE, Context.MODE_APPEND)) {

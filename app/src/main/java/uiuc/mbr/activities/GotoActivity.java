@@ -21,7 +21,7 @@ public class GotoActivity extends AppCompatActivity
 {
 	private List<UserLocation> locations;
 	private final Adapter adapter = new Adapter();
-	UserLocation chosenTo = null;
+	private UserLocation chosenTo = null;
 
 	private final LocationRequest locationRequest = new LocationRequest();
 	private GoogleApiClient locationClient;
